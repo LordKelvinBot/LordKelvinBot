@@ -29,6 +29,10 @@ Consts/Libraries Installed:
     the bot itself (bot)
     Login token that the bot uses to verify with discord or something (TOKEN)
 */
+
+global.config = require('./config.json');
+global.servers = {};
+
 const Discord = require("discord.js");
 const superagent = require("superagent");
 const fetch = require('node-fetch');
@@ -44,8 +48,8 @@ const bot = new Discord.Client();
 const Jimp = require('jimp');
 const fs = require('fs');
 const urban = module.require("urban");
-const TOKEN = "Mzc5Nzk4NTczNjEwNTY1NjMy.DOvSgQ.-x_v5x_9kFhINa0OSmHNAvgzqic";
-const PREFIX = "hey ";
+const TOKEN = config.token;
+const PREFIX = config.prefix;
 const ytdl = require('ytdl-core');
 var ytpl = require('ytpl');
 var answerlist = ["The twin towers", "The peasants of casterly rock", "Fallout 4", "The dragonborn", "Six and a half american dollars", "The Chosen One", "Link", "The Hero of time", "The Hero of Rhyme", "Edwin Vancleef", "Ezio", "Some fuckin edgy guy", "Chell", "Shell", "GlaD0s", "Deckard", "A Fast food worker", "Gordon Freeman", "Talion", "Stanley", "Iron Chancellor Otto von Bismarck", "Doom Guy", "Mario", "Luigi", "That guy", "Kirby", "The Kazoo Kid", "Kratos", "KratOS", "Scorpion", "Johnny Cage", "Sub-Zero", "The man himself", "Han Solo", "Harrison Ford", "Lord Revan", "A Marine", "Iron Man", "Tony Stark", "Robert Downey Jr.", "Captain America", "The Econonmy", "Black Widow", "A Spider", "Spider man", "Spider-man", "Spiderman", "Thor", "Chris Hemsworth", "Loki", "Legolas", "Bilbo Baggins", "Frodo", "Falcon", "Hawkeye", "Ant Man", "Paul Rudd", "Thanos", "Galactus", "The Silver Surfer", "Stan Lee", "Mr. Bean", "My neighbor steve", "A mysterious man you've never seen in your life", "Jake Paul", "Pewdiepie", "Bilbo Baggins", "A ninja that was hiding in a corner", "Kim Jung Un", "Kim Jung OOF", "Kim Jung-Possible", "Franklin Deleanor Roosevelt", "Donald Trump", "Bill Gates", "Steven Hawking", "The creator of the Note 5", "Heman", "Actual Cannibal Shia LeBouf", "Shia LeBouf", "Mia Khalifa", "National Geographic", "Percy Jackson", "a boosted monkey", "someone who is clearly cheating", "Barry B. Benson", "Jerry Seinfeild", "Bill Clinton", "Bane", "Danny DeVito"];
@@ -57,11 +61,8 @@ var dabArray = ["dab.PNG", "dabderful.jpg", "dabtastic.jpg", "clamdab.jpg", "dab
 var servers = {};
 var thing = 1;
 var playerList = [];
-var timeChancer = 45;  forceFetchUsers: true
-
-
-global.config = require('./config.json');
-global.servers = {};
+var timeChancer = 45;
+forceFetchUsers: true
 
 function generateHex() {
   return '#' + Math.floor(Math.random() * 16777215).toString(16);
@@ -287,7 +288,7 @@ bot.on("message", async message => {
   function deleteLastMessage() {
     message.channel
       .fetchMessages({
-          limit: 1
+        limit: 1
       })
       .then(messages => {
         message.delete(500);
@@ -295,9 +296,9 @@ bot.on("message", async message => {
       })
 
       .catch(err => {
-       log("Error while doing Bulk Delete");
+        log("Error while doing Bulk Delete");
         log(err);
-    })
+      })
 
 
   }
