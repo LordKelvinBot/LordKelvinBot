@@ -92,63 +92,6 @@ bot.on("message", async message => {
   }
 
 
-  var today = new Date().getTime(); //gets time in utc
-  var day = today.getDate();
-  var month = today.getMonth() + 1;
-  var year = today.getFullYear();
-  var hour = today.getHours() - 8;
-  var minute = today.getMinutes();
-  var second = today.getSeconds();
-  /*
-    function convert(var d, var h, var m, var s)
-    {
-    day = d;
-  	hour = h;
-  	minute = m;
-  	second = s;
-  	while (hour > 23)
-  	{
-  		hour -= 24;
-  		day += 1;
-  	}
-  	while (minute >= 60)
-  	{
-  		minute -= 60;
-  		hour += 1;
-  	}
-  	while (second >= 60)
-  	{
-  		second -= 60;
-  		minute += 1;
-  	}
-  	while (hour < 0)
-  	{
-  		hour += 24;
-  		day -= 1;
-  	}
-  	while (minute < 0)
-  	{
-  		minute += 60;
-  		hour -= 1;
-  	}
-  	while (second < 0)
-  	{
-  		second += 60;
-  		minute -= 1;
-  	}
-  }
-    convert(day, hour, minute, second);
-
-  */
-  if (minute < 10) {
-    minute = "0" + minute.toString();
-  }
-  var time;
-  if (hour > 12) {
-    time = (hour - 12).toString() + ":" + minute.toString() + " PM";
-  } else if (hour <= 12) {
-    time = hour.toString() + ':' + minute.toString() + " AM";
-  }
   var messageContent = message.content;
   var justInCase = 0;
   while (messageContent.indexOf("@") > -1)
@@ -160,7 +103,7 @@ bot.on("message", async message => {
       break;
     }
   }
-  if (!(message.author.equals(bot.user)) && !(message.content.startsWith(PREFIX)) && !(message.content.startsWith(".")) && !(message.author.username == "Hime") && !(message.channel.id = 383829771865292801)) message.guild.channels.find("name", "console-log").send(messageContent + "\n    *Sent by " + message.author.username + " in the channel " + message.channel + " at " + time + ", on " + month + "/" + day + "/" + year + "*");
+  if (!(message.author.equals(bot.user)) && !(message.content.startsWith(PREFIX)) && !(message.content.startsWith(".")) && !(message.author.username == "Hime") && !(message.channel.id = 383829771865292801)) message.guild.channels.find("name", "console-log").send(messageContent + "\n    *Sent by " + message.author.username + "*");
   //bot.user.setActivity('Serving ${bot.users.size} people');
   if (message.author.equals(bot.user)) return;
   if (!message.content.startsWith(PREFIX)) return;

@@ -49,6 +49,67 @@ message.channel.send(fetch('https://www.reddit.com/r/RoomPorn.json')
 
 
 
+//Time things that are unnecsseseyary
+/*
+var today = new Date();
+var day = today.getDate();
+var month = today.getMonth() + 1;
+var year = today.getFullYear();
+var hour = today.getHours() - 8;
+var minute = today.getMinutes();
+var second = today.getSeconds();
+
+  function convert(var d, var h, var m, var s)
+  {
+  day = d;
+  hour = h;
+  minute = m;
+  second = s;
+  while (hour > 23)
+  {
+    hour -= 24;
+    day += 1;
+  }
+  while (minute >= 60)
+  {
+    minute -= 60;
+    hour += 1;
+  }
+  while (second >= 60)
+  {
+    second -= 60;
+    minute += 1;
+  }
+  while (hour < 0)
+  {
+    hour += 24;
+    day -= 1;
+  }
+  while (minute < 0)
+  {
+    minute += 60;
+    hour -= 1;
+  }
+  while (second < 0)
+  {
+    second += 60;
+    minute -= 1;
+  }
+}
+  convert(day, hour, minute, second);
+
+
+if (minute < 10) {
+  minute = "0" + minute.toString();
+}
+var time;
+if (hour > 12) {
+  time = (hour - 12).toString() + ":" + minute.toString() + " PM";
+} else if (hour <= 12) {
+  time = hour.toString() + ':' + minute.toString() + " AM";
+}
+
+
 
 //A smash ultimate countdown timer that just counts the time until 9
 // new Promise(function(resolve, reject) {          //idk what this is
