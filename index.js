@@ -99,8 +99,9 @@ bot.on("message", async message => {
   var hour = today.getHours() - 8;
   var minute = today.getMinutes();
   var second = today.getSeconds();
-  function convert(var d, var h, var m, var s)
-  {
+  /*
+    function convert(var d, var h, var m, var s)
+    {
     day = d;
   	hour = h;
   	minute = m;
@@ -136,7 +137,9 @@ bot.on("message", async message => {
   		minute -= 1;
   	}
   }
-  convert(day, hour, minute, second);
+    convert(day, hour, minute, second);
+
+  */
   if (minute < 10) {
     minute = "0" + minute.toString();
   }
