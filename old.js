@@ -475,5 +475,72 @@ function getPlayerList() {
         getBalance(message.author.toString());
         break;
 
+snekfetch, the possible cause of the unknwon channel error
 
+case "test3":
+  log("Command received");
+  var imageArray = getImages("https://www.reddit.com/r/EarthPorn.json");
+  for (var i = 0; i < imageArray.length; i++) {
+    log("Iteration #" + i);
+    message.channel.send(imageArray[i]);
+  }
+  break;
+
+  async function getImages(url) {
+    log("Check 1. Passed into async function");
+    const images = [];
+    const response = await snekfetch.get(url);
+    response.body.data.children.forEach((child) => {
+      child.data.preview.images.forEach((image) => {
+        images.push(image.source.url);
+      });
+    });
+    log("Check 2. Image array pushed");
+    return images;
+  }
+
+  case "json":
+    snekfetch.get(api).then(r => {
+      let body = r.body;
+      let id = args[1];
+      if (!id) {
+        message.channel.send("No ID");
+        return;
+      }
+      if (isNaN(id)) {
+        message.channel.send("ID must be a number");
+        return;
+      }
+      let entry = body.find(post => post.id == id);
+      console.log(entry);
+      if (!entry) return message.channel.send("This entry does not exist");
+      let jsonEmbed = new Discord.RichEmbed()
+        .setAuthor(entry.title)
+        .setDescription(entry.body)
+        .addField("Author ID", entry.userId)
+        .setFooter("Post ID: " + entry.id);
+
+      message.channel.send({
+        embed: jsonEmbed
+      });
+    });
+    break;
+
+    case "test6":
+      if (!args[1]) return message.channel.send("Enter a title (Be VERY specific");
+      snekfetch.get(pics).then(r => {
+        let title1 = args[1];
+        let subname = r.subreddit_name_prefixed;
+        let thumbnail = r.thumbnail;
+        let img = r.preview.images[0].source.url;
+        //let image = r.preview.images.source.url;
+        let entry = r.find(post => post.title == title1);
+        let picture = new Discord.RichEmbed()
+          .setAuthor(entry.title)
+          .addField(entry)
+          .setImage(img);
+        message.channel.send(picture);
+        //message.channel.send(entry.preview.images[0].source.url);
+      });
+      break;
 */

@@ -1,0 +1,25 @@
+{
+  "name": "betterbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.2.1",
+    "fetch-subreddit": "^3.0.0",
+    "ffmpeg-binaries": "^3.2.2-3",
+    "jimp": "^0.5.6",
+    "node-fetch": "^2.2.0",
+    "opusscript": "0.0.4",
+    "random-puppy": "^1.1.0",
+    "snekfetch": "^4.0.4",
+    "snoowrap": "^1.15.2",
+    "superagent": "^4.0.0-beta.5",
+    "urban": "^0.3.2",
+    "ytdl-core": "^0.18.7"
+  }
+}

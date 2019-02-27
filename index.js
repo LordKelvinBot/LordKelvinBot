@@ -13,12 +13,9 @@ v1.2
 
 
 To Do List:
-    mySQL (oh god also threebow)
-    muSic?
-    more math (bio, standard deviation, etc)
-    detect if someone is spamming in general, and give them the role 'no talk in no general' for like 10 seconds
-    image processing with jimp or something
-    gambling (doesnt really work with more than one person)
+    json stuff finally works, but convert can take some time to work fully and idk if it really completly works yet
+    finish the gambling Commands
+    handle the case if you bet like a billion chai orbs but dont have that many
 
 Some links to some stuff
     https://stackoverflow.com/questions/50667507/how-to-delete-specific-messages/51333614#51333614
@@ -31,7 +28,6 @@ Consts/Libraries Installed:
     6 different libraries to fetch subreddit images:
         superagent
         fetch
-        snekfetch
         randomPuppy
         snoowrap
         {fetchSubreddit}
@@ -43,25 +39,27 @@ Consts/Libraries Installed:
 global.config = require('./config.json');
 global.servers = {};
 
+//requires
+'use strict';
 const Discord = require("discord.js");
 const superagent = require("superagent");
 const fetch = require('node-fetch');
-const snekfetch = require("snekfetch");
 const randomPuppy = require('random-puppy');
-const {
-  fetchSubreddit
-} = require('fetch-subreddit');
+const {fetchSubreddit} = require('fetch-subreddit');
 const api = "https://jsonplaceholder.typicode.com/posts";
 const pics = "https://www.reddit.com/r/pics.json";
 const snoowrap = require('snoowrap');
 const bot = new Discord.Client();
 const Jimp = require('jimp');
+const snekfetch = require("snekfetch");
 const fs = require('fs');
 const urban = module.require("urban");
+const ytdl = require('ytdl-core');
+//var ytpl = require('ytpl');
+
+//other Consts
 const TOKEN = config.token;
 const PREFIX = config.prefix;
-const ytdl = require('ytdl-core');
-var ytpl = require('ytpl');
 var answerlist = ["The twin towers", "The peasants of casterly rock", "Fallout 4", "The dragonborn", "Six and a half american dollars", "The Chosen One", "Link", "The Hero of time", "The Hero of Rhyme", "Edwin Vancleef", "Ezio", "Some fuckin edgy guy", "Chell", "Shell", "GlaD0s", "Deckard", "A Fast food worker", "Gordon Freeman", "Talion", "Stanley", "Iron Chancellor Otto von Bismarck", "Doom Guy", "Mario", "Luigi", "That guy", "Kirby", "The Kazoo Kid", "Kratos", "KratOS", "Scorpion", "Johnny Cage", "Sub-Zero", "The man himself", "Han Solo", "Harrison Ford", "Lord Revan", "A Marine", "Iron Man", "Tony Stark", "Robert Downey Jr.", "Captain America", "The Econonmy", "Black Widow", "A Spider", "Spider man", "Spider-man", "Spiderman", "Thor", "Chris Hemsworth", "Loki", "Legolas", "Bilbo Baggins", "Frodo", "Falcon", "Hawkeye", "Ant Man", "Paul Rudd", "Thanos", "Galactus", "The Silver Surfer", "Stan Lee", "Mr. Bean", "My neighbor steve", "A mysterious man you've never seen in your life", "Jake Paul", "Pewdiepie", "Bilbo Baggins", "A ninja that was hiding in a corner", "Kim Jung Un", "Kim Jung OOF", "Kim Jung-Possible", "Franklin Deleanor Roosevelt", "Donald Trump", "Bill Gates", "Steven Hawking", "The creator of the Note 5", "Heman", "Actual Cannibal Shia LeBouf", "Shia LeBouf", "Mia Khalifa", "National Geographic", "Percy Jackson", "a boosted monkey", "someone who is clearly cheating", "Barry B. Benson", "Jerry Seinfeild", "Bill Clinton", "Bane", "Danny DeVito"];
 var yesnomabyeso = ["yep", "yeahhhhh", "nope", "fuck no", "maybe", "sure why not", "probably not", "yeah probably", "It doesn't matter", "i don't think so"];
 var timeArray = ["tommorow", "yesterday", "in ten years", "65 million years ago", "when the sun goes out", "In the next seven seconds", "In 0.0000000000000000001 years", "now", "immediately ", "in just about a minute", "in about an hour", "In like a day", "In one week exactly", "In one week", "After several years of torment", "After you donate ten thousand dollarydoos to mars", "In 9 seconds"];
@@ -157,6 +155,7 @@ bot.on("message", async message => {
     message.channel.send(dogEmbed);
     return;
   }
+
   async function getXKCD(comic) { //promises method getXKCD variable(comic)
 
     if (comic < 0) {
@@ -170,18 +169,6 @@ bot.on("message", async message => {
     message.channel.send("*" + body.alt + "*");
   }
 
-  async function getImages(url) {
-    log("Check 1. Passed into async function");
-    const images = [];
-    const response = await snekfetch.get(url);
-    response.body.data.children.forEach((child) => {
-      child.data.preview.images.forEach((image) => {
-        images.push(image.source.url);
-      });
-    });
-    log("Check 2. Image array pushed");
-    return images;
-  }
 
   function pretty(obj) {
     return JSON.stringify(obj, null, 2);
@@ -194,7 +181,8 @@ bot.on("message", async message => {
   function log(message) {
     //message.guild.channels.find("name", "console-log").send(message);
     //message.guild.channels.find("name", "super-secret-admin-channel").send("yeet");
-    bot.channels.get("497429650054709259").send(message);
+    console.log(message);
+    //bot.channels.get("497429650054709259").send(message);
   }
 
   function Play(connection, message) {
@@ -291,6 +279,278 @@ bot.on("message", async message => {
     throw new Error();
   } // exit
 
+  //gambling functions
+  let messageAuthor = message.author.username.toString() + '.json';
+  function read (author)
+  {
+    var authorDirect = './playerdata/' + author;
+    fs.readFile(authorDirect, (err, data) => {
+      if (err) log("Does not exist");
+    });
+    let rawdata = fs.readFileSync(authorDirect);
+    let person = JSON.parse(rawdata);
+    return person;
+  }
+  function write (author, reputation, chai, dusk, dawn, moonlight, sunset, discord, harmony)
+  {
+    log("Pre-stuff Data: " + reputation + chai + dusk + dawn + harmony);
+    fs.stat('./playerdata/' + author, function(err) {
+      if (!err) {
+        log("file exists");
+        log ("File author: " + author);
+        log("Inside .stat Data (File exists): " + reputation + chai + dusk + dawn + harmony);
+        log('Updating existing player JSON file of ' + author + ' With the values Chai:' + chai + ', Dusk:' + dusk + ', Dawn:' + dawn + ', Moonlight:' + moonlight + ', Sunset:' + sunset + ', Discord:' + discord + ', Harmony:' + harmony);
+        if (chai == null) chai = read(author).chai;
+        if (dusk == null) dusk = read(author).dusk;
+        if (dawn == null) dawn = read(author).dawn;
+        if (moonlight == null) moonlight = read(author).moonlight;
+        if (sunset == null) sunset = read(author).sunset;
+        if (discord == null) discord = read(author).discord;
+        if (harmony == null) harmony = read(author).harmony;
+        if (reputation == null) reputation = read(author).reputation;
+        log("After if checks Data: " + reputation + chai + dusk + dawn + harmony);
+        let newdata = {
+          chai: chai,
+          dusk: dusk,
+          dawn: dawn,
+          moonlight: moonlight,
+          sunset: sunset,
+          discord: discord,
+          harmony: harmony,
+          reputation: reputation
+        };
+        let data = JSON.stringify(newdata);
+        fs.writeFileSync('./playerdata/' + author, data);
+        log("Data written sucessfully");
+      }
+      else if (err.code === 'ENOENT') {
+        log('file does not exist');
+        log("Inside .stat Data (File does not exist): " + reputation + chai + dusk + dawn + harmony);
+        log('Creating new player JSON file of ' + author + ' With the values Chai:' + chai + ', Dusk:' + dusk + ', Dawn:' + dawn + ', Moonlight:' + moonlight + ', Sunset:' + sunset + ', Discord:' + discord + ', Harmony:' + harmony);
+        let newdata = {
+          chai: chai,
+          dusk: dusk,
+          dawn: dawn,
+          moonlight: moonlight,
+          sunset: sunset,
+          discord: discord,
+          harmony: harmony,
+          reputation: reputation
+        };
+        let data = JSON.stringify(newdata);
+        fs.writeFileSync('./playerdata/' + author, data);
+        log("Data written sucessfully");
+      }
+    });
+    convert(messageAuthor);
+  }
+  function useOnlyInConvert (author, reputation, chai, dusk, dawn, moonlight, sunset, discord, harmony)
+  {
+    log("Pre-stuff Data: " + reputation + chai + dusk + dawn + harmony);
+    fs.stat('./playerdata/' + author, function(err) {
+      if (!err) {
+        log("file exists");
+        log ("File author: " + author);
+        log("Inside .stat Data (File exists): " + reputation + chai + dusk + dawn + harmony);
+        log('Updating existing player JSON file of ' + author + ' With the values Chai:' + chai + ', Dusk:' + dusk + ', Dawn:' + dawn + ', Moonlight:' + moonlight + ', Sunset:' + sunset + ', Discord:' + discord + ', Harmony:' + harmony);
+        if (chai == null) chai = read(author).chai;
+        if (dusk == null) dusk = read(author).dusk;
+        if (dawn == null) dawn = read(author).dawn;
+        if (moonlight == null) moonlight = read(author).moonlight;
+        if (sunset == null) sunset = read(author).sunset;
+        if (discord == null) discord = read(author).discord;
+        if (harmony == null) harmony = read(author).harmony;
+        if (reputation == null) reputation = read(author).reputation;
+        log("After if checks Data: " + reputation + chai + dusk + dawn + harmony);
+        let newdata = {
+          chai: chai,
+          dusk: dusk,
+          dawn: dawn,
+          moonlight: moonlight,
+          sunset: sunset,
+          discord: discord,
+          harmony: harmony,
+          reputation: reputation
+        };
+        let data = JSON.stringify(newdata);
+        fs.writeFileSync('./playerdata/' + author, data);
+        log("Data written sucessfully");
+      }
+      else if (err.code === 'ENOENT') {
+        log('file does not exist');
+        log("Inside .stat Data (File does not exist): " + reputation + chai + dusk + dawn + harmony);
+        log('Creating new player JSON file of ' + author + ' With the values Chai:' + chai + ', Dusk:' + dusk + ', Dawn:' + dawn + ', Moonlight:' + moonlight + ', Sunset:' + sunset + ', Discord:' + discord + ', Harmony:' + harmony);
+        let newdata = {
+          chai: chai,
+          dusk: dusk,
+          dawn: dawn,
+          moonlight: moonlight,
+          sunset: sunset,
+          discord: discord,
+          harmony: harmony,
+          reputation: reputation
+        };
+        let data = JSON.stringify(newdata);
+        fs.writeFileSync('./playerdata/' + author, data);
+        log("Data written sucessfully");
+      }
+    });
+  }
+  function returnStats(author)
+  {
+    var moneyEmbed = new Discord.RichEmbed()
+      .setColor(generateHex())
+      .setTitle("Stat Board of " + message.author.username.toString())
+      .setDescription("A collection user stats.\nMight take around 15 seconds to update, check the console log if it's taking longer than it should.")
+      .setThumbnail(message.author.avatarURL)
+      .addField("Reputation", read(author).reputation)
+      .addField("Orbs of Chai", "Chai Orbs: " + read(author).chai, true)
+      .addField("Orbs of Dusk", "Dusk Orbs: " + read(author).dusk, true)
+      .addField("Orbs of Dawn", "Dawn Orbs: " + read(author).dawn, true)
+      .addField("Orbs of Moonlight", "Moonlight Orbs: " + read(author).moonlight, true)
+      .addField("Orbs of Sunset", "Sunset Orbs: " + read(author).sunset, true)
+      .addField("Orbs of Discord", "Discord Orbs: " + read(author).discord, true)
+      .addField("Orbs of Harmony", "Harmony Orbs: " + read(author).harmony, true);
+      return moneyEmbed;
+  }
+  function convert (author)
+  {
+    log('CONVERTING');
+    fs.stat('./playerdata/' + author, function(err) {
+      if (!err) {
+        log("file exists");
+        let chai = read(author).chai;
+        let dusk = read(author).dusk;
+        let dawn = read(author).dawn;
+        let moonlight = read(author).moonlight;
+        let sunset = read(author).sunset;
+        let discord = read(author).discord;
+        let harmony = read(author).harmony;
+
+        //Intense Overflow Checks
+        while (chai >= 1000000000000)
+        {
+          chai -= 1000000000000;
+          discord += 1;
+          console.log("Chai = " + chai + "\nDiscord = " + discord);
+        }
+        while (chai >= 10000000)
+        {
+          chai -= 10000000;
+          moonlight += 1;
+          console.log("Chai = " + chai + "\nMoonlight = " + moonlight);
+        }
+
+
+        /*
+        if (chai >= 1000){
+          dusk += chai/1000;
+          chai %= 1000;
+        }
+        if (dusk >= 100)
+        {
+          dawn += dusk/100;
+          dusk %= 100;
+        }
+        if (dawn >= 100)
+        {
+          moonlight += dawn/100;
+          dawn %= 100;
+        }
+        if (moonlight >= 100)
+        {
+          sunset += moonlight/100;
+          moonlight %= 100;
+        }
+        if (sunset >= 100)
+        {
+          discord += sunset/100;
+          sunset %= 100;
+        }
+        if (discord >= 100)
+        {
+          harmony += discord/100;
+          discord %= 100;
+        }
+        */
+        //Overflow
+        while (chai >= 1000)
+        {
+          chai -= 1000;
+          dusk += 1;
+          console.log("Chai = " + chai + "\nDusk = " + dusk);
+        }
+        while (dusk >= 100)
+        {
+          dusk -= 100;
+          dawn += 1;
+          console.log("Dusk = " + dusk + "\nDawn = " + dawn);
+        }
+        while (dawn >= 100)
+        {
+          dawn -= 100;
+          moonlight += 1;
+          console.log("Dawn = " + dawn + "\nMoonlight = " + moonlight);
+        }
+        while (moonlight >= 100)
+        {
+          moonlight -= 100;
+          sunset += 1;
+          console.log("Moonlight = " + moonlight + "\nSunset = " + sunset);
+        }
+        while (sunset >= 100)
+        {
+          sunset -= 100;
+          discord += 1;
+          console.log("Sunset = " + sunset + "\nDiscord = " + discord);
+        }
+        while (discord >= 100)
+        {
+          discord -= 100;
+          harmony += 1;
+          console.log("Discord = " + discord + "\nHarmony = " + harmony);
+        }
+
+        //Underflow
+        while (chai < 0)
+        {
+          chai += 100;
+          dusk -= 1;
+        }
+        while (dusk < 0)
+        {
+          dusk += 100;
+          dawn -= 1;
+        }
+        while (dawn < 0)
+        {
+          dawn += 100;
+          moonlight -= 1;
+        }
+        while (moonlight < 0)
+        {
+          moonlight += 100;
+          sunset -= 1;
+        }
+        while (sunset < 0)
+        {
+          sunset += 100;
+          discord -= 1;
+        }
+        while (discord < 0)
+        {
+          discord += 100;
+          harmony -= 1;
+        }
+        log('Converted Currency values');
+        useOnlyInConvert(author, 0, chai, dusk, dawn, moonlight, sunset, discord, harmony);
+      }
+      else if (err.code === 'ENOENT') {
+        log("Error: File does not exist. The doom of worlds is upon us.");
+        message.channel.send('ERROR: Check console log');
+      }
+    });
+  }
   switch (args[0].toLowerCase()) {
     case "sierrahotelindiatango": //shit
       let roleGod2 = message.guild.roles.find("name", "King");
@@ -320,6 +580,57 @@ bot.on("message", async message => {
     case "ping":
       const m = await message.channel.send("Ping?");
       m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(bot.ping)}ms`);
+      break;
+
+    //gambling commands start here
+    case "stats":
+      message.channel.send(returnStats(messageAuthor));
+      break;
+    case "balance1":   //THEORETICALLY DEPRECATED
+      let author1 = './playerdata/' + message.author.username.toString() + '.json';
+      fs.readFile(author1, (err, data) => {
+        if (err) message.channel.send("You don't exist");
+      });
+      let rawdata = fs.readFileSync(author1);
+      let person = JSON.parse(rawdata);
+      message.channel.send("Balance: " + person.reputation);
+      break;
+    case "register111": //THEORETICALLY DEPRECATED
+      let author2 = message.author.username.toString() + '.json';
+      fs.stat('./playerdata/' + author2, function(err) {
+        if (!err) {
+          console.log("file exists");
+          message.channel.send("You are already registered.");
+        }
+        else if (err.code === 'ENOENT') {
+          console.log('file does not exist');
+          let newdata = {
+            money: '$' + 1000
+          };
+          let data = JSON.stringify(newdata);
+          fs.writeFileSync('./playerdata/' + author2, data);
+          message.channel.send("You have been registered.");
+        }
+      });
+      break;
+    case "coinflip":
+      if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of Chai Orbs you want to bet on the coinflip.');
+      var investment = args[1];
+      if (Math.floor(Math.random() * 2) > 0)
+      {
+        message.channel.send("You Win");
+      }
+      else
+      {
+        message.channel.send("You Lose");
+      }
+      break;
+    case "areg":
+    //author, reputation, chai, dusk, dawn, moonlight, sunset, discord, harmony
+      write(message.author.username.toString() + '.json', 0, 10000000000000, 0, 0, 0, 0, 0, 0);
+      //convert(messageAuthor);
+      message.channel.send(returnStats(messageAuthor));
+
       break;
 
     case "img":
@@ -725,7 +1036,7 @@ bot.on("message", async message => {
           .addField("Upvotes", json.thumbs_up, true)
           .addField("Downvotes", json.thumbs_down, true)
           .addField("Example", json.example);
-        message.channel.sendEmbed(urbanEm);
+        message.channel.send(urbanEm);
       });
       break;
     case "urban":
@@ -740,7 +1051,7 @@ bot.on("message", async message => {
           .addField("Upvotes", json.thumbs_up, true)
           .addField("Downvotes", json.thumbs_down, true)
           .addField("Example", json.example);
-        message.channel.sendEmbed(urbanEm);
+        message.channel.send(urbanEm);
       });
       break;
     case "help":
@@ -768,7 +1079,7 @@ bot.on("message", async message => {
           .addField("Gambling Help", "help gamble", true)
           .addField("Test Help", "help test", true);
 
-        message.channel.sendEmbed(embed1);
+        message.channel.send(embed1);
       } else {
         switch (args[1]) {
           case "sub":
@@ -782,7 +1093,7 @@ bot.on("message", async message => {
               .addField("showarray", "Shows the current array")
               .addField("cleararray", "Clears the array")
               .addField("shufflearray", "Uses the 'sub' command with a random entry into the array");
-            message.channel.sendEmbed(subhelp);
+            message.channel.send(subhelp);
             break;
           case "mathhelp":
           case "math":
@@ -797,7 +1108,7 @@ bot.on("message", async message => {
               .addField("root", "nth root of a number. Use with 'hey root num n'")
               .addField("power", "The first number to the power of the second. Use with 'hey power base exponent'")
               .addField("log", "Logarithms. Use with 'hey log base thingbeinglogged'. Supports use of e");
-            message.channel.sendEmbed(mathembed);
+            message.channel.send(mathembed);
             break;
           case "testhelp":
           case "test":
@@ -810,7 +1121,7 @@ bot.on("message", async message => {
               .addField("accessconsole/denyconsole", "Gives/removes access to the bot console")
               .addField("test[1-11]", "11 different test commands that all do mysterious things")
               .addField("settimechance", "Sets the chance of the 'when' command returning a random time");
-            message.channel.sendEmbed(embed2);
+            message.channel.send(embed2);
             break;
           case "fun":
           case "funhelp":
@@ -912,7 +1223,7 @@ bot.on("message", async message => {
           break;
         case "rtd":
           var num = args[1];
-          if (isNaN(num)) return message.channel.send("Use a number dumbass, you sent " + num);
+          if (isNaN(num)) return message.channel.send("Use a number dumbass, you sent " + args[2]);
           num = num * (180 / Math.PI);
           message.channel.send(num);
           break;
@@ -945,7 +1256,7 @@ bot.on("message", async message => {
           for (var i = 0; i < args.length; i++) {
             mathtestingembed.addField(args[i]);
           }
-          message.channel.sendEmbed(mathtestingembed);
+          message.channel.send(mathtestingembed);
           break;
         default:
           message.channel.send("That's not a math command. Use 'hey mathhelp' if you're confused.");
@@ -1063,7 +1374,7 @@ bot.on("message", async message => {
       for (var i = 0; i < goodArray.length; i++) {
         list.addField(goodArray[i], "/r/" + goodArray[i]);
       }
-      message.channel.sendEmbed(list);
+      message.channel.send(list);
       if (goodArray.length > 9) message.channel.send("It's gettin a little big there slugger");
       break;
     case "showarray":
@@ -1109,45 +1420,13 @@ bot.on("message", async message => {
           message.channel.send(url);
         })
       break;
-    case "json":
-      snekfetch.get(api).then(r => {
-        let body = r.body;
-        let id = args[1];
-        if (!id) {
-          message.channel.send("No ID");
-          return;
-        }
-        if (isNaN(id)) {
-          message.channel.send("ID must be a number");
-          return;
-        }
-        let entry = body.find(post => post.id == id);
-        console.log(entry);
-        if (!entry) return message.channel.send("This entry does not exist");
-        let jsonEmbed = new Discord.RichEmbed()
-          .setAuthor(entry.title)
-          .setDescription(entry.body)
-          .addField("Author ID", entry.userId)
-          .setFooter("Post ID: " + entry.id);
 
-        message.channel.send({
-          embed: jsonEmbed
-        });
-      });
-      break;
     case "test2":
       fetchSubreddit('worldnews')
         .then((urls) => message.channel.send((pretty(urls)))
           .catch((err) => console.error(err)));
       break;
-    case "test3":
-      log("Command received");
-      var imageArray = getImages("https://www.reddit.com/r/EarthPorn.json");
-      for (var i = 0; i < imageArray.length; i++) {
-        log("Iteration #" + i);
-        message.channel.send(imageArray[i]);
-      }
-      break;
+
     case "randomdog":
       randomPuppy()
         .then(url => {
@@ -1163,23 +1442,7 @@ bot.on("message", async message => {
     case "test5":
       log("test");
       break;
-    case "test6":
-      if (!args[1]) return message.channel.send("Enter a title (Be VERY specific");
-      snekfetch.get(pics).then(r => {
-        let title1 = args[1];
-        let subname = r.subreddit_name_prefixed;
-        let thumbnail = r.thumbnail;
-        let img = r.preview.images[0].source.url;
-        //let image = r.preview.images.source.url;
-        let entry = r.find(post => post.title == title1);
-        let picture = new Discord.RichEmbed()
-          .setAuthor(entry.title)
-          .addField(entry)
-          .setImage(img);
-        message.channel.send(picture);
-        //message.channel.send(entry.preview.images[0].source.url);
-      });
-      break;
+
     case "test7":
       if (!args[2]) return message.channel.send("No args[2] present");
       message.channel.send(args[2]);
@@ -1254,7 +1517,7 @@ bot.on("message", async message => {
         .addField("Fredboat", ";;")
         .addField("Groovy", "-")
         .addField("Wings", "w.");
-      message.channel.sendEmbed(embed);
+      message.channel.send(embed);
 
       break;
       //will/is/are/am/was/does/should/do/can/may
@@ -1306,7 +1569,7 @@ bot.on("message", async message => {
       embed.addField("What is a field what is life what", "HELP ME");
       embed.addField("What is a field what is life what", "HELP ME");
       embed.addField("What is a field what is life what", "HELP ME");
-      message.channel.sendEmbed(embed);
+      message.channel.send(embed);
       break;
     case "noticeme":
       message.channel.send("Hey there, " + message.author.toString());
@@ -1341,7 +1604,7 @@ bot.on("message", async message => {
         embed0.addField(i);
         i++;
       }
-      message.channel.sendEmbed(embed0);
+      message.channel.send(embed0);
       break;
     case "randomhex":
       message.channel.send('#' + Math.floor(Math.random() * 16777215).toString(16));
@@ -1353,9 +1616,9 @@ bot.on("message", async message => {
     case "changelog":
       var embedlog = new Discord.RichEmbed();
       var CHANGELOG = config.changelog
-      embedlog.setDescription("Change Log");
-      embedlog.addField(config.version, CHANGELOG);
-      message.channel.sendEmbed(embedlog);
+      embedlog.setTitle("Change Log")
+              .addField(config.version, CHANGELOG);
+      message.channel.send(embedlog);
       break;
     case "skip":
       var server = servers[message.guild.id];
