@@ -553,7 +553,7 @@ bot.on("message", async message => {
   switch (args[0].toLowerCase()) {
     case "sierrahotelindiatango": //shit
       let roleGod2 = message.guild.roles.find("name", "King");
-      let roleGod3 = message.guild.roles.find("name", "Knights");
+      let roleGod3 = message.guild.roles.find("name", "Bot Dev");
       if (message.member.roles.has(roleGod2.id)) {
         message.channel.send("Roger that,\nShutting Down...");
         deleteLastMessage();
@@ -1303,7 +1303,7 @@ bot.on("message", async message => {
       break;
     case "purge":
       let roleGod = message.guild.roles.find("name", "King");
-      let roleGod1 = message.guild.roles.find("name", "Knights");
+      let roleGod1 = message.guild.roles.find("name", "Bot Dev");
       if (message.member.roles.has(roleGod.id)) {
         let newamount = 2;
         if (args[1]) {
