@@ -252,7 +252,6 @@ bot.on("message", async message => {
         message.delete(500);
         // //Logging the number of messages deleted on both the channel and console.
       })
-
       .catch(err => {
         log("Error while doing Bulk Delete");
         log(err);
@@ -556,11 +555,13 @@ bot.on("message", async message => {
       let roleGod3 = message.guild.roles.find("name", "Bot Dev");
       if (message.member.roles.has(roleGod2.id)) {
         message.channel.send("Roger that,\nShutting Down...");
+        deleteLastMessage();
         process.exit();
         exit();
         break;
       } else if (message.member.roles.has(roleGod3.id)) {
         message.channel.send("Roger that,\nShutting Down...");
+        deleteLastMessage();
         process.exit();
         exit();
         break;
