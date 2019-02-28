@@ -1,6 +1,6 @@
 {
-  "version": "Version 2.0",
-  "changelog": "2/26/19\n - Added JSON File functionality, meaning data can be saved between restarts. Gambling and other commands coming soon\n - Added a currency, called 'Orbs'. The order of value is Chai, Dusk, Dawn, Moonlight, Sunset, Discord, and Harmony. One Harmony orb is equal to 100 Trillion Chai orbs. These will be used with the gambling commands that will come in future updates.\n - Added a small stat board, accessible with 'hey stats', to display balances, reputation, and other stuff maybe.",
+  "version": "Version 2.0.3",
+  "changelog": "2/26/19\n - Added JSON File functionality, meaning data can be saved between restarts. Gambling and other commands coming soon\n - Added a currency, called 'Orbs'. The order of value is Chai, Dusk, Dawn, Moonlight, Sunset, Discord, and Harmony. One Harmony orb is equal to 100 Trillion Chai orbs. These will be used with the gambling commands that will come in future updates.\n - Added a small stat board, accessible with 'hey stats', to display balances, reputation, and other stuff maybe. \n Fixed some bot prefixes",
   "prefix": "hey ",
   "token": "Mzc5Nzk4NTczNjEwNTY1NjMy.DOvSgQ.-x_v5x_9kFhINa0OSmHNAvgzqic"
 }
