@@ -111,9 +111,7 @@ bot.on("message", async message => {
   var argString = args.join(" ");
   let colors = message.guild.roles.filter(role => role.name.startsWith("#"));
 
-  function send(text) {
-    message.channel.send(text);
-  }
+
 
   function getSubredditImage() { //methods
 
@@ -886,18 +884,18 @@ bot.on("message", async message => {
       }
       break;
     case "addtest":
-      if (!args[1]) send("DOESNT WORK");
+      if (!args[1]) message.channel.send("DOESNT WORK");
       if (args[2] != "+") {
-        send("DOESNT WORK");
+        message.channel.send("DOESNT WORK");
         break;
       }
       if (!args[3]) {
-        send("DOESNT WORK");
+        message.channel.send("DOESNT WORK");
         break;
       }
       if (args[1].isNaN || args[3].isNaN) {
 
-        send("DOESNT WORK");
+        message.channel.send("DOESNT WORK");
         break;
       }
       break;
