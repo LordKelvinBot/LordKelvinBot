@@ -111,7 +111,9 @@ bot.on("message", async message => {
   var argString = args.join(" ");
   let colors = message.guild.roles.filter(role => role.name.startsWith("#"));
 
-
+  function send(text) {
+    message.channel.send(text);
+  }
 
   function getSubredditImage() { //methods
 
@@ -884,18 +886,18 @@ bot.on("message", async message => {
       }
       break;
     case "addtest":
-      if (!args[1]) message.channel.send("DOESNT WORK");
+      if (!args[1]) send("DOESNT WORK");
       if (args[2] != "+") {
-        message.channel.send("DOESNT WORK");
+        send("DOESNT WORK");
         break;
       }
       if (!args[3]) {
-        message.channel.send("DOESNT WORK");
+        send("DOESNT WORK");
         break;
       }
       if (args[1].isNaN || args[3].isNaN) {
 
-        message.channel.send("DOESNT WORK");
+        send("DOESNT WORK");
         break;
       }
       break;
@@ -1579,7 +1581,7 @@ bot.on("message", async message => {
       reported.splice(reported.indexOf('foo'), 1);
       reported.splice(reported.indexOf("report"), 1);
       message.channel.send("You reported " + reported.join(" ") + ".");
-      message.guild.channels.find("name", "super-secret-admin-channel").send(message.author.toString() + " reported " + reported.join(" ") + " for " + args.join(" ") + "\n" + findSpacing(original) + "*Reported at " + time + ", on " + month + "/" + day + "/" + year + "*");
+      //message.guild.channels.find("name", "super-secret-admin-channel").send(message.author.toString() + " reported " + reported.join(" ") + " for " + args.join(" ") + "\n" + findSpacing(original) + "*Reported at " + time + ", on " + month + "/" + day + "/" + year + "*");
       break;
 
     case "escape":
