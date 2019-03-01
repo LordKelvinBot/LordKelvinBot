@@ -75,10 +75,6 @@ function generateHex() {
   return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 
-bot.on("guildMemberAdd", function(member) { // this here thing adds whoever joins as an admin. dont uncomment it
-  message.channel.send(member.user.username + " has joined the server.\n<@&295777645931790336>")
-
-});
 bot.on("message", async message => {
   console.log(message.content);
   function findSpacing(message) {
@@ -88,7 +84,6 @@ bot.on("message", async message => {
     }
     return spacing;
   }
-
 
   var messageContent = message.content;
   var justInCase = 0;
@@ -253,7 +248,6 @@ bot.on("message", async message => {
         message.delete(500);
         // //Logging the number of messages deleted on both the channel and console.
       })
-
       .catch(err => {
         log("Error while doing Bulk Delete");
         log(err);
@@ -554,7 +548,7 @@ bot.on("message", async message => {
   switch (args[0].toLowerCase()) {
     case "sierrahotelindiatango": //shit
       let roleGod2 = message.guild.roles.find("name", "King");
-      let roleGod3 = message.guild.roles.find("name", "Lords of π");
+      let roleGod3 = message.guild.roles.find("name", "Bot Dev");
       if (message.member.roles.has(roleGod2.id)) {
         message.channel.send("Roger that,\nShutting Down...");
         deleteLastMessage();
@@ -569,7 +563,6 @@ bot.on("message", async message => {
         break;
       } else {
         message.channel.send("You don't have perms for that");
-        deleteLastMessage();
       }
       break;
 
@@ -1304,7 +1297,7 @@ bot.on("message", async message => {
       break;
     case "purge":
       let roleGod = message.guild.roles.find("name", "King");
-      let roleGod1 = message.guild.roles.find("name", "Lords of π");
+      let roleGod1 = message.guild.roles.find("name", "Bot Dev");
       if (message.member.roles.has(roleGod.id)) {
         let newamount = 2;
         if (args[1]) {
@@ -1515,7 +1508,7 @@ bot.on("message", async message => {
         .addField("Jukebox", "$$")
         .addField("Pancake Bot", "p!")
         .addField("Fredboat", ";;")
-        .addField("Groovy", "-")
+        .addField("Groovy", "--")
         .addField("Wings", "w.");
       message.channel.send(embed);
 
@@ -1582,7 +1575,7 @@ bot.on("message", async message => {
       reported.splice(reported.indexOf('foo'), 1);
       reported.splice(reported.indexOf("report"), 1);
       message.channel.send("You reported " + reported.join(" ") + ".");
-      message.guild.channels.find("name", "super-secret-admin-channel").send(message.author.toString() + " reported " + reported.join(" ") + " for " + args.join(" ") + "\n" + findSpacing(original) + "*Reported at " + time + ", on " + month + "/" + day + "/" + year + "*");
+      //message.guild.channels.find("name", "super-secret-admin-channel").send(message.author.toString() + " reported " + reported.join(" ") + " for " + args.join(" ") + "\n" + findSpacing(original) + "*Reported at " + time + ", on " + month + "/" + day + "/" + year + "*");
       break;
 
     case "escape":
