@@ -330,12 +330,12 @@ bot.on("message", async message => {
     if (rep >= 50) return ":thumbsup:";
     if (rep >= 10) return "Neutral+";
     if (rep >= 0) return "Neutral";
-    if (rep <= 10000) return "The Antichrist Himself   :smiling_imp:";
-    if (rep <= 5000) return "EA";
-    if (rep <= 1000) return "Snake";
-    if (rep <= 500) return "Shady";
-    if (rep <= 50) return ":thinking:";
-    if (rep <= 10) return "Neutral-";
+    if (rep <= -10000) return "The Antichrist Himself   :smiling_imp:";
+    if (rep <= -5000) return "EA";
+    if (rep <= -1000) return "Snake";
+    if (rep <= -500) return "Shady";
+    if (rep <= -50) return ":thinking:";
+    if (rep <= -10) return "Neutral-";
   }
   function convert (author)
   {
