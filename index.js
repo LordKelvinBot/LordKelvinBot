@@ -15,7 +15,7 @@ v1.2
 To Do List:
     json stuff finally works, but convert can take some time to work fully and idk if it really completly works yet
     finish the gambling Commands
-    handle the case if you bet like a billion chai orbs but dont have that many
+    handle the case if you bet like a billion copper  but dont have that many
 
 Some links to some stuff
     https://stackoverflow.com/questions/50667507/how-to-delete-specific-messages/51333614#51333614
@@ -285,33 +285,21 @@ bot.on("message", async message => {
     let person = JSON.parse(rawdata);
     return person;
   }
-  function write (author, reputation, chai, dusk, dawn, moonlight, sunset, discord, harmony)
+  function write (author, reputation, copper)
   {
-    log("Pre-stuff Data: " + reputation + chai + dusk + dawn + harmony);
+    log("Pre-stuff Data: " + reputation + copper);
     fs.stat('./playerdata/' + author, function(err) {
       if (!err) {
         log("file exists");
         log ("File author: " + author);
-        log("Inside .stat Data (File exists): " + reputation + chai + dusk + dawn + harmony);
-        log('Updating existing player JSON file of ' + author + ' With the values Chai:' + chai + ', Dusk:' + dusk + ', Dawn:' + dawn + ', Moonlight:' + moonlight + ', Sunset:' + sunset + ', Discord:' + discord + ', Harmony:' + harmony);
-        if (chai == null) chai = read(author).chai;
-        if (dusk == null) dusk = read(author).dusk;
-        if (dawn == null) dawn = read(author).dawn;
-        if (moonlight == null) moonlight = read(author).moonlight;
-        if (sunset == null) sunset = read(author).sunset;
-        if (discord == null) discord = read(author).discord;
-        if (harmony == null) harmony = read(author).harmony;
+        log("Inside .stat Data (File exists): " + reputation + copper);
+        log('Updating existing player JSON file of ' + author + ' With the values copper:' + copper);
+        if (copper == null) copper = read(author).copper;
         if (reputation == null) reputation = read(author).reputation;
-        log("After if checks Data: " + reputation + chai + dusk + dawn + harmony);
+        log("After if checks Data: " + reputation + copper);
         let newdata = {
-          chai: chai,
-          dusk: dusk,
-          dawn: dawn,
-          moonlight: moonlight,
-          sunset: sunset,
-          discord: discord,
-          harmony: harmony,
-          reputation: reputation
+          reputation: reputation,
+          copper: copper
         };
         let data = JSON.stringify(newdata);
         fs.writeFileSync('./playerdata/' + author, data);
@@ -319,93 +307,35 @@ bot.on("message", async message => {
       }
       else if (err.code === 'ENOENT') {
         log('file does not exist');
-        log("Inside .stat Data (File does not exist): " + reputation + chai + dusk + dawn + harmony);
-        log('Creating new player JSON file of ' + author + ' With the values Chai:' + chai + ', Dusk:' + dusk + ', Dawn:' + dawn + ', Moonlight:' + moonlight + ', Sunset:' + sunset + ', Discord:' + discord + ', Harmony:' + harmony);
+        log("Inside .stat Data (File does not exist): " + reputation + copper + silver + gold + platinum);
+        log('Creating new player JSON file of ' + author + ' With the values copper:' + copper);
         let newdata = {
-          chai: chai,
-          dusk: dusk,
-          dawn: dawn,
-          moonlight: moonlight,
-          sunset: sunset,
-          discord: discord,
-          harmony: harmony,
-          reputation: reputation
+          reputation: reputation,
+          copper: copper
         };
         let data = JSON.stringify(newdata);
         fs.writeFileSync('./playerdata/' + author, data);
         log("Data written sucessfully");
       }
     });
-    convert(messageAuthor);
+
   }
-  function useOnlyInConvert (author, reputation, chai, dusk, dawn, moonlight, sunset, discord, harmony)
+  function repCheck (author)
   {
-    log("Pre-stuff Data: " + reputation + chai + dusk + dawn + harmony);
-    fs.stat('./playerdata/' + author, function(err) {
-      if (!err) {
-        log("file exists");
-        log ("File author: " + author);
-        log("Inside .stat Data (File exists): " + reputation + chai + dusk + dawn + harmony);
-        log('Updating existing player JSON file of ' + author + ' With the values Chai:' + chai + ', Dusk:' + dusk + ', Dawn:' + dawn + ', Moonlight:' + moonlight + ', Sunset:' + sunset + ', Discord:' + discord + ', Harmony:' + harmony);
-        if (chai == null) chai = read(author).chai;
-        if (dusk == null) dusk = read(author).dusk;
-        if (dawn == null) dawn = read(author).dawn;
-        if (moonlight == null) moonlight = read(author).moonlight;
-        if (sunset == null) sunset = read(author).sunset;
-        if (discord == null) discord = read(author).discord;
-        if (harmony == null) harmony = read(author).harmony;
-        if (reputation == null) reputation = read(author).reputation;
-        log("After if checks Data: " + reputation + chai + dusk + dawn + harmony);
-        let newdata = {
-          chai: chai,
-          dusk: dusk,
-          dawn: dawn,
-          moonlight: moonlight,
-          sunset: sunset,
-          discord: discord,
-          harmony: harmony,
-          reputation: reputation
-        };
-        let data = JSON.stringify(newdata);
-        fs.writeFileSync('./playerdata/' + author, data);
-        log("Data written sucessfully");
-      }
-      else if (err.code === 'ENOENT') {
-        log('file does not exist');
-        log("Inside .stat Data (File does not exist): " + reputation + chai + dusk + dawn + harmony);
-        log('Creating new player JSON file of ' + author + ' With the values Chai:' + chai + ', Dusk:' + dusk + ', Dawn:' + dawn + ', Moonlight:' + moonlight + ', Sunset:' + sunset + ', Discord:' + discord + ', Harmony:' + harmony);
-        let newdata = {
-          chai: chai,
-          dusk: dusk,
-          dawn: dawn,
-          moonlight: moonlight,
-          sunset: sunset,
-          discord: discord,
-          harmony: harmony,
-          reputation: reputation
-        };
-        let data = JSON.stringify(newdata);
-        fs.writeFileSync('./playerdata/' + author, data);
-        log("Data written sucessfully");
-      }
-    });
-  }
-  function returnStats(author)
-  {
-    var moneyEmbed = new Discord.RichEmbed()
-      .setColor(generateHex())
-      .setTitle("Stat Board of " + message.author.username.toString())
-      .setDescription("A collection user stats.\nMight take around 15 seconds to update, check the console log if it's taking longer than it should.")
-      .setThumbnail(message.author.avatarURL)
-      .addField("Reputation", read(author).reputation)
-      .addField("Orbs of Chai", "Chai Orbs: " + read(author).chai, true)
-      .addField("Orbs of Dusk", "Dusk Orbs: " + read(author).dusk, true)
-      .addField("Orbs of Dawn", "Dawn Orbs: " + read(author).dawn, true)
-      .addField("Orbs of Moonlight", "Moonlight Orbs: " + read(author).moonlight, true)
-      .addField("Orbs of Sunset", "Sunset Orbs: " + read(author).sunset, true)
-      .addField("Orbs of Discord", "Discord Orbs: " + read(author).discord, true)
-      .addField("Orbs of Harmony", "Harmony Orbs: " + read(author).harmony, true);
-      return moneyEmbed;
+    let rep = read(author).reputation;
+    if (rep >= 10000) return "Abraham Lincoln Himself   :sunglasses:";
+    if (rep >= 5000) return "Keanu Reeves";
+    if (rep >= 1000) return "Very Good";
+    if (rep >= 500) return "Good";
+    if (rep >= 50) return ":thumbsup:";
+    if (rep >= 10) return "Neutral+";
+    if (rep >= 0) return "Neutral";
+    if (rep <= 10000) return "The Antichrist Himself   :smiling_imp:";
+    if (rep <= 5000) return "EA";
+    if (rep <= 1000) return "Snake";
+    if (rep <= 500) return "Shady";
+    if (rep <= 50) return ":thinking:";
+    if (rep <= 10) return "Neutral-";
   }
   function convert (author)
   {
@@ -413,131 +343,50 @@ bot.on("message", async message => {
     fs.stat('./playerdata/' + author, function(err) {
       if (!err) {
         log("file exists");
-        let chai = read(author).chai;
-        let dusk = read(author).dusk;
-        let dawn = read(author).dawn;
-        let moonlight = read(author).moonlight;
-        let sunset = read(author).sunset;
-        let discord = read(author).discord;
-        let harmony = read(author).harmony;
+        let copper = read(author).copper;
+        let silver = 0;
+        let gold = 0;
+        let platinum = 0;
 
-        //Intense Overflow Checks
-        while (chai >= 1000000000000)
+        //Extreme Overflow
+        while (copper >= 1000000)
         {
-          chai -= 1000000000000;
-          discord += 1;
-          console.log("Chai = " + chai + "\nDiscord = " + discord);
+          copper -= 1000000;
+          platinum += 1;
         }
-        while (chai >= 10000000)
+        while (copper >= 10000)
         {
-          chai -= 10000000;
-          moonlight += 1;
-          console.log("Chai = " + chai + "\nMoonlight = " + moonlight);
+          copper -= 10000;
+          gold += 1;
         }
-
-
-        /*
-        if (chai >= 1000){
-          dusk += chai/1000;
-          chai %= 1000;
-        }
-        if (dusk >= 100)
-        {
-          dawn += dusk/100;
-          dusk %= 100;
-        }
-        if (dawn >= 100)
-        {
-          moonlight += dawn/100;
-          dawn %= 100;
-        }
-        if (moonlight >= 100)
-        {
-          sunset += moonlight/100;
-          moonlight %= 100;
-        }
-        if (sunset >= 100)
-        {
-          discord += sunset/100;
-          sunset %= 100;
-        }
-        if (discord >= 100)
-        {
-          harmony += discord/100;
-          discord %= 100;
-        }
-        */
         //Overflow
-        while (chai >= 1000)
+        while (copper >= 100)
         {
-          chai -= 1000;
-          dusk += 1;
-          console.log("Chai = " + chai + "\nDusk = " + dusk);
+          copper -= 100;
+          silver += 1;
+          console.log("copper = " + copper + "\nsilver = " + silver);
         }
-        while (dusk >= 100)
+        while (silver >= 100)
         {
-          dusk -= 100;
-          dawn += 1;
-          console.log("Dusk = " + dusk + "\nDawn = " + dawn);
+          silver -= 100;
+          gold += 1;
+          console.log("silver = " + silver + "\ngold = " + gold);
         }
-        while (dawn >= 100)
+        while (gold >= 100)
         {
-          dawn -= 100;
-          moonlight += 1;
-          console.log("Dawn = " + dawn + "\nMoonlight = " + moonlight);
-        }
-        while (moonlight >= 100)
-        {
-          moonlight -= 100;
-          sunset += 1;
-          console.log("Moonlight = " + moonlight + "\nSunset = " + sunset);
-        }
-        while (sunset >= 100)
-        {
-          sunset -= 100;
-          discord += 1;
-          console.log("Sunset = " + sunset + "\nDiscord = " + discord);
-        }
-        while (discord >= 100)
-        {
-          discord -= 100;
-          harmony += 1;
-          console.log("Discord = " + discord + "\nHarmony = " + harmony);
-        }
-
-        //Underflow
-        while (chai < 0)
-        {
-          chai += 100;
-          dusk -= 1;
-        }
-        while (dusk < 0)
-        {
-          dusk += 100;
-          dawn -= 1;
-        }
-        while (dawn < 0)
-        {
-          dawn += 100;
-          moonlight -= 1;
-        }
-        while (moonlight < 0)
-        {
-          moonlight += 100;
-          sunset -= 1;
-        }
-        while (sunset < 0)
-        {
-          sunset += 100;
-          discord -= 1;
-        }
-        while (discord < 0)
-        {
-          discord += 100;
-          harmony -= 1;
+          gold -= 100;
+          platinum += 1;
+          console.log("gold = " + gold + "\nplatinum = " + platinum);
         }
         log('Converted Currency values');
-        useOnlyInConvert(author, 0, chai, dusk, dawn, moonlight, sunset, discord, harmony);
+        var moneyEmbed = new Discord.RichEmbed()
+          .setColor(generateHex())
+          .setTitle("Stat Board of " + message.author.username.toString())
+          .setDescription("A collection of your stats.")
+          .setThumbnail(message.author.avatarURL)
+          .addField("Reputation", read(author).reputation + "\nReputation Level: " + repCheck(messageAuthor))
+          .addField("Money", "Copper: " + copper + "\nSilver: " + silver + "\nGold: " + gold + "\nPlatinum: " + platinum);
+          message.channel.send(moneyEmbed);
       }
       else if (err.code === 'ENOENT') {
         log("Error: File does not exist. The doom of worlds is upon us.");
@@ -577,7 +426,7 @@ bot.on("message", async message => {
 
     //gambling commands start here
     case "stats":
-      message.channel.send(returnStats(messageAuthor));
+      convert(messageAuthor);
       break;
     case "balance1":   //THEORETICALLY DEPRECATED
       let author1 = './playerdata/' + message.author.username.toString() + '.json';
@@ -607,22 +456,25 @@ bot.on("message", async message => {
       });
       break;
     case "coinflip":
-      if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of Chai Orbs you want to bet on the coinflip.');
-      var investment = args[1];
+      if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of copper you want to bet on the coinflip.');
+      var investment = parseInt(args[1]);
       if (Math.floor(Math.random() * 2) > 0)
       {
-        message.channel.send("You Win");
+        message.channel.send("You Won " + investment);
+        //(author, reputation, copper, silver, gold, platinum, sunset, discord, )
+        write(messageAuthor, null, read(messageAuthor).copper + investment);
       }
       else
       {
-        message.channel.send("You Lose");
+        message.channel.send("You Lost " + investment);
+        write(messageAuthor, null, read(messageAuthor).copper - investment);
       }
       break;
     case "areg":
-    //author, reputation, chai, dusk, dawn, moonlight, sunset, discord, harmony
-      write(message.author.username.toString() + '.json', 0, 10000000000000, 0, 0, 0, 0, 0, 0);
-      //convert(messageAuthor);
-      message.channel.send(returnStats(messageAuthor));
+    //author, reputation, copper, silver, gold, platinum, sunset, discord,
+      write(messageAuthor, args[2], args[1]);
+      convert(messageAuthor);
+
 
       break;
 
