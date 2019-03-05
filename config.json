@@ -1,6 +1,6 @@
 {
   "version": "Version 2.1",
-  "changelog": "3/4/19\n - Changed currency from 8 different kinds of orbs to a simpler copper, silver, gold, and platinum\n - Money is now stored as one variable (copper) and then converted only visually. This makes it much easier to implement other commands.\n - Added different reputation levels, and a reputation level section to the stat board.",
+  "changelog": "3/4/19\n - Changed currency from 8 different kinds of orbs to a simpler copper, silver, gold, and platinum\n - Money is now stored as one variable (copper) and then converted only visually. This makes it much easier to implement other commands.\n - Added different reputation levels, and a reputation level section to the stat board.\n - Fixed bot crash issues",
   "prefix": "hey ",
   "token": "Mzc5Nzk4NTczNjEwNTY1NjMy.DOvSgQ.-x_v5x_9kFhINa0OSmHNAvgzqic"
 }
