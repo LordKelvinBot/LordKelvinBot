@@ -77,13 +77,7 @@ function generateHex() {
 
 bot.on("message", async message => {
   console.log(message.content);
-  function findSpacing(message) {
-    var spacing = " ";
-    for (var i = 0; i < message.length; i++) {
-      spacing = spacing + " ";
-    }
-    return spacing;
-  }
+
 
   var messageContent = message.content;
   var justInCase = 0;
@@ -96,7 +90,7 @@ bot.on("message", async message => {
       break;
     }
   }
-  if (!(message.author.equals(bot.user)) && !(message.content.startsWith(PREFIX)) && !(message.content.startsWith(".")) && !(message.author.username == "Hime") && !(message.channel.id = 383829771865292801)) message.guild.channels.find("name", "console-log").send(messageContent + "\n    *Sent by " + message.author.username + "*");
+  //if (!(message.author.equals(bot.user)) && !(message.content.startsWith(PREFIX)) && !(message.content.startsWith(".")) && !(message.author.username == "Hime") && !(message.channel.id = 383829771865292801)) message.guild.channels.find("name", "console-log").send(messageContent + "\n    *Sent by " + message.author.username + "*");
   //bot.user.setActivity('Serving ${bot.users.size} people');
   if (message.author.equals(bot.user)) return;
   if (!message.content.startsWith(PREFIX)) return;
@@ -105,7 +99,7 @@ bot.on("message", async message => {
   //Can't really do a countdown timer that says something every hour, because this code only runs every time someone sends a message. At least the command works
   var args = message.content.substring(PREFIX.length).split(" ");
   var argString = args.join(" ");
-  let colors = message.guild.roles.filter(role => role.name.startsWith("#"));
+  //let colors = message.guild.roles.filter(role => role.name.startsWith("#"));
 
   function send(text) {
     message.channel.send(text);
@@ -287,6 +281,7 @@ bot.on("message", async message => {
   }
   function write (author, reputation, copper)
   {
+
     log("Pre-stuff Data: " + reputation + copper);
     fs.stat('./playerdata/' + author, function(err) {
       if (!err) {
@@ -336,6 +331,67 @@ bot.on("message", async message => {
     if (rep <= -500) return "Shady";
     if (rep <= -50) return ":thinking:";
     if (rep <= -10) return "Neutral-";
+  }
+  function brokeCheck (author, bet)
+  {
+    if (read(author).copper < bet) return true;
+    return false;
+  }
+  function quickConvert(amount, type)
+  {
+    //types: 0 = copper, 1 = silver, etc.
+    return amount*(Math.pow(100, type));
+
+  }
+  function validType (type)
+  {
+    switch (type.toLowerCase())
+    {
+      case "copper":
+      case "c":
+      case "cop":
+      case "gold":
+      case "g":
+      case "silver":
+      case "silv":
+      case "s":
+      case "platinum":
+      case "platnum":
+      case "plat":
+      case "p":
+        return true;
+        break;
+      default:
+        return false;
+    }
+  }
+  function checkMoneyType (type)
+  {
+    switch (type.toLowerCase())
+    {
+      case "copper":
+      case "c":
+      case "cop":
+        return 0;
+        break;
+      case "gold":
+      case "g":
+        return 2;
+        break;
+      case "silver":
+      case "silv":
+      case "s":
+        return 1;
+        break;
+      case "platinum":
+      case "platnum":
+      case "plat":
+      case "p":
+        return 3;
+        break;
+      default:
+        return false;
+    }
   }
   function convert (author)
   {
@@ -455,27 +511,31 @@ bot.on("message", async message => {
         }
       });
       break;
-    case "coinflip":
+    case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
       if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of copper you want to bet on the coinflip.');
-      var investment = parseInt(args[1]);
+      let moneyType = "copper";
+      if (args[2]) moneyType = args[2];
+      if (!validType(moneyType)) return message.channel.send("Not a valid type of currency");
+      moneyType = checkMoneyType(moneyType);
+      var investment = quickConvert(parseInt(args[1]), moneyType);
+      console.log("Investment = " + investment + "\nmoneyType = " + moneyType);
+      if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
       if (Math.floor(Math.random() * 2) > 0)
       {
         message.channel.send("You Won " + investment);
         //(author, reputation, copper, silver, gold, platinum, sunset, discord, )
-        write(messageAuthor, null, read(messageAuthor).copper + investment);
+        write(messageAuthor, null, read(messageAuthor).copper + parseInt(investment));
       }
       else
       {
         message.channel.send("You Lost " + investment);
-        write(messageAuthor, null, read(messageAuthor).copper - investment);
+        write(messageAuthor, null, read(messageAuthor).copper - parseInt(investment));
       }
       break;
     case "areg":
     //author, reputation, copper, silver, gold, platinum, sunset, discord,
       write(messageAuthor, args[2], args[1]);
       convert(messageAuthor);
-
-
       break;
 
     case "img":
@@ -1405,7 +1465,7 @@ bot.on("message", async message => {
 
     case "secretadmintest":
       message.channel.send("This is a test command. I'm testing something. It doesn't do much.");
-      message.guild.channels.find("name", "super-secret-admin-channel").send("test sucessful my guy did i spell that right");
+      //message.guild.channels.find("name", "super-secret-admin-channel").send("test sucessful my guy did i spell that right");
       break;
     case "embedtest":
       var embed = new Discord.RichEmbed();
