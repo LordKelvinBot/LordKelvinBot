@@ -324,7 +324,7 @@ bot.on("message", async message => {
     if (rep >= 500) return "Good";
     if (rep >= 50) return ":thumbsup:";
     if (rep >= 10) return "Neutral+";
-    if (rep >= 0) return "Neutral";
+    if (-9 >= rep >= 0) return "Neutral";
     if (rep <= -10000) return "The Antichrist Himself   :smiling_imp:";
     if (rep <= -5000) return "EA";
     if (rep <= -1000) return "Snake";
