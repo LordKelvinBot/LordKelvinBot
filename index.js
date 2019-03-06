@@ -184,7 +184,7 @@ bot.on("message", async message => {
     var voiceChannel = message.member.voiceChannel;
     voiceChannel.join().then(connection => {
       console.log("joined channel");
-      new String = String convertedToString;
+      String convertedToString = new String();
       String convertedToString = Object.toString(server.queue[0]);
       const stream = ytdl(convertedToString, {
         filter: 'audioonly',
