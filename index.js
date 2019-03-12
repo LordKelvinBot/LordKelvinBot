@@ -99,7 +99,7 @@ bot.on("message", async message => {
   //Can't really do a countdown timer that says something every hour, because this code only runs every time someone sends a message. At least the command works
   var args = message.content.substring(PREFIX.length).split(" ");
   var argString = args.join(" ");
-  //let colors = message.guild.roles.filter(role => role.name.startsWith("#"));
+  let colors = message.guild.roles.filter(role => role.name.startsWith("#"));
 
   function send(text) {
     message.channel.send(text);
