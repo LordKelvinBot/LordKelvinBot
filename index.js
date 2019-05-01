@@ -66,6 +66,7 @@ var timeArray = ["tommorow", "yesterday", "in ten years", "65 million years ago"
 var timeTypes = ["hours", "seconds", "years", "milliseconds", "solar rotations", "months", "weeks", "days", "planetary rotations"];
 var goodArray = [];
 var dabArray = ["dab.PNG", "dabderful.jpg", "dabtastic.jpg", "clamdab.jpg", "dabeet.jpg", "halfdab.jpg", "headless-dab.jpg", "whoadab.jpg", "dapper.jpg", "dinosaur.jpg", "dabbrown.jpg", "selfdab.jpg"];
+var sentenceArray = ["no", "stop", "dude", "literally", "like", "seriously", "fuck"];
 var servers = {};
 var thing = 1;
 var timeChancer = 45;
@@ -454,7 +455,7 @@ bot.on("message", async message => {
     });
   }
   switch (args[0].toLowerCase()) {
-    case "sierrahotelindiatango": //shit
+    case "sierrahotelindiatango":
       let roleGod2 = message.guild.roles.find("name", "King");
       let roleGod3 = message.guild.roles.find("name", "Bot Dev");
       if (message.member.roles.has(roleGod2.id)) {
@@ -474,7 +475,21 @@ bot.on("message", async message => {
       }
       break;
 
-
+    case "that":
+      for (var i = sentenceArray.length - 1; i > 0; i--)
+      {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = sentenceArray[i];
+        sentenceArray[i] = sentenceArray[j];
+        sentenceArray[j] = temp;
+      }
+      var messageToBeSent = "";
+      for (var k = 0; k < sentenceArray.length; k++)
+      {
+        messageToBeSent += sentenceArray[k] + " ";
+      }
+      message.channel.send(messageToBeSent);
+      break;
     case "time":
       message.channel.send("The time is ")
       break;
