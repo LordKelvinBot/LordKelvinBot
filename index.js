@@ -190,7 +190,7 @@ bot.on("message", async message => {
         filter: 'audioonly',
         quality: 'highestaudio'
       });
-      const dispatcher = connection.playOpusStream(await ytdl(url), streamOptions);
+      const dispatcher = connection.playOpusStream(await ytdl(url), streamOptions));
       dispatcher.on("end", end => {
         console.log("left channel");
         voiceChannel.leave();
