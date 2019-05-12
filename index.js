@@ -175,7 +175,7 @@ bot.on("message", async message => {
     //bot.channels.get("497429650054709259").send(message);
   }
 
-  function Play(connection, message) {
+  function Play(connection, url) {
     const streamOptions = {
       seek: 0,
       volume: 1
@@ -185,12 +185,12 @@ bot.on("message", async message => {
     var voiceChannel = message.member.voiceChannel;
     voiceChannel.join().then(connection => {
       console.log("joined channel");
-      var convertedToString = Object.toString(server.queue[0]);
-      const stream = ytdl(convertedToString, {
+      var url = Object.toString(server.queue[0]);
+      const stream = ytdl(url, {
         filter: 'audioonly',
         quality: 'highestaudio'
       });
-      const dispatcher = connection.playStream(stream, streamOptions);
+      const dispatcher = connection.playOpusStream(await ytdl(url), streamOptions);
       dispatcher.on("end", end => {
         console.log("left channel");
         voiceChannel.leave();
