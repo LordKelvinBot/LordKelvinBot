@@ -12,7 +12,7 @@ v1.2
   - added a new file named resources.js, meant to be used to redo all gambling commands in a more closed system. Will it work? No.
 
 
-To Do List:
+To Do List
     json stuff finally works, but convert can take some time to work fully and idk if it really completly works yet
     finish the gambling Commands
     handle the case if you bet like a billion copper  but dont have that many
