@@ -68,6 +68,7 @@ var goodArray = [];
 var dabArray = ["dab.PNG", "dabderful.jpg", "dabtastic.jpg", "clamdab.jpg", "dabeet.jpg", "halfdab.jpg", "headless-dab.jpg", "whoadab.jpg", "dapper.jpg", "dinosaur.jpg", "dabbrown.jpg", "selfdab.jpg"];
 var sentenceArray = ["no", "stop", "dude", "literally", "like", "seriously", "fuck"];
 var servers = {};
+var slotMachine = [":tongue:", ":sweat_drops:", ":tophat:", ":fire:", ":eggplant:"];
 var thing = 1;
 var timeChancer = 45;
 forceFetchUsers: true
@@ -536,7 +537,7 @@ bot.on("message", async message => {
       break;
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
       if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of copper you want to bet on the coinflip.');
-      let moneyType = "copper";
+      let moneyType = "copper";         //these four lines shouldn't work and don't do anything, but they work so...
       if (args[2]) moneyType = args[2];
       if (!validType(moneyType)) return message.channel.send("Not a valid type of currency");
       moneyType = checkMoneyType(moneyType);
@@ -554,6 +555,16 @@ bot.on("message", async message => {
         message.channel.send("You Lost " + investment);
         write(messageAuthor, null, read(messageAuthor).copper - parseInt(investment));
       }
+      break;
+    case "slots":
+      var investment = args[1];
+      console.log("Investment = " + investment);
+      if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
+      var slot1 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
+      var slot2 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
+      var slot3 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
+      //message.channel.send("Slot 1: " + slot1 + ", Slot 2: " + slot2 + ", Slot 3: " + slot3);
+      message.channel.send(slot1 + " " + slot2 + " " + slot3);
       break;
     case "areg":
     //test command for setting json file values. Use with 'hey areg '
