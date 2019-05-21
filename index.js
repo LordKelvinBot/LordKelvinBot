@@ -12,7 +12,7 @@ v1.2
   - added a new file named resources.js, meant to be used to redo all gambling commands in a more closed system. Will it work? No.
 
 
-To Do List
+To Do List:
     json stuff finally works, but convert can take some time to work fully and idk if it really completly works yet
     finish the gambling Commands
     handle the case if you bet like a billion copper  but dont have that many
@@ -175,7 +175,7 @@ bot.on("message", async message => {
     //bot.channels.get("497429650054709259").send(message);
   }
 
-  function Play(connection, url) {
+  function Play(connection, message) {
     const streamOptions = {
       seek: 0,
       volume: 1
@@ -185,12 +185,13 @@ bot.on("message", async message => {
     var voiceChannel = message.member.voiceChannel;
     voiceChannel.join().then(connection => {
       console.log("joined channel");
-      var url = Object.toString(server.queue[1]);
-      const stream = ytdl(url, {
+  //    new String() = String convertedToString;
+  //    String convertedToString = Object.toString(server.queue[0]);
+      const stream = ytdl(convertedToString, {
         filter: 'audioonly',
         quality: 'highestaudio'
       });
-      const dispatcher = connection.playOpusStream(ytdl(url), streamOptions);
+      const dispatcher = connection.playStream(stream, streamOptions);
       dispatcher.on("end", end => {
         console.log("left channel");
         voiceChannel.leave();
@@ -305,7 +306,7 @@ bot.on("message", async message => {
       }
       else if (err.code === 'ENOENT') {
         log('file does not exist');
-        log("Inside .stat Data (File does not exist): " + reputation + copper + silver + gold + platinum);
+        log("Inside .stat Data (File does not exist): " + reputation + copper);
         log('Creating new player JSON file of ' + author + ' With the values copper:' + copper);
         let newdata = {
           reputation: reputation,
@@ -398,6 +399,7 @@ bot.on("message", async message => {
   }
   function convert (author)
   {
+
     log('CONVERTING');
     fs.stat('./playerdata/' + author, function(err) {
       if (!err) {
@@ -448,9 +450,13 @@ bot.on("message", async message => {
           message.channel.send(moneyEmbed);
       }
       else if (err.code === 'ENOENT') {
-        log("Error: File does not exist. The doom of worlds is upon us.");
-        message.channel.send('ERROR: Check console log');
-      }
+        log("Error: File does not exist."); //happens when a user hasn't create a json file in playerdata. Use another write() function?
+        message.channel.send('You don\'t have an existing file, so one will be created.');
+        write(messageAuthor, 0, 0);
+        setTimeout(function(){
+          convert(messageAuthor); //recursion, monkaS
+        }, 2000);                 //timeout function, in place so the recursion doesn't happen too fast. If something breaks
+      }                           //and the file can't be created, this will cause huge delays and stuff
     });
   }
   switch (args[0].toLowerCase()) {
@@ -550,7 +556,7 @@ bot.on("message", async message => {
       }
       break;
     case "areg":
-    //author, reputation, copper, silver, gold, platinum, sunset, discord,
+    //test command for setting json file values. Use with 'hey areg '
       write(messageAuthor, args[2], args[1]);
       convert(messageAuthor);
       break;
