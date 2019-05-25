@@ -36,7 +36,7 @@ Consts/Libraries Installed:
     Login token that the bot uses to verify with discord or something (TOKEN)
 */
 
-global.config = require('~/config.json');
+global.config = require('./config.json');
 global.servers = {};
 
 //requires
