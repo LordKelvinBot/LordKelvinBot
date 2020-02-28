@@ -1237,7 +1237,14 @@ bot.on("message", async message => {
       }
       break;
     case "d20":
-      message.channel.send(Math.floor(Math.random() * 20) + 1);
+      message.channel.send(Math.floor(Math.random() * args[1]) + 1 + bonus);
+      break;
+    case "roll":
+      if (!args[2]) message.channel.send(Math.floor(Math.random() * args[1]) + 1);
+      else
+      {
+        message.channel.send(Math.floor(Math.random() * args[1]) + 1 + parseInt(args[2]));
+      }
       break;
     case "say":
       var sayMessage = args.join(" ");
