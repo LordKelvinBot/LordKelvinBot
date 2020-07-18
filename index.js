@@ -1000,8 +1000,9 @@ bot.on("message", async message => {
             .addFields({
                 name: 'Role',
                 value: 'Hoster & Part-Time Developer'
-              },
-              message.channel.send(embed10); message.channel.send(embed11);
+              })
+              message.channel.send(embed10);
+              message.channel.send(embed11);
               break;
               case "help":
               if (!args[1]) {
