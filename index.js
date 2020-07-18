@@ -1005,16 +1005,22 @@ bot.on("message", async message => {
       });
       break;
       case "devs":
+        var embed9 = new Discord.RichEmbed()
+        .setTitle("Developers")
+        .setDescription("These are the Developers")
         var embed10 = new Discord.RichEmbed()
-          .setTitle("Developers")
-          .setDescription("These are the Developers")
           .addField("Role","Original Bot Developer")
           .setAuthor('Eddie Vaughn', 'https://cdn.discordapp.com/attachments/684671474010947609/732567752518271016/DSC05763.png', 'https://eddiedoesntexistyet.com')
         var embed11 = new Discord.RichEmbed()
           .addField("Role","Hoster & Part-Time Developer")
           .setAuthor('Kyle Chau', 'https://i.imgur.com/9Qs4rex.jpg', 'https://byle.dev')
+        var embed12 = new Discord.RichEmbed()
+          .addField("Role","Somewhat useful people")
+          .setAuthor('Zi Hao Liang & Kenneth Kwan')
+        message.channel.send(embed9);
         message.channel.send(embed10);
         message.channel.send(embed11);
+        message.channel.send(embed12);
       break;
     case "help":
       if (!args[1]) {
