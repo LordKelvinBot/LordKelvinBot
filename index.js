@@ -1038,7 +1038,7 @@ bot.on("message", async message => {
           .addField("noticeme", "Notices you", true)
           .addField("d20", "Rolls a d20 (1-20)", true)
           .addField("vote", "Calls a vote", true)
-          .addField("List of Devs", "dev", true)
+          .addField("dev", "List of Devs", true)
           .addField("tierlist [game]", "Sends the tierlist of a game", true)
           .addField("tierlist", "Lists the current tierlists", true)
           .addField("random", "Returns a random number. Use with ' hey random num'")
