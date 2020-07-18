@@ -1004,6 +1004,14 @@ bot.on("message", async message => {
         message.channel.send(urbanEm);
       });
       break;
+      case "devs":
+        var embed10 = new Discord.RichEmbed()
+          .setTitle("Developers")
+          .setDescription("These are the Developers")
+          .setAuthor('Eddie Vaughn','https://cdn.discordapp.com/attachments/684671474010947609/732567752518271016/DSC05763.png','https://eddiedoesntexistyet.com')
+          .setAuthor('Kyle Chau','https://i.imgur.com/9Qs4rex.jpg','https://byle.dev')
+        message.channel.send(embed10);
+      break;
     case "help":
       if (!args[1]) {
         var embed1 = new Discord.RichEmbed()
