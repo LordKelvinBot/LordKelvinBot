@@ -901,7 +901,9 @@ bot.on("message", async message => {
     case "colors":
       if (colors.size < 1) return message.channel.send("No colors set up yet");
       log(colors.map(c => c.name));
-      message.channel.send(colors.array().join(" | "));
+      var embed999 = new Discord.RichEmbed()
+      .addField("Colors",colors.array().join(" | "))
+      message.channel.send(embed999);
       break;
     case "setcolor":
       let roleDuke = message.guild.roles.find("name", "Duke");
