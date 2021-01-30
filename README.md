@@ -1,6 +1,6 @@
 # LordKelvinBot
 
-Great Bot
+A small bot that was made for Discord servers for fun.
 
 Not for Resale/Re-distribution
 
