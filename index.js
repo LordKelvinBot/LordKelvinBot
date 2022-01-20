@@ -41,7 +41,8 @@ global.servers = {};
 
 //requires
 'use strict';
-const Discord, Intent = require("discord.js");
+const Discord = require("discord.js");
+const Intent = require("discord.js");
 const superagent = require("superagent");
 const fetch = require('node-fetch');
 const randomPuppy = require('random-puppy');
