@@ -77,7 +77,7 @@ function generateHex() {
   return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 
-bot.on("message", message => {
+bot.on("message", async message => {
   console.log('Ready!');
   console.log(message.content);
 
