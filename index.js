@@ -1283,8 +1283,8 @@ bot.on("message", async message => {
       }
       break;
     case "purge":
-      let roleGod = message.guild.roles.fetch("name", "King");
-      let roleGod1 = message.guild.roles.fetch("name", "Bot Dev");
+      let roleGod = message.guild.roles.fetch('295777645931790336');
+      let roleGod1 = message.guild.roles.fetch('550117111045816320');
       if (message.member.roles.has(roleGod.id)) {
         let newamount = 2;
         if (args[1]) {
