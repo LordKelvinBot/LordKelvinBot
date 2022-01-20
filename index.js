@@ -1011,7 +1011,7 @@ bot.on("message", async message => {
       case "dev":
         var embed9 = new MessageEmbed()
         .setTitle("Developers")
-        .setDescription("These are the Developerss")
+        .setDescription("These are the Developers")
         var embed10 = new MessageEmbed()
           .addField("Role","Original Bot Developer")
           .setAuthor('Eddie Vaughn', 'https://cdn.discordapp.com/attachments/684671474010947609/732567752518271016/DSC05763.png', 'https://eddiedoesntexistyet.com')
