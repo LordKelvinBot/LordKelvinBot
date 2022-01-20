@@ -41,7 +41,7 @@ global.servers = {};
 
 //requires
 'use strict';
-const { Client , Intents } = require("discord.js");
+const { Discord , Intents } = require("discord.js");
 const superagent = require("superagent");
 const fetch = require('node-fetch');
 const randomPuppy = require('random-puppy');
@@ -49,7 +49,7 @@ const {fetchSubreddit} = require('fetch-subreddit');
 const api = "https://jsonplaceholder.typicode.com/posts";
 const pics = "https://www.reddit.com/r/pics.json";
 const snoowrap = require('snoowrap');
-const bot = new Client({ intents: [Intents.FLAGS.GUILDS]});
+const bot = new Discord.Client({ intents: [Intents.FLAGS.GUILDS]});
 const Jimp = require('jimp');
 const snekfetch = require("snekfetch");
 const fs = require('fs');
@@ -1106,9 +1106,9 @@ bot.on("message", async message => {
               .addField("urban", "Gives an entry from urban dictionary", true)
               .addField("urbanr", "Gives a random entry from urban dictionary", true)
               .addField("xkcd", "Gets an xkcd comic", true)
-              .addField("colors", "Lists the current colors", true)
-              .addField("setcolor", "Changes your color (Requires at least Duke")
-              .addField("removecolor", "Removes your color and sets it back to default")
+              //.addField("colors", "Lists the current colors", true)
+              //.addField("setcolor", "Changes your color (Requires at least Duke")
+              //.addField("removecolor", "Removes your color and sets it back to default")
               .addField("source", "Plays an audio file from a folder. Has to be saved on my PC for now")
               .addField("effect", "Same as source, but from a folder full of random audio effects")
               .addField("randomhex", "Returns a random hex code", true)
