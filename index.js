@@ -1134,11 +1134,12 @@ bot.on("message", async message => {
 
       break;
     case "dab":
-      var rand = Math.floor(Math.random() * dabArray.length);
+      /*var rand = Math.floor(Math.random() * dabArray.length);
       log("*Dab Command Received*\nFile: " + dabArray[rand] + "\nRand: " + rand);
       message.channel.send({
         files: ["./images/" + dabArray[rand]]
-      });
+      });*/
+      message.channel.send("No shot");
       break;
     case "Hello":
       message.channel.send("I'm back");
