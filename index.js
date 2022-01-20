@@ -1009,7 +1009,7 @@ bot.on("message", async message => {
         message.channel.send(urbanEm);
       });
       break;
-      case "devs":
+      case "dev":
         var embed9 = new MessageEmbed()
         .setTitle("Developers")
         .setDescription("These are the Developers")
