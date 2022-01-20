@@ -78,13 +78,9 @@ function generateHex() {
 }
 
 bot.on("message", async message => {
-<<<<<<< HEAD
-  if(message != null)
-    console.log(message.content);
-=======
-  console.log();
->>>>>>> 3c4065cad104caf097e81d6b2334586b4663c664
-
+  if(message != null) {
+      console.log(message.content);
+  }
 
   var messageContent = message.content;
   var justInCase = 0;
