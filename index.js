@@ -77,10 +77,8 @@ function generateHex() {
   return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 
-bot.on("message", async (message, channel) => {
-  if(channel != null) {
+bot.on("message", async message => {
       console.log(message.content);
-  }
 
   var messageContent = message.content;
   var justInCase = 0;
