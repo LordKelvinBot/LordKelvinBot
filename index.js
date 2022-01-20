@@ -78,7 +78,7 @@ function generateHex() {
 }
 
 bot.on("message", async message => {
-  if(message != null) {
+  if(channel != null) {
       console.log(message.content);
   }
 
