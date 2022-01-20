@@ -78,7 +78,7 @@ function generateHex() {
 }
 
 bot.on("message", async message => {
-  console.log(message.content);
+  console.log();
 
 
   var messageContent = message.content;
