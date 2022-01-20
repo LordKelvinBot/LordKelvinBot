@@ -41,7 +41,7 @@ global.servers = {};
 
 //requires
 'use strict';
-const { Discord , Intents } = require("discord.js");
+const { Client , Intents } = require("discord.js");
 const superagent = require("superagent");
 const fetch = require('node-fetch');
 const randomPuppy = require('random-puppy');
@@ -49,7 +49,7 @@ const {fetchSubreddit} = require('fetch-subreddit');
 const api = "https://jsonplaceholder.typicode.com/posts";
 const pics = "https://www.reddit.com/r/pics.json";
 const snoowrap = require('snoowrap');
-const bot = new Discord({ intents: [Intents.FLAGS.GUILDS]});
+const bot = new Client({ intents: [Intents.FLAGS.GUILDS]});
 const Jimp = require('jimp');
 const snekfetch = require("snekfetch");
 const fs = require('fs');
