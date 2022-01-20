@@ -1101,7 +1101,6 @@ bot.on("message", async message => {
             var embed3 = new MessageEmbed()
               .setTitle("Fun Commands")
               .setColor(generateHex())
-              .addField("dab", "Dabs on the haters", true)
               .addField("urban", "Gives an entry from urban dictionary", true)
               .addField("urbanr", "Gives a random entry from urban dictionary", true)
               .addField("xkcd", "Gets an xkcd comic", true)
@@ -1613,7 +1612,7 @@ bot.on("message", async message => {
 
 
     default:
-      message.channel.send("That isn't a command you idiot");
+      message.channel.send("not a command :clown:");
   }
 
 
