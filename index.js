@@ -78,7 +78,7 @@ function generateHex() {
 }
 
 bot.on("message", async message => {
-      console.log(message.content);
+  console.log(message.content);
 
   var messageContent = message.content;
   var justInCase = 0;
