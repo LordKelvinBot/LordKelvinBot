@@ -940,6 +940,7 @@ bot.on("message", async message => {
       var rated = args.join(" ");
       message.channel.send("I rate " + rated + " a good " + Math.floor(Math.random() * 101) + "/100");
       break;
+    /*
     case "removecolor":
       try {
         await message.member.removeRoles(colors);
@@ -948,6 +949,7 @@ bot.on("message", async message => {
         message.channel.send(`Operation Failed! ${e.message}`);
       }
       break;
+    */
     case "vote":
       args.splice(0, 1);
       deleteLastMessage();
