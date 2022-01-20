@@ -24,7 +24,7 @@ Some links to some stuff
 
 
 Consts/Libraries Installed:
-    Discord API stuff (discord.js)
+    Discord API stuff (js)
     6 different libraries to fetch subreddit images:
         superagent
         fetch
@@ -125,7 +125,7 @@ bot.on("message", async message => {
 
     const render = post => {
 
-      image1 = new Discord.MessageEmbed()
+      image1 = new MessageEmbed()
         .setTitle(post.title)
         .addField(post.img);
       message.channel.send(image1);
@@ -139,7 +139,7 @@ bot.on("message", async message => {
       body
     } = await superagent
       .get('https://random.dog/woof.json');
-    let dogEmbed = new Discord.MessageEmbed()
+    let dogEmbed = new MessageEmbed()
       .setColor("#ff9900")
       .setTitle("Dog")
       .setImage(body.url);
@@ -441,7 +441,7 @@ bot.on("message", async message => {
           console.log("gold = " + gold + "\nplatinum = " + platinum);
         }
         log('Converted Currency values');
-        var moneyEmbed = new Discord.MessageEmbed()
+        var moneyEmbed = new MessageEmbed()
           .setColor(generateHex())
           .setTitle("Stat Board of " + message.author.username.toString())
           .setDescription("A collection of your stats.")
@@ -585,7 +585,7 @@ bot.on("message", async message => {
 
     case "img":
       if (!args[1]) {
-        var imgEmbed = new Discord.MessageEmbed()
+        var imgEmbed = new MessageEmbed()
           .setTitle("These are the current images in stock")
           .setColor(generateHex())
           .addField("the fastest spook in the west", "neutron")
@@ -854,7 +854,7 @@ bot.on("message", async message => {
       break;
     case "tierlist":
       if (!args[1]) {
-        let tierlists = new Discord.MessageEmbed()
+        let tierlists = new MessageEmbed()
           .setTitle("The current tierlists")
           .setColor(generateHex())
           .addField("Smash Ultimate", "ultimate")
@@ -901,7 +901,7 @@ bot.on("message", async message => {
     /*case "colors":
       if (colors.size < 1) return message.channel.send("No colors set up yet");
       log(colors.map(c => c.name));
-      var embed999 = new Discord.MessageEmbed()
+      var embed999 = new MessageEmbed()
       .addField("Colors",colors.array().join(" | "))
       message.channel.send(embed999);
       break;
@@ -953,7 +953,7 @@ bot.on("message", async message => {
     case "vote":
       args.splice(0, 1);
       deleteLastMessage();
-      let votingEmbed = new Discord.MessageEmbed()
+      let votingEmbed = new MessageEmbed()
         .setTitle(args.join(" "))
         .setColor(generateHex());
       //message.channel.send(votingEmbed);
@@ -985,7 +985,7 @@ bot.on("message", async message => {
       break;
     case "urbanr":
       urban.random().first(json => {
-        let urbanEm = new Discord.MessageEmbed()
+        let urbanEm = new MessageEmbed()
           .setTitle(json.word)
           .setDescription(json.definition)
           .addField("Upvotes", json.thumbs_up, true)
@@ -1000,7 +1000,7 @@ bot.on("message", async message => {
       urban(args).first(json => {
         if (!json) return message.channel.send("No definition found.");
         console.log(json);
-        let urbanEm = new Discord.MessageEmbed()
+        let urbanEm = new MessageEmbed()
           .setTitle(json.word)
           .setDescription(json.definition)
           .addField("Upvotes", json.thumbs_up, true)
@@ -1010,16 +1010,16 @@ bot.on("message", async message => {
       });
       break;
       case "devs":
-        var embed9 = new Discord.MessageEmbed()
+        var embed9 = new MessageEmbed()
         .setTitle("Developers")
         .setDescription("These are the Developers")
-        var embed10 = new Discord.MessageEmbed()
+        var embed10 = new MessageEmbed()
           .addField("Role","Original Bot Developer")
           .setAuthor('Eddie Vaughn', 'https://cdn.discordapp.com/attachments/684671474010947609/732567752518271016/DSC05763.png', 'https://eddiedoesntexistyet.com')
-        var embed11 = new Discord.MessageEmbed()
+        var embed11 = new MessageEmbed()
           .addField("Role","Hoster & Part-Time Developer")
           .setAuthor('Kyle Chau', 'https://i.imgur.com/9Qs4rex.jpg', 'https://byle.dev')
-        var embed12 = new Discord.MessageEmbed()
+        var embed12 = new MessageEmbed()
           .addField("Role","Somewhat useful people")
           .setAuthor('Zi Hao Liang & Kenneth Kwan')
         message.channel.send(embed9);
@@ -1029,7 +1029,7 @@ bot.on("message", async message => {
       break;
     case "help":
       if (!args[1]) {
-        var embed1 = new Discord.MessageEmbed()
+        var embed1 = new MessageEmbed()
 
           .setColor(generateHex())
           .setDescription("These are the current commands", true)
@@ -1059,7 +1059,7 @@ bot.on("message", async message => {
           case "sub":
           case "subs":
           case "subhelp":
-            var subhelp = new Discord.MessageEmbed()
+            var subhelp = new MessageEmbed()
               .setColor(generateHex())
               .setDescription("These are the commands for getting images for reddit.")
               .addField("sub", "Gets a random image from a specified subreddit.")
@@ -1071,7 +1071,7 @@ bot.on("message", async message => {
             break;
           case "mathhelp":
           case "math":
-            var mathembed = new Discord.MessageEmbed()
+            var mathembed = new MessageEmbed()
               .setColor(generateHex())
               .setDescription("These are the commands for doing math. Put 'math' before each command. For example, 'hey math sqrt 4' would return 2. NaN means 'Not a Number'. Supports use of pi as 'pi', but if you're using just pi by itself you need to put '1pi'.")
               .addField("dtr", "Convert Degrees to Radians. Use with 'hey dtr num1 num2'")
@@ -1086,7 +1086,7 @@ bot.on("message", async message => {
             break;
           case "testhelp":
           case "test":
-            var embed2 = new Discord.MessageEmbed()
+            var embed2 = new MessageEmbed()
               .setColor(generateHex())
               .setDescription("Test Commands")
               .setFooter("Buncha test stuff that doesn't do anything")
@@ -1099,7 +1099,7 @@ bot.on("message", async message => {
             break;
           case "fun":
           case "funhelp":
-            var embed3 = new Discord.MessageEmbed()
+            var embed3 = new MessageEmbed()
               .setTitle("Fun Commands")
               .setColor(generateHex())
               .addField("dab", "Dabs on the haters", true)
@@ -1119,7 +1119,7 @@ bot.on("message", async message => {
             break;
           case "gamble":
           case "gambling":
-            var embed4 = new Discord.MessageEmbed()
+            var embed4 = new MessageEmbed()
               .setTitle("Gambling Commands. None of these really work that well, and if more than one person uses it, it will 100% break.")
               .addField("register", "Registers you as a player", true)
               .addField("balance", "Shows your current balance", true)
@@ -1226,7 +1226,7 @@ bot.on("message", async message => {
           message.channel.send("X = " + logged);
           break;
         case "test":
-          var mathtestingembed = new Discord.MessageEmbed();
+          var mathtestingembed = new MessageEmbed();
           for (var i = 0; i < args.length; i++) {
             mathtestingembed.addField(args[i]);
           }
@@ -1349,7 +1349,7 @@ bot.on("message", async message => {
     case "pusharray":
       goodArray.push(args[1]);
       message.channel.send("The current array is: ");
-      var list = new Discord.MessageEmbed()
+      var list = new MessageEmbed()
         .setDescription("Current List of Subs:")
         .setColor(generateHex());
       for (var i = 0; i < goodArray.length; i++) {
@@ -1435,7 +1435,7 @@ bot.on("message", async message => {
       plaympeg("Sands.mp3")
       break;
     case "test10":
-      let test10 = new Discord.MessageEmbed()
+      let test10 = new MessageEmbed()
         .addField("test one", "test two", true)
         .addField("test three", "test four", true);
       message.channel.send(test10);
@@ -1484,7 +1484,7 @@ bot.on("message", async message => {
 
       break;
     case "botprefixes":
-      var embed = new Discord.MessageEmbed()
+      var embed = new MessageEmbed()
         .setColor(0x00FFFF)
         .setDescription("These are the current bot prefixes")
         .addField("Gnarbot", "_")
@@ -1544,7 +1544,7 @@ bot.on("message", async message => {
       //message.guild.channels.find("name", "super-secret-admin-channel").send("test sucessful my guy did i spell that right");
       break;
     case "embedtest":
-      var embed = new Discord.MessageEmbed();
+      var embed = new MessageEmbed();
       embed.setDescription("Test embed my guy this is the description i think");
       embed.addField("What is a field what is life what", "HELP ME");
       embed.addField("What is a field what is life what", "HELP ME");
@@ -1576,7 +1576,7 @@ bot.on("message", async message => {
       break;
     case "largeembed":
       var i = 1;
-      var embed0 = new Discord.MessageEmbed();
+      var embed0 = new MessageEmbed();
       embed0.setDescription("Numbers My Guy");
       while (i <= args[1]) {
         if (i > 24) {
@@ -1595,7 +1595,7 @@ bot.on("message", async message => {
       message.channel.send(VERSION);
       break;
     case "changelog":
-      var embedlog = new Discord.MessageEmbed();
+      var embedlog = new MessageEmbed();
       var CHANGELOG = config.changelog
       embedlog.setTitle("Change Log")
               .addField(config.version, CHANGELOG);
