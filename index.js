@@ -76,7 +76,7 @@ forceFetchUsers: true
 function generateHex() {
   return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
-
+console.log("Ready First!");
 bot.on("message", async message => {
   console.log('Ready!');
   console.log(message.content);
