@@ -500,7 +500,7 @@ bot.on("message", async message => {
       break;
     case "ping":
       const m = await message.channel.send("Ping?");
-      m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(bot.ping)}ms`);
+      m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(Client.ws.ping)}ms`);
       break;
 
     //gambling commands start here
