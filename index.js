@@ -1303,7 +1303,7 @@ bot.on("message", async message => {
                 "Deletion of messages successful. \n Total messages deleted including command: " +
                 newamount
               )
-              .then(message => channel.message({ timeout: 5000 }));
+              .then(message => Client.message({ timeout: 5000 }));
             log(
               "Deletion of messages successful. \n Total messages deleted including command: " +
               newamount
