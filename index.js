@@ -1303,10 +1303,10 @@ bot.on("message", async message => {
                 "Deletion of messages successful. \n Total messages deleted including command: " +
                 newamount
               )
-              /*.then(message => message({ timeout: 5000 }));
+              .then(message => message({ timeout: 5000 }));
             log(
               "Deletion of messages successful. \n Total messages deleted including command: " +
-              newamount*/
+              newamount
             );
           })
           .catch(err => {
