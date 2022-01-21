@@ -243,7 +243,7 @@ bot.on("message", async message => {
         limit: 1
       })
       .then(messages => {
-        message.delete(500);
+        message.delete({ timeout: 500 });
         // //Logging the number of messages deleted on both the channel and console.
       })
       .catch(err => {
@@ -1303,7 +1303,7 @@ bot.on("message", async message => {
                 "Deletion of messages successful. \n Total messages deleted including command: " +
                 newamount
               )
-              .then(message => message.delete(5000));
+              .then(message => message({ timeout: 5000 }));
             log(
               "Deletion of messages successful. \n Total messages deleted including command: " +
               newamount
@@ -1331,7 +1331,7 @@ bot.on("message", async message => {
                 "Deletion of messages successful. \n Total messages deleted including command: " +
                 newamount
               )
-              .then(message => message.delete(5000));
+              .then(message => message.delete({ timeout: 5000 }));
             log(
               "Deletion of messages successful. \n Total messages deleted including command: " +
               newamount
