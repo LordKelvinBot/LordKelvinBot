@@ -463,13 +463,13 @@ bot.on("message", async message => {
     case "sierrahotelindiatango":
       let roleGod2 = message.guild.roles.find("name", "King");
       let roleGod3 = message.guild.roles.find("name", "Bot Dev");
-      if (message.member.roles.has(roleGod2.id)) {
+      if (message.member.roles.cache.has(roleGod2.id)) {
         message.channel.send("Roger that,\nShutting Down...");
         deleteLastMessage();
         process.exit();
         exit();
         break;
-      } else if (message.member.roles.has(roleGod3.id)) {
+      } else if (message.member.roles.cache.has(roleGod3.id)) {
         message.channel.send("Roger that,\nShutting Down...");
         deleteLastMessage();
         process.exit();
@@ -906,7 +906,7 @@ bot.on("message", async message => {
       break;
     case "setcolor":
       let roleDuke = message.guild.roles.find("name", "Duke");
-      if (!(message.member.roles.has(roleDuke.id))) {
+      if (!(message.member.roles.cache.has(roleDuke.id))) {
         message.channel.send("You don't have enough perms for that.")
           .then(message => message.delete(5000));
         message.channel.fetch({
@@ -1285,7 +1285,7 @@ bot.on("message", async message => {
     case "purge":
       let roleGod = message.guild.roles.fetch('295777645931790336');
       let roleGod1 = message.guild.roles.fetch('550117111045816320');
-      if (message.member.roles.has(roleGod.id)) {
+      if (message.member.roles.cache.has(roleGod.id) || message.guild.members.cache.get('181284528793452545')) {
         let newamount = 2;
         if (args[1]) {
           newamount = args[1];
@@ -1313,7 +1313,7 @@ bot.on("message", async message => {
             log("Error while doing Bulk Delete");
             log(err);
           });
-      } else if (message.member.roles.has(roleGod1.id)) {
+      } else if (message.member.roles.cache.has(roleGod1.id)) {
         let newamount = 2;
         if (args[1]) {
           newamount = args[1];
@@ -1364,7 +1364,7 @@ bot.on("message", async message => {
       break;
     case "accessconsole":
       let role11 = message.guild.roles.find("name", "console.log.perms");
-      if (message.member.roles.has(role11.id)) {
+      if (message.member.roles.cache.has(role11.id)) {
         message.channel.send(`You already have access`);
         return;
       }
