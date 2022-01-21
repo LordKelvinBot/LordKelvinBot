@@ -1321,7 +1321,7 @@ bot.on("message", async message => {
         let messagecount = newamount.toString();
         message.channel
           .fetch({
-            limit: messagecount
+            limit: parseInt(messagecount)
           })
           .then(messages => {
             message.channel.bulkDelete(messages);
