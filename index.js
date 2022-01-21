@@ -239,7 +239,7 @@ bot.on("message", async message => {
 
   function deleteLastMessage() {
     message.channel
-      .fetchMessages({
+      .fetch({
         limit: 1
       })
       .then(messages => {
@@ -909,7 +909,7 @@ bot.on("message", async message => {
       if (!(message.member.roles.has(roleDuke.id))) {
         message.channel.send("You don't have enough perms for that.")
           .then(message => message.delete(5000));
-        message.channel.fetchMessages({
+        message.channel.fetch({
           limit: 2
         }).then(collected => { //collected is a Collection
           collected.forEach(message => {
@@ -1292,7 +1292,7 @@ bot.on("message", async message => {
         }
         let messagecount = newamount.toString();
         message.channel
-          .fetchMessages({
+          .fetch({
             limit: messagecount
           })
           .then(messages => {
@@ -1320,7 +1320,7 @@ bot.on("message", async message => {
         }
         let messagecount = newamount.toString();
         message.channel
-          .fetchMessages({
+          .fetch({
             limit: messagecount
           })
           .then(messages => {
