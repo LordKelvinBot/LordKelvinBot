@@ -1612,9 +1612,9 @@ bot.on("message", async message => {
       console.log("Time works");
       var myDate = new Date(1633071599000);
       var pstDate = myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
-      message.channel.send(pstDate);
       var date = new Date(Date.now());
       console.log(date.toUTCString());
+      message.channel.send(date.toLocaleDateString('en-US', { timeZone: 'America/New_York' }));
       break;
 
     default:
