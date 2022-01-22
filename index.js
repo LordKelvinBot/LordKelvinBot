@@ -1296,7 +1296,7 @@ bot.on("message", async message => {
             limit: parseInt(messagecount)
           })
           .then(messages => {
-            message.channel.bulkDelete(messages+1, true);
+            message.channel.bulkDelete(messages, true);
             // Logging the number of messages deleted on both the channel and console.
             message.channel
               .send(
@@ -1324,7 +1324,7 @@ bot.on("message", async message => {
             limit: parseInt(messagecount)
           })
           .then(messages => {
-            message.channel.bulkDelete(messages);
+            message.channel.bulkDelete(messages, true);
             // Logging the number of messages deleted on both the channel and console.
             message.channel
               .send(
