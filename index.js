@@ -1529,14 +1529,6 @@ bot.on("message", async message => {
       }
       break;
 
-    case "what time is it":
-      console.log("Time works");
-      if (args[1]) {
-        var myDate = new Date(1633071599000);
-        var pstDate = myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
-        message.channel.send(pstDate);
-      }
-      break;
     case "who":
       if (args[1]) {
         message.channel.send(answerlist[Math.floor(Math.random() * answerlist.length)]);
@@ -1616,7 +1608,12 @@ bot.on("message", async message => {
       var server = servers[message.guild.id];
       if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();
       break;
-
+    case "what time is it":
+      console.log("Time works");
+      var myDate = new Date(1633071599000);
+      var pstDate = myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
+      message.channel.send(pstDate);
+      break;
 
     default:
       message.channel.send("not a command :clown:");
