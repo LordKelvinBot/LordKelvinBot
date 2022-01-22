@@ -1291,7 +1291,7 @@ bot.on("message", async message => {
           newamount = args[1];
         }
         let messagecount = newamount.toString();
-        message.channel
+        message.channel.messages
           .fetch({
             limit: parseInt(messagecount)
           })
@@ -1319,7 +1319,7 @@ bot.on("message", async message => {
           newamount = args[1];
         }
         let messagecount = newamount.toString();
-        message.channel
+        message.channel.messages
           .fetch({
             limit: parseInt(messagecount)
           })
