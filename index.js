@@ -1016,7 +1016,7 @@ bot.on("message", async message => {
           .addField("Role","Original Bot Developer")
           .setAuthor('Eddie Vaughn', 'https://cdn.discordapp.com/attachments/684671474010947609/732567752518271016/DSC05763.png', 'https://eddiedoesntexistyet.com')
         var embed11 = new MessageEmbed()
-          .addField("Role","Hoster & Part-Time Developer")
+          .addField("Role","Hoster & Developer")
           .setAuthor('Kyle Chau', 'https://i.imgur.com/9Qs4rex.jpg', 'https://byle.dev')
         var embed12 = new MessageEmbed()
           .addField("Role","Somewhat useful people")
@@ -1596,7 +1596,7 @@ bot.on("message", async message => {
     case "changelog":
       var embedlog = new MessageEmbed();
       var CHANGELOG = config.changelog
-      embedlog.setTitle("Change Log")
+      embedlog.setTitle("Change Log of Kelvin v2")
               .addField(config.version, CHANGELOG);
       message.channel.send(embedlog);
       break;
