@@ -1,4 +1,0 @@
-{
-  "version": "1.2",
-  "changelog":"2/8/2019 \n Happy Birthday Kyle! \n Updates to Code - Time \n - fixed issue where the bot would log the messages sent in the admin channel \n- fixed issue where the bot would not remove mentions in the console log when sending more than one mention \n- removed the accesschangelog and denychangelog commands and replaced them with a simple changelog command \n- added a response to whenever someone joins the server \n Changes to code (aka things that don't really matter) \n - added live version reading to changelog \n - got rid of all old commented out lines and gambling commands to a new file named old.js \n - added a new file named resources.js, meant to be used to redo all gambling commands in a more closed system. Will it work? No."
-}
