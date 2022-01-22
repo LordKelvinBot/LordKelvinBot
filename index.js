@@ -1534,7 +1534,7 @@ bot.on("message", async message => {
         var pstDate = myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"})
         message.channel.send(pstDate);
       }
-
+      break;
     case "who":
       if (args[1]) {
         message.channel.send(answerlist[Math.floor(Math.random() * answerlist.length)]);
