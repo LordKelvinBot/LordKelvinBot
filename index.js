@@ -801,7 +801,7 @@ bot.on("message", async message => {
         if (!message.guild.voiceConnection) {
           if (!servers[message.guild.id]) {
             servers[message.guild.id] = {
-              queue: []
+              queue: {}
             }
           }
 
