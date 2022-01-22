@@ -1296,14 +1296,14 @@ bot.on("message", async message => {
             limit: parseInt(messagecount)
           })
           .then(messages => {
-            message.channel.bulkDelete(messages);
+            message.channel.bulkDelete(messages+1, true);
             // Logging the number of messages deleted on both the channel and console.
             message.channel
               .send(
                 "Deletion of messages successful. \n Total messages deleted including command: " +
                 newamount
               )
-              .then(message => Client.message({ timeout: 5000 }));
+              .then(message => message.delete({ timeout: 5000 }));
             log(
               "Deletion of messages successful. \n Total messages deleted including command: " +
               newamount
