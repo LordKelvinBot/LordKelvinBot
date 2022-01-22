@@ -1608,7 +1608,7 @@ bot.on("message", async message => {
       var server = servers[message.guild.id];
       if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();
       break;
-    case "what time is it":
+    case "time":
       console.log("Time works");
       var myDate = new Date(1633071599000);
       var pstDate = myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
