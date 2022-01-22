@@ -581,7 +581,6 @@ bot.on("message", async message => {
       write(messageAuthor, args[2], args[1]);
       convert(messageAuthor);
       break;
-
     case "img":
       if (!args[1]) {
         var imgEmbed = new MessageEmbed()
@@ -1529,6 +1528,12 @@ bot.on("message", async message => {
         message.channel.send("wait what");
       }
       break;
+    case "what time is it":
+      if (args[1]) {
+        var myDate = new Date(1633071599000)
+        var pstDate = myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"})
+        message.channel.send(pstDate);
+      }
 
     case "who":
       if (args[1]) {
