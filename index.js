@@ -238,7 +238,7 @@ bot.on("message", async message => {
   }
 
   function deleteLastMessage() {
-    message.channel
+    message.channel.messages
       .fetch({
         limit: 1
       })
