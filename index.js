@@ -1528,10 +1528,12 @@ bot.on("message", async message => {
         message.channel.send("wait what");
       }
       break;
+
     case "what time is it":
+      console.log("Time works");
       if (args[1]) {
-        var myDate = new Date(1633071599000)
-        var pstDate = myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"})
+        var myDate = new Date(1633071599000);
+        var pstDate = myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
         message.channel.send(pstDate);
       }
       break;
