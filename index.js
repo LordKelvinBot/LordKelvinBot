@@ -197,7 +197,7 @@ bot.on("message", async message => {
         voiceChannel.leave();
         server.queue.shift();
       });
-    }).catch(err => console.log(err));
+    }).catch(err => console.error(err));
   }
 
   function piReplace() {
@@ -524,7 +524,7 @@ bot.on("message", async message => {
           message.channel.send("You are already registered.");
         }
         else if (err.code === 'ENOENT') {
-          console.log('file does not exist');
+          console.error('file does not exist');
           let newdata = {
             money: '$' + 1000
           };
