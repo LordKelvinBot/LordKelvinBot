@@ -1,5 +1,7 @@
 /*
 You're gonna have a bad time.
+v2
+  - Added weather & time commands
 
 v1.2
   - fixed issue where the bot would log the messages sent in the admin channel
