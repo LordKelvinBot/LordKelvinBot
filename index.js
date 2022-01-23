@@ -502,7 +502,7 @@ bot.on("message", async message => {
       var pstDate = myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
       console.log(myDate.toUTCString());
       console.log(pstDate);
-      message.channel.send(date.toLocaleDateString('en-US', { timeZone: 'America/New_York' }));
+      message.channel.send(myDate.toLocaleDateString('en-US', { timeZone: 'America/New_York' }));
       var time = dt.toDate(new Date.now());
       console.log(time);
       message.channel.send(time);
