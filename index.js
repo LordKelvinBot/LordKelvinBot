@@ -510,21 +510,29 @@ bot.on("message", async message => {
         cw = wt.find({search: args[1], degreeType: 'F'}, function(err, result) {
           if(err) console.log(err);
           console.log(JSON.stringify(result, null, 2));
+          let wsend = new MessageEmbed()
+            .setTitle(cw.location.name)
+            .setDescription(cw.current.date)
+            .addField("Current Temperature: ", cw.current.temperature + "F", true)
+            .addField("Sky: ", cw.current.skytext, true)
+            .addField("Humidity: ", cw.current.humidity)
+            .addField("Wind: ", cw.current.windspeed)
+          message.channel.send(wsend);
         });
       } else {
         cw = wt.find({search: 'San Gabriel, CA', degreeType: 'F'}, function(err, result) {
           if(err) console.log(err);
           console.log(JSON.stringify(result, null, 2));
+          let wsend = new MessageEmbed()
+            .setTitle(cw.location.name)
+            .setDescription(cw.current.date)
+            .addField("Current Temperature: ", cw.current.temperature + "F", true)
+            .addField("Sky: ", cw.current.skytext, true)
+            .addField("Humidity: ", cw.current.humidity)
+            .addField("Wind: ", cw.current.windspeed)
+          message.channel.send(wsend);
         });
       }
-      let wsend = new MessageEmbed()
-        .setTitle(cw.location.name)
-        .setDescription(cw.current.date)
-        .addField("Current Temperature: ", cw.current.temperature + "F", true)
-        .addField("Sky: ", cw.current.skytext, true)
-        .addField("Humidity: ", cw.current.humidity)
-        .addField("Wind: ", cw.current.windspeed)
-      message.channel.send(wsend);
       break;
     case "ping":
       const m = await message.channel.send("Ping?");
