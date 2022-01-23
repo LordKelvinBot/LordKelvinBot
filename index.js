@@ -521,8 +521,8 @@ bot.on("message", async message => {
         .setDescription(cw.current.date)
         .addField("Current Temperature: ", cw.current.temperature + "F", true)
         .addField("Sky: ", cw.current.skytext, true)
-        .addField("Humidity: ", cw.current.humidity);
-        .addField("Wind: ", cw.current.windspeed);
+        .addField("Humidity: ", cw.current.humidity)
+        .addField("Wind: ", cw.current.windspeed)
       message.channel.send(wsend);
       break;
     case "ping":
