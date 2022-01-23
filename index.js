@@ -77,6 +77,12 @@ var thing = 1;
 var timeChancer = 45;
 forceFetchUsers: true
 
+var wsettings = {
+  hour: 'numeric',
+  minute: 'numeric',
+  hour12: true
+};
+
 function generateHex() {
   return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
@@ -514,7 +520,7 @@ bot.on("message", async message => {
           parsed = parsed[0];
           let wsend = new MessageEmbed()
             .setTitle(parsed.location.name)
-            .setDescription(parsed.current.date + parsed.current.observationtime.toLocaleString('en-US'))
+            .setDescription(parsed.current.date + " " + parsed.current.observationtime.toLocaleString('en-US', wsettings))
             .addField("Current Temperature: ", parsed.current.temperature + " F", true)
             .addField("Sky: ", parsed.current.skytext, true)
             .addField("Humidity: ", parsed.current.humidity + "%")
@@ -528,7 +534,7 @@ bot.on("message", async message => {
           parsed = parsed[0];
           let wsend = new MessageEmbed()
             .setTitle(parsed.location.name)
-            .setDescription(parsed.current.date + parsed.current.observationtime.toLocaleString('en-US'))
+            .setDescription(parsed.current.date + " " + parsed.current.observationtime.toLocaleString('en-US', wsettings))
             .addField("Current Temperature: ", parsed.current.temperature + " F", true)
             .addField("Sky: ", parsed.current.skytext, true)
             .addField("Humidity: ", parsed.current.humidity + "%")
