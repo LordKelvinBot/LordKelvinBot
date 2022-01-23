@@ -505,13 +505,14 @@ bot.on("message", async message => {
       message.channel.send("EST Time: " + myDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
       break;
     case "weather":
+      var cw;
       if(args[1]) {
-        let cw = wt.find({search: args[1], degreeType: 'F'}, function(err, result) {
+        var cw = wt.find({search: args[1], degreeType: 'F'}, function(err, result) {
           if(err) console.log(err);
           console.log(JSON.stringify(result, null, 2));
         });
       } else {
-        let cw = wt.find({search: 'San Gabriel, CA', degreeType: 'F'}, function(err, result) {
+        var cw = wt.find({search: 'San Gabriel, CA', degreeType: 'F'}, function(err, result) {
           if(err) console.log(err);
           console.log(JSON.stringify(result, null, 2));
         });
