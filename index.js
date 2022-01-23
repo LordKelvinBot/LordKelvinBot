@@ -498,8 +498,9 @@ bot.on("message", async message => {
       break;
     case "time":
       var myDate = new Date(Date.now());
-      message.channel.send("PST Time:" + myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
-      message.channel.send("MST Time:" + myDate.toLocaleString("en-US", {timeZone: "America/Denver"}));
+      message.channel.send("PST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
+      message.channel.send("MST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Denver"}));
+      message.channel.send("CST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Chicago"}));
       message.channel.send("EST Time: " + myDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
       break;
     case "ping":
