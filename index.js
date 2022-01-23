@@ -505,31 +505,32 @@ bot.on("message", async message => {
       message.channel.send("EST Time: " + myDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
       break;
     case "weather":
-      var cw;
       if(args[1]) {
         wt.find({search: args[1], degreeType: 'F'}, function(err, result) {
           if(err) console.log(err);
           console.log(JSON.stringify(result, null, 2));
+          let parsed = JSON.parse(result)
           let wsend = new MessageEmbed()
-            .setTitle(result.location.name)
-            .setDescription(cw.current.date)
-            .addField("Current Temperature: ", result.current.temperature + "F", true)
-            .addField("Sky: ", result.current.skytext, true)
-            .addField("Humidity: ", result.current.humidity)
-            .addField("Wind: ", result.current.windspeed)
+            .setTitle(parsed.location.name)
+            .setDescription(parsed.current.date)
+            .addField("Current Temperature: ", parsed.current.temperature + "F", true)
+            .addField("Sky: ", parsed.current.skytext, true)
+            .addField("Humidity: ", parsed.current.humidity)
+            .addField("Wind: ", parsed.current.windspeed)
           message.channel.send(wsend);
         });
       } else {
         wt.find({search: 'San Gabriel, CA', degreeType: 'F'}, function(err, result) {
           if(err) console.log(err);
           console.log(JSON.stringify(result, null, 2));
+          let parsed = JSON.parse(result)
           let wsend = new MessageEmbed()
-            .setTitle(result.location.name)
-            .setDescription(result.current.date)
-            .addField("Current Temperature: ", result.current.temperature + "F", true)
-            .addField("Sky: ", result.current.skytext, true)
-            .addField("Humidity: ", result.current.humidity)
-            .addField("Wind: ", result.current.windspeed)
+            .setTitle(parsed.location.name)
+            .setDescription(parsed.current.date)
+            .addField("Current Temperature: ", parsed.current.temperature + "F", true)
+            .addField("Sky: ", parsed.current.skytext, true)
+            .addField("Humidity: ", parsed.current.humidity)
+            .addField("Wind: ", parsed.current.windspeed)
           message.channel.send(wsend);
         });
       }
