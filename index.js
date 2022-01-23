@@ -55,7 +55,7 @@ const snekfetch = require("snekfetch");
 const fs = require('fs');
 const urban = module.require("urban");
 const ytdl = require('ytdl-core');
-var dt = require('date-fns/toDate');
+const dt = require('date-fns/toDate');
 //var ytpl = require('ytpl');
 
 //other Consts
@@ -1610,8 +1610,19 @@ bot.on("message", async message => {
       if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();
       break;
     case "time":
+      console.log("Time works");
+      var myDate = new Date(Date.now());
+      var pstDate = myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
+      console.log(date.toUTCString());
+      console.log(pstDate);
+      message.channel.send(date.toLocaleDateString('en-US', { timeZone: 'America/New_York' }));
       var time = dt.toDate(new Date.now());
+      console.log(time);
       message.channel.send(time);
+      var time1 = dt.toDate(Date.now());
+      console.log(time1);
+      var time2 = dt.toDate(pstDate);
+      console.log(time2);
       break;
 
     default:
