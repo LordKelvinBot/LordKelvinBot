@@ -56,6 +56,7 @@ const fs = require('fs');
 const urban = module.require("urban");
 const ytdl = require('ytdl-core');
 const dt = require('date-fns/toDate');
+const wt = require('weather');
 //var ytpl = require('ytpl');
 
 //other Consts
@@ -502,6 +503,27 @@ bot.on("message", async message => {
       message.channel.send("MST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Denver"}));
       message.channel.send("CST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Chicago"}));
       message.channel.send("EST Time: " + myDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+      break;
+    case "weather":
+      if(args[1]) {
+        let cw = weather.find({search: args[1], degreeType: 'F'}, function(err, result) {
+          if(err) console.log(err);
+          console.log(JSON.stringify(result, null, 2));
+        });
+      } else {
+        let cw = weather.find({search: 'San Gabriel, CA', degreeType: 'F'}, function(err, result) {
+          if(err) console.log(err);
+          console.log(JSON.stringify(result, null, 2));
+        });
+      }
+      let wsend = new MessageEmbed()
+        .setTitle(cw.location.name)
+        .setDescription(cw.current.date)
+        .addField("Current Temperature: ", cw.current.temperature + "F", true)
+        .addField("Sky: ", cw.current.skytext, true)
+        .addField("Humidity: ", cw.current.humidity);
+        .addField("Wind: ", cw.current.windspeed);
+      message.channel.send(wsend);
       break;
     case "ping":
       const m = await message.channel.send("Ping?");
