@@ -1610,18 +1610,8 @@ bot.on("message", async message => {
       if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();
       break;
     case "time":
-      console.log("Time works");
-      var myDate = new Date(Date.now());
-      var pstDate = myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
-      console.log(date.toUTCString());
-      console.log(pstDate);
-      var time = dt.toDate(new Date.now());
-      console.log(time);
-      message.channel.send(time);
-      var time1 = dt.toDate(Date.now());
-      console.log(time1);
-      var time2 = dt.toDate(pstDate);
-      console.log(time2);
+      var timestamp = Date.now();
+      message.channel.send(timestamp);
       break;
 
     default:
