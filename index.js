@@ -497,19 +497,10 @@ bot.on("message", async message => {
       message.channel.send(messageToBeSent);
       break;
     case "time":
-      console.log("Time works");
       var myDate = new Date(Date.now());
-      var pstDate = myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
-      console.log(myDate.toUTCString());
-      console.log(pstDate);
-      message.channel.send(myDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-      var time = dt.toDate(new Date.now());
-      console.log(time);
-      message.channel.send(time);
-      var time1 = dt.toDate(Date.now());
-      console.log(time1);
-      var time2 = dt.toDate(pstDate);
-      console.log(time2);
+      message.channel.send("PST Time:" + myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
+      message.channel.send("MST Time:" + myDate.toLocaleString("en-US", {timeZone: "America/Denver"}));
+      message.channel.send("EST Time: " + myDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
       break;
     case "ping":
       const m = await message.channel.send("Ping?");
