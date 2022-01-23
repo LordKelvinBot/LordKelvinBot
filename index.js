@@ -506,12 +506,12 @@ bot.on("message", async message => {
       break;
     case "weather":
       if(args[1]) {
-        let cw = weather.find({search: args[1], degreeType: 'F'}, function(err, result) {
+        let cw = wt.find({search: args[1], degreeType: 'F'}, function(err, result) {
           if(err) console.log(err);
           console.log(JSON.stringify(result, null, 2));
         });
       } else {
-        let cw = weather.find({search: 'San Gabriel, CA', degreeType: 'F'}, function(err, result) {
+        let cw = wt.find({search: 'San Gabriel, CA', degreeType: 'F'}, function(err, result) {
           if(err) console.log(err);
           console.log(JSON.stringify(result, null, 2));
         });
