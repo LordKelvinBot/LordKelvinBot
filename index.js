@@ -56,7 +56,7 @@ const fs = require('fs');
 const urban = module.require("urban");
 const ytdl = require('ytdl-core');
 const dt = require('date-fns/toDate');
-const wt = require('weather');
+const wt = require('weather-js');
 //var ytpl = require('ytpl');
 
 //other Consts
