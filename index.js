@@ -520,7 +520,7 @@ bot.on("message", async message => {
           parsed = parsed[0];
           let wsend = new MessageEmbed()
             .setTitle(parsed.location.name)
-            .setDescription(parsed.current.date + " " + parsed.current.observationtime.toTimeString())
+            .setDescription(parsed.current.date)
             .addField("Current Temperature: ", parsed.current.temperature + " F", true)
             .addField("Sky: ", parsed.current.skytext, true)
             .addField("Humidity: ", parsed.current.humidity + "%")
@@ -534,7 +534,7 @@ bot.on("message", async message => {
           parsed = parsed[0];
           let wsend = new MessageEmbed()
             .setTitle(parsed.location.name)
-            .setDescription(parsed.current.date + " " + parsed.current.observationtime.toTimeString())
+            .setDescription(parsed.current.date)
             .addField("Current Temperature: ", parsed.current.temperature + " F", true)
             .addField("Sky: ", parsed.current.skytext, true)
             .addField("Humidity: ", parsed.current.humidity + "%")
