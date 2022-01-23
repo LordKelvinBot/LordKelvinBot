@@ -527,9 +527,9 @@ bot.on("message", async message => {
           let wsend = new MessageEmbed()
             .setTitle(parsed.location.name)
             .setDescription(parsed.current.date)
-            .addField("Current Temperature: ", parsed.current.temperature + "F", true)
+            .addField("Current Temperature: ", parsed.current.temperature + " F", true)
             .addField("Sky: ", parsed.current.skytext, true)
-            .addField("Humidity: ", parsed.current.humidity)
+            .addField("Humidity: ", parsed.current.humidity + "%")
             .addField("Wind: ", parsed.current.windspeed)
           message.channel.send(wsend);
         });
