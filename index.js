@@ -509,6 +509,7 @@ bot.on("message", async message => {
         wt.find({search: args[1], degreeType: 'F'}, function(err, parsed) {
           if(err) console.log(err);
           console.log(JSON.stringify(parsed, null, 2));
+          parsed = parsed[0];
           let wsend = new MessageEmbed()
             .setTitle(parsed.location.name)
             .setDescription(parsed.current.date)
@@ -522,6 +523,7 @@ bot.on("message", async message => {
         wt.find({search: 'San Gabriel, CA', degreeType: 'F'}, function(err, parsed) {
           if(err) console.log(err);
           console.log(JSON.stringify(parsed, null, 2));
+          parsed = parsed[0];
           let wsend = new MessageEmbed()
             .setTitle(parsed.location.name)
             .setDescription(parsed.current.date)
