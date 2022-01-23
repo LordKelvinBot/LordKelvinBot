@@ -55,7 +55,7 @@ const snekfetch = require("snekfetch");
 const fs = require('fs');
 const urban = module.require("urban");
 const ytdl = require('ytdl-core');
-import { parse, toDate } from 'date-fns'
+var dt = require('date-fns/toDate');
 //var ytpl = require('ytpl');
 
 //other Consts
