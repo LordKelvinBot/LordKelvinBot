@@ -543,6 +543,18 @@ bot.on("message", async message => {
         });
       }
       break;
+    case "forecast":
+      if(args[1]) {
+        wt.find({search: args[1], degreeType: 'F'}, function(err, parsed) {
+          if(err) console.log(err);
+          console.log(JSON.stringify(parsed, null, 2));
+          parsed = parsed[0];
+          let wsend = new MessageEmbed()
+            .setTitle(parsed.location.name + " 5 Day Forecast")
+            .setDescription(parsed.current.date)
+            .addField(parsed.forecast[0].day, "Low: " + parsed.forecast[0].low + " High: " + parsed.forecast[0].high, true)
+          message.channel.send(wsend);
+        });
     case "ping":
       const m = await message.channel.send("Ping?");
       m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(bot.ws.ping)}ms`);
