@@ -600,7 +600,7 @@ bot.on("message", async message => {
       if(message.guild.members.cache.get('181284528793452545')) {
         let author = './playerdata/' + message.author.username.toString() + '.json';
         fs.readFile(author, (err, data) => {
-          let rawdata = fs.readFileSync(author1);
+          let rawdata = fs.readFileSync(author);
           let person = JSON.parse(rawdata);
           if (err) message.channel.send("You don't exist");
           if(args[1]) {
