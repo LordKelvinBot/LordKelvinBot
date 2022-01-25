@@ -555,7 +555,8 @@ bot.on("message", async message => {
             .addField(parsed.forecast[0].day, "Low: " + parsed.forecast[0].low + " High: " + parsed.forecast[0].high, true)
           message.channel.send(wsend);
         });
-        break;
+      }
+      break;
     case "ping":
       const m = await message.channel.send("Ping?");
       m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(bot.ws.ping)}ms`);
