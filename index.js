@@ -634,7 +634,7 @@ bot.on("message", async message => {
         else if (err.code === 'ENOENT') {
           console.error('file does not exist');
           let newdata = {
-            money: '$' + 1000
+            money: 1000
           };
           let data = JSON.stringify(newdata);
           fs.writeFileSync('./playerdata/' + author2, data);
