@@ -577,7 +577,7 @@ bot.on("message", async message => {
       }
       break;
     case "uptime":
-      let totalSeconds = (client.uptime / 1000);
+      let totalSeconds = (Client.uptime / 1000);
       let days = Math.floor(totalSeconds / 86400);
       totalSeconds %= 86400;
       let hours = Math.floor(totalSeconds / 3600);
