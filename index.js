@@ -558,6 +558,7 @@ bot.on("message", async message => {
             .addField(parsed.forecast[4].day, "Low: " + parsed.forecast[4].low + " High: " + parsed.forecast[4].high)
           message.channel.send(wsend);
         });
+      }
         else {
           wt.find({search: "San Gabriel, CA", degreeType: 'F'}, function(err, parsed) {
             if(err) console.log(err);
