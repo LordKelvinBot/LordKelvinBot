@@ -61,7 +61,7 @@ const dt = require('date-fns/toDate');
 const wt = require('weather-js');
 const moment = require("moment");
 require("moment-duration-format");
-const duration = moment.duration(client.uptime).format(" D [days], H [hrs], m [mins], s [secs]");
+const duration = moment.duration(Client.uptime).format(" D [days], H [hrs], m [mins], s [secs]");
 //var ytpl = require('ytpl');
 
 //other Consts
