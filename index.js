@@ -622,7 +622,7 @@ bot.on("message", async message => {
       });
       let rawdata = fs.readFileSync(author1);
       let person = JSON.parse(rawdata);
-      message.channel.send("Balance: " + person.reputation);
+      message.channel.send("Balance: " + person.balance);
       break;
     case "register111": //THEORETICALLY DEPRECATED
       let author2 = message.author.username.toString() + '.json';
