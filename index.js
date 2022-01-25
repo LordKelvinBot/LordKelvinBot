@@ -552,11 +552,11 @@ bot.on("message", async message => {
           let wsend = new MessageEmbed()
             .setTitle(parsed.location.name + " 5 Day Forecast")
             .setDescription(parsed.current.date + " " + parsed.current.day)
-            .addField(parsed.forecast[0].day, "Low: " + parsed.forecast[0].low + " High: " + parsed.forecast[0].high, true)
-            .addField(parsed.forecast[1].day, "Low: " + parsed.forecast[1].low + " High: " + parsed.forecast[1].high, true)
-            .addField(parsed.forecast[2].day, "Low: " + parsed.forecast[2].low + " High: " + parsed.forecast[2].high, true)
-            .addField(parsed.forecast[3].day, "Low: " + parsed.forecast[3].low + " High: " + parsed.forecast[3].high, true)
-            .addField(parsed.forecast[4].day, "Low: " + parsed.forecast[4].low + " High: " + parsed.forecast[4].high, true)
+            .addField(parsed.forecast[0].day, "Low: " + parsed.forecast[0].low + " High: " + parsed.forecast[0].high)
+            .addField(parsed.forecast[1].day, "Low: " + parsed.forecast[1].low + " High: " + parsed.forecast[1].high)
+            .addField(parsed.forecast[2].day, "Low: " + parsed.forecast[2].low + " High: " + parsed.forecast[2].high)
+            .addField(parsed.forecast[3].day, "Low: " + parsed.forecast[3].low + " High: " + parsed.forecast[3].high)
+            .addField(parsed.forecast[4].day, "Low: " + parsed.forecast[4].low + " High: " + parsed.forecast[4].high)
           message.channel.send(wsend);
         });
       }
