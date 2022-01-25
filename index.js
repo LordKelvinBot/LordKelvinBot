@@ -603,9 +603,11 @@ bot.on("message", async message => {
           if (err) message.channel.send("You don't exist");
           if(args[1]) {
             data.money += 5000
+            console.log("Money added to " + author);
           }
           else {
             data.money += 1000
+            console.log("Money added to " + author);
           }
         })
       }
