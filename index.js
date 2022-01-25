@@ -612,6 +612,7 @@ bot.on("message", async message => {
       else {
         message.channel.send("You don't have enough permissions.");
       }
+      break;
     case "balance1":   //THEORETICALLY DEPRECATED
       let author1 = './playerdata/' + message.author.username.toString() + '.json';
       fs.readFile(author1, (err, data) => {
