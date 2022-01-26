@@ -696,7 +696,7 @@ bot.on("message", async message => {
       var slot3 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
       //message.channel.send("Slot 1: " + slot1 + ", Slot 2: " + slot2 + ", Slot 3: " + slot3);
       message.channel.send(slot1 + " " + slot2 + " " + slot3);
-      if (slot1 == slot2 && slot2 == slot3)
+      if (slot1 == slot2 && slot2 == slot3 && slot1 == slot3)
       {
         message.channel.send("You Won " + investment);
         let newdata = {
