@@ -1465,7 +1465,7 @@ bot.on("message", async message => {
               )
               .then(message => message.delete({ timeout: 5000 }));
             log(
-              "Deletion of messages successful. \n Total messages deleted including command: " +
+              "Deletion of messages successful. Zi here\n Total messages deleted including command: " +
               newamount
             );
           })
@@ -1493,7 +1493,7 @@ bot.on("message", async message => {
               )
               .then(message => message.delete({ timeout: 5000 }));
             log(
-              "Deletion of messages successful. \n Total messages deleted including command: " +
+              "Deletion of messages successful. Zi there\n Total messages deleted including command: " +
               newamount
             );
           })
