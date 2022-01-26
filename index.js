@@ -608,7 +608,7 @@ bot.on("message", async message => {
               money: args[1] + money
             };
             let data = JSON.stringify(newdata);
-            fs.writeFileSync('./playerdata/' + author, data);
+            fs.writeFileSync(author, data);
             console.log(args[1] + " added to " + author);
           }
           else {
@@ -616,7 +616,7 @@ bot.on("message", async message => {
               money: 1001
             };
             let data = JSON.stringify(newdata);
-            fs.writeFileSync('./playerdata/' + author, data);
+            fs.writeFileSync(author, data);
             console.log("Money reset to " + author);
           }
         })
