@@ -604,11 +604,19 @@ bot.on("message", async message => {
         fs.readFile(author, (err, data) => {
           if (err) message.channel.send("You don't exist");
           if(args[1]) {
-            person.money = args[1] + person.money
+            let newdata = {
+              money: args[1] + money
+            };
+            let data = JSON.stringify(newdata);
+            fs.writeFileSync('./playerdata/' + author, data);
             console.log(args[1] + " added to " + author);
           }
           else {
-            person.money = 1001
+            let newdata = {
+              money: 1001
+            };
+            let data = JSON.stringify(newdata);
+            fs.writeFileSync('./playerdata/' + author, data);
             console.log("Money reset to " + author);
           }
         })
