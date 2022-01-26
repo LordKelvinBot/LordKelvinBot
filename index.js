@@ -604,12 +604,12 @@ bot.on("message", async message => {
           let person = JSON.parse(rawdata);
           if (err) message.channel.send("You don't exist");
           if(args[1]) {
-            person.money += args[1]
+            person.money = args[1] + person.money
             console.log("Money added to " + author);
           }
           else {
-            person.money += 1000
-            console.log("Money added to " + author);
+            person.money = 1000
+            console.log("Money reset to " + author);
           }
         })
       }
