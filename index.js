@@ -77,6 +77,7 @@ var servers = {};
 var slotMachine = [":tongue:", ":sweat_drops:", ":tophat:", ":fire:", ":eggplant:"];
 var thing = 1;
 var timeChancer = 45;
+let messageAuthorPath = './playerdata/' + message.author.id + '.json';
 forceFetchUsers: true
 
 var wsettings = {
@@ -654,7 +655,6 @@ bot.on("message", async message => {
       });
       break;
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
-      let messageAuthorPath = './playerdata/' + message.author.id + '.json';
       if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of money you want to bet on the coinflip.');
       /*let moneyType = "copper";         //these four lines shouldn't work and don't do anything, but they work so...
       if (args[2]) moneyType = args[2];
