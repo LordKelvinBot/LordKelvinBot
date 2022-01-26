@@ -662,8 +662,8 @@ bot.on("message", async message => {
       moneyType = checkMoneyType(moneyType);*/
       var investment = parseInt(args[1]);
       console.log("Investment = " + investment);
-      let rawdata = fs.readFileSync(messageAuthorPath);
-      let person = JSON.parse(rawdata);
+      let raw = fs.readFileSync(messageAuthorPath);
+      let person = JSON.parse(raw);
       if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
       if (Math.floor(Math.random() * 2) > 0)
       {
