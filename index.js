@@ -626,7 +626,7 @@ bot.on("message", async message => {
         message.channel.send("You don't have enough permissions.");
       }
       break;
-    case "balance1":   //THEORETICALLY DEPRECATED
+    case "balance":   //THEORETICALLY DEPRECATED
       let author1 = './playerdata/' + message.author.username.toString() + '.json';
       fs.readFile(author1, (err, data) => {
         if (err) message.channel.send("You don't exist");
@@ -635,7 +635,7 @@ bot.on("message", async message => {
       let person = JSON.parse(rawdata);
       message.channel.send("Balance: " + person.money);
       break;
-    case "register111": //THEORETICALLY DEPRECATED
+    case "register": //THEORETICALLY DEPRECATED
       let author2 = message.author.username.toString() + '.json';
       fs.stat('./playerdata/' + author2, function(err) {
         if (!err) {
