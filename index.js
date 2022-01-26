@@ -689,6 +689,7 @@ bot.on("message", async message => {
     case "slots":
       var investment = args[1];
       console.log("Investment = " + investment);
+      if (args[1] < 1) return message.channel.send("Input a valid number more than 0.")
       if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
       var slot1 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
       var slot2 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
@@ -698,12 +699,12 @@ bot.on("message", async message => {
       if (slot1 == slot2 && slot2 == slot3)
       {
         message.channel.send("You Won " + investment);
-        write(messageAuthor, null, read(messageAuthor).copper + parseInt(investment));
+        write(messageAuthor, null, read(messageAuthor).money + parseInt(investment));
       }
       else
       {
         message.channel.send("You Lost " + investment);
-        write(messageAuthor, null, read(messageAuthor).copper - parseInt(investment));
+        write(messageAuthor, null, read(messageAuthor).money - parseInt(investment));
       }
       //add more possibililites for victory, like if you get 3 animals or something
       break;
