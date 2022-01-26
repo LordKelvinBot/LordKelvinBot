@@ -698,18 +698,18 @@ bot.on("message", async message => {
       message.channel.send(slot1 + " " + slot2 + " " + slot3);
       if (slot1 == slot2 && slot2 == slot3 && slot1 == slot3)
       {
-        message.channel.send("You Won " + investment);
+        message.channel.send("You won " + investment);
         let newdata = {
-          money: parseInt(per.money) + parseInt(investment)
+          money: parseInt(read(messageAuthor).money) + (parseInt(investment) * 5)
         };
         let writedata = JSON.stringify(newdata);
         fs.writeFileSync(messageAuthorPath, writedata);
       }
       else
       {
-        message.channel.send("You Lost " + investment);
+        message.channel.send("You lost " + investment);
         let newdata = {
-          money: parseInt(per.money) - parseInt(investment)
+          money: parseInt(read(messageAuthor).money) - parseInt(investment)
         };
         let writedata = JSON.stringify(newdata);
         fs.writeFileSync(messageAuthorPath, writedata);
