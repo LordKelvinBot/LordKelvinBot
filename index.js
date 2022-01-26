@@ -605,7 +605,7 @@ bot.on("message", async message => {
           if (err) message.channel.send("You don't exist");
           if(args[1]) {
             let newdata = {
-              money: args[1] + money
+              money: args[1] + data.money
             };
             let data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
