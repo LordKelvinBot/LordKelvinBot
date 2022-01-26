@@ -717,6 +717,7 @@ bot.on("message", async message => {
       var slot3 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
       //message.channel.send("Slot 1: " + slot1 + ", Slot 2: " + slot2 + ", Slot 3: " + slot3);
       message.channel.send(slot1 + " " + slot2 + " " + slot3);
+      let mAuthor = './playerdata/' + message.author.id + '.json';
       if (slot1 == slot2 && slot2 == slot3 && slot1 == slot3)
       {
         message.channel.send("You won " + investment);
@@ -724,7 +725,7 @@ bot.on("message", async message => {
           money: parseInt(read(messageAuthor).money) + (parseInt(investment) * 50)
         };
         let writedata = JSON.stringify(newdata);
-        fs.writeFileSync(messageAuthorPath, writedata);
+        fs.writeFileSync(mAuthor, writedata);
       }
       else
       {
@@ -733,7 +734,7 @@ bot.on("message", async message => {
           money: parseInt(read(messageAuthor).money) - parseInt(investment)
         };
         let writedata = JSON.stringify(newdata);
-        fs.writeFileSync(messageAuthorPath, writedata);
+        fs.writeFileSync(mAuthor, writedata);
       }
       //add more possibililites for victory, like if you get 3 animals or something
       break;
