@@ -699,12 +699,20 @@ bot.on("message", async message => {
       if (slot1 == slot2 && slot2 == slot3)
       {
         message.channel.send("You Won " + investment);
-        write(messageAuthor, null, read(messageAuthor).money + parseInt(investment));
+        let newdata = {
+          money: parseInt(per.money) + parseInt(investment)
+        };
+        let writedata = JSON.stringify(newdata);
+        fs.writeFileSync(messageAuthorPath, writedata);
       }
       else
       {
         message.channel.send("You Lost " + investment);
-        write(messageAuthor, null, read(messageAuthor).money - parseInt(investment));
+        let newdata = {
+          money: parseInt(per.money) - parseInt(investment)
+        };
+        let writedata = JSON.stringify(newdata);
+        fs.writeFileSync(messageAuthorPath, writedata);
       }
       //add more possibililites for victory, like if you get 3 animals or something
       break;
