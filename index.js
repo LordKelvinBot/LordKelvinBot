@@ -672,7 +672,8 @@ bot.on("message", async message => {
         let newdata = {
           money: parseInt(per.money) + parseInt(investment)
         };
-        fs.writeFileSync(messageAuthorPath, newdata);
+        let writedata = JSON.stringify(newdata);
+        fs.writeFileSync(messageAuthorPath, writedata);
       }
       else
       {
@@ -680,7 +681,8 @@ bot.on("message", async message => {
         let newdata = {
           money: parseInt(per.money) - parseInt(investment)
         };
-        fs.writeFileSync(messageAuthorPath, newdata);
+        let writedata = JSON.stringify(newdata);
+        fs.writeFileSync(messageAuthorPath, writedata);
       }
       break;
     case "slots":
