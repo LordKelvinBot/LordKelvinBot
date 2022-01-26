@@ -284,7 +284,7 @@ bot.on("message", async message => {
   } // exit
 
   //gambling functions
-  let messageAuthor = message.author.username.toString() + '.json';
+  let messageAuthor = message.author.id + '.json';
   function read (author)
   {
     var authorDirect = './playerdata/' + author;
@@ -454,7 +454,7 @@ bot.on("message", async message => {
         log('Converted Currency values');
         var moneyEmbed = new MessageEmbed()
           .setColor(generateHex())
-          .setTitle("Stat Board of " + message.author.username.toString())
+          .setTitle("Stat Board of " + message.author.id)
           .setDescription("A collection of your stats.")
           .setThumbnail(message.author.avatarURL)
           .addField("Reputation", read(author).reputation + "\nReputation Level: " + repCheck(messageAuthor))
@@ -598,7 +598,7 @@ bot.on("message", async message => {
       break;
     case "add":
       if(message.guild.members.cache.get('181284528793452545')) {
-        let author = './playerdata/' + message.author.username.toString() + '.json';
+        let author = './playerdata/' + message.author.id + '.json';
         let rawdata = fs.readFileSync(author);
         let person = JSON.parse(rawdata);
         fs.readFile(author, (err, data) => {
@@ -627,7 +627,7 @@ bot.on("message", async message => {
       }
       break;
     case "balance":   //THEORETICALLY DEPRECATED
-      let author1 = './playerdata/' + message.author.username.toString() + '.json';
+      let author1 = './playerdata/' + message.author.id + '.json';
       fs.readFile(author1, (err, data) => {
         if (err) message.channel.send("You don't exist");
       });
@@ -636,7 +636,7 @@ bot.on("message", async message => {
       message.channel.send("Balance: " + person.money);
       break;
     case "register": //THEORETICALLY DEPRECATED
-      let author2 = message.author.username.toString() + '.json';
+      let author2 = message.author.id + '.json';
       fs.stat('./playerdata/' + author2, function(err) {
         if (!err) {
           console.log("file exists");
@@ -654,7 +654,7 @@ bot.on("message", async message => {
       });
       break;
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
-      let messageAuthorPath = './playerdata/' + message.author.username.toString() + '.json';
+      let messageAuthorPath = './playerdata/' + message.author.id + '.json';
       if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of money you want to bet on the coinflip.');
       /*let moneyType = "copper";         //these four lines shouldn't work and don't do anything, but they work so...
       if (args[2]) moneyType = args[2];
