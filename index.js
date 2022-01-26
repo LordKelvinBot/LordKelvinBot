@@ -1446,35 +1446,7 @@ bot.on("message", async message => {
       let roleGod = message.guild.roles.fetch('295777645931790336');
       let roleGod1 = message.guild.roles.fetch('550117111045816320');
       //(message.guild.id == '272582751545196544' && message.member.roles.cache.has(roleGod.id)) ||
-      if (message.guild.members.cache.get('181284528793452545')) {
-        let newamount = 2;
-        if (args[1]) {
-          newamount = args[1];
-        }
-        let messagecount = newamount.toString();
-        message.channel.messages
-          .fetch({
-            limit: parseInt(messagecount)+1
-          })
-          .then(messages => {
-            message.channel.bulkDelete(messages, true);
-            // Logging the number of messages deleted on both the channel and console.
-            message.channel
-              .send(
-                "Deletion of messages successful. \n Total messages deleted including command: " +
-                newamount
-              )
-              .then(message => message.delete({ timeout: 5000 }));
-            log(
-              "Deletion of messages successful. \n Total messages deleted including command: " +
-              newamount
-            );
-          })
-          .catch(err => {
-            log("Error while doing Bulk Delete");
-            log(err);
-          });
-      } else if (message.member.roles.cache.has(roleGod1.id) && message.guild.id == '272582751545196544' && message.guild.members.cache.get('181284528793452545')) {
+      if (message.author.id == '181284528793452545') {
         let newamount = 2;
         if (args[1]) {
           newamount = args[1];
