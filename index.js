@@ -603,9 +603,10 @@ bot.on("message", async message => {
         let person = JSON.parse(rawdata);
         fs.readFile(author, (err, data) => {
           if (err) message.channel.send("You don't exist");
+          let newbalance = args[1] + person.money
           if(args[1]) {
             let newdata = {
-              money: args[1] + person.money
+              money: newbalance
             };
             let data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
