@@ -599,16 +599,16 @@ bot.on("message", async message => {
     case "add":
       if(message.guild.members.cache.get('181284528793452545')) {
         let author = './playerdata/' + message.author.username.toString() + '.json';
+        let rawdata = fs.readFileSync(author);
+        let person = JSON.parse(rawdata);
         fs.readFile(author, (err, data) => {
-          let rawdata = fs.readFileSync(author);
-          let person = JSON.parse(rawdata);
           if (err) message.channel.send("You don't exist");
           if(args[1]) {
             person.money = args[1] + person.money
-            console.log("Money added to " + author);
+            console.log(args[1] + " added to " + author);
           }
           else {
-            person.money = 1000
+            person.money = 1001
             console.log("Money reset to " + author);
           }
         })
