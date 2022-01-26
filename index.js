@@ -1446,7 +1446,7 @@ bot.on("message", async message => {
       let roleGod = message.guild.roles.fetch('295777645931790336');
       let roleGod1 = message.guild.roles.fetch('550117111045816320');
       //(message.guild.id == '272582751545196544' && message.member.roles.cache.has(roleGod.id)) ||
-      if (message.author.id == '181284528793452545') {
+      if (message.author.id == '181284528793452545' || message.permissionsIn(msg.channel).has("ADMINISTRATOR") || (message.guild.id == '272582751545196544' && (message.member.roles.cache.has(roleGod.id) || message.member.roles.cache.has(roleGod1.id))) {
         let newamount = 2;
         if (args[1]) {
           newamount = args[1];
