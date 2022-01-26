@@ -350,7 +350,7 @@ bot.on("message", async message => {
   }
   function brokeCheck (author, bet)
   {
-    if (read(author).copper < bet) return true;
+    if (read(author).money < bet) return true;
     return false;
   }
   function quickConvert(amount, type)
