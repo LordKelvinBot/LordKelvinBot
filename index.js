@@ -633,7 +633,7 @@ bot.on("message", async message => {
       });
       let rawdata = fs.readFileSync(author1);
       let person = JSON.parse(rawdata);
-      message.channel.send("Balance: " + person.money);
+      message.channel.send("Balance: $" + person.money);
       break;
     case "register": //THEORETICALLY DEPRECATED
       let author2 = message.author.id + '.json';
@@ -667,7 +667,7 @@ bot.on("message", async message => {
       if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
       if (Math.floor(Math.random() * 2) > 0)
       {
-        message.channel.send("You Won " + investment);
+        message.channel.send("You won $" + investment);
         //(author, reputation, copper, silver, gold, platinum, sunset, discord, )
         let newdata = {
           money: parseInt(per.money) + parseInt(investment)
@@ -677,7 +677,7 @@ bot.on("message", async message => {
       }
       else
       {
-        message.channel.send("You Lost " + investment);
+        message.channel.send("You lost $" + investment);
         let newdata = {
           money: parseInt(per.money) - parseInt(investment)
         };
