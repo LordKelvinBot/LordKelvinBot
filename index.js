@@ -655,32 +655,30 @@ bot.on("message", async message => {
       break;
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
       let messageAuthorPath = './playerdata/' + message.author.username.toString() + '.json';
-      if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of copper you want to bet on the coinflip.');
-      let moneyType = "copper";         //these four lines shouldn't work and don't do anything, but they work so...
+      if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of money you want to bet on the coinflip.');
+      /*let moneyType = "copper";         //these four lines shouldn't work and don't do anything, but they work so...
       if (args[2]) moneyType = args[2];
       if (!validType(moneyType)) return message.channel.send("Not a valid type of currency");
-      moneyType = checkMoneyType(moneyType);
-      var investment = quickConvert(parseInt(args[1]), moneyType);
-      console.log("Investment = " + investment + "\nmoneyType = " + moneyType);
+      moneyType = checkMoneyType(moneyType);*/
+      var investment = parseInt(args[1]);
+      console.log("Investment = " + investment;
+      let rawdata = fs.readFileSync(messageAuthorPath);
+      let person = JSON.parse(rawdata);
       if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
       if (Math.floor(Math.random() * 2) > 0)
       {
         message.channel.send("You Won " + investment);
         //(author, reputation, copper, silver, gold, platinum, sunset, discord, )
-        let rawdata = fs.readFileSync(messageAuthorPath);
-        let person = JSON.parse(rawdata);
         let newdata = {
-          money: parseInt(read(messageAuthor).money) + parseInt(investment)
+          money: parseInt(person.money) + parseInt(investment)
         };
         fs.writeFileSync(messageAuthorPath, newdata);
       }
       else
       {
         message.channel.send("You Lost " + investment);
-        let rawdata = fs.readFileSync(messageAuthorPath);
-        let person = JSON.parse(rawdata);
         let newdata = {
-          money: parseInt(read(messageAuthor).money) - parseInt(investment)
+          money: parseInt(person.money) - parseInt(investment)
         };
         fs.writeFileSync(messageAuthorPath, newdata);
       }
