@@ -661,7 +661,7 @@ bot.on("message", async message => {
       if (!validType(moneyType)) return message.channel.send("Not a valid type of currency");
       moneyType = checkMoneyType(moneyType);*/
       var investment = parseInt(args[1]);
-      console.log("Investment = " + investment;
+      console.log("Investment = " + investment);
       let rawdata = fs.readFileSync(messageAuthorPath);
       let person = JSON.parse(rawdata);
       if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
