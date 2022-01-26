@@ -670,7 +670,7 @@ bot.on("message", async message => {
         let rawdata = fs.readFileSync(messageAuthorPath);
         let person = JSON.parse(rawdata);
         let newdata = {
-          money: parseInt(read(messageAuthor).copper) + parseInt(investment)
+          money: parseInt(read(messageAuthor).money) + parseInt(investment)
         };
         fs.writeFileSync(messageAuthorPath, newdata);
       }
@@ -680,7 +680,7 @@ bot.on("message", async message => {
         let rawdata = fs.readFileSync(messageAuthorPath);
         let person = JSON.parse(rawdata);
         let newdata = {
-          money: parseInt(read(messageAuthor).copper) - parseInt(investment)
+          money: parseInt(read(messageAuthor).money) - parseInt(investment)
         };
         fs.writeFileSync(messageAuthorPath, newdata);
       }
