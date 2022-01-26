@@ -597,7 +597,7 @@ bot.on("message", async message => {
       convert(messageAuthor);
       break;
     case "reset":
-      if(message.guild.members.cache.get('181284528793452545')) {
+      if(message.guild.members.cache.get('181284528793452545') && !args.length == 0) {
         if(args[1]) {
           console.log("Balance has been reset for player " + args[1]);
           let resetperson = './playerdata/' + args[1] + '.json';
@@ -608,7 +608,14 @@ bot.on("message", async message => {
           fs.writeFileSync(resetperson, data);
         }
       } else {
-        channel.message.send("You don't have permission to do this.")
+          console.log("Balance has been reset for player " + message.author.username.toString());
+          let resetperson = './playerdata/' + message.author.id + '.json';
+          let newdata = {
+            money: 100
+          };
+          let data = JSON.stringify(newdata);
+          fs.writeFileSync(resetperson, data);
+          message.channel.send("Reset money for " + message.author.username.toString());
       }
       break;
     case "add":
