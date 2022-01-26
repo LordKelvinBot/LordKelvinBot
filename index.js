@@ -1425,7 +1425,7 @@ bot.on("message", async message => {
     case "roll":
       if (!args[2]) message.channel.send(Math.floor(Math.random() * args[1]) + 1);
       else if (!args[2] && !args[1]){
-         message.channel.send("Where the hell is the input fucko");
+         message.channel.send("Where the hell is the input bucko");
       }
       else
       {
