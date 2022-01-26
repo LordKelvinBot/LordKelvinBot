@@ -700,7 +700,7 @@ bot.on("message", async message => {
       {
         message.channel.send("You won " + investment);
         let newdata = {
-          money: parseInt(read(messageAuthor).money) + (parseInt(investment) * 5)
+          money: parseInt(read(messageAuthor).money) + (parseInt(investment) * 50)
         };
         let writedata = JSON.stringify(newdata);
         fs.writeFileSync(messageAuthorPath, writedata);
