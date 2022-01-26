@@ -598,9 +598,10 @@ bot.on("message", async message => {
       break;
     case "reset":
       if(message.guild.members.cache.get('181284528793452545')) {
+        let resetman = parseInt(args[1]);
         if(args[1]) {
-          console.log("Balance has been reset for player " + args[1]);
-          let resetperson = './playerdata/' + args[1] + '.json';
+          console.log("Balance has been reset for player " + resetman.username.toString());
+          let resetperson = './playerdata/' + resetman + '.json';
           let newdata = {
             money: 100
           };
