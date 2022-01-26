@@ -663,14 +663,14 @@ bot.on("message", async message => {
       var investment = parseInt(args[1]);
       console.log("Investment = " + investment);
       let raw = fs.readFileSync(messageAuthorPath);
-      let person = JSON.parse(raw);
+      let per = JSON.parse(raw);
       if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
       if (Math.floor(Math.random() * 2) > 0)
       {
         message.channel.send("You Won " + investment);
         //(author, reputation, copper, silver, gold, platinum, sunset, discord, )
         let newdata = {
-          money: parseInt(person.money) + parseInt(investment)
+          money: parseInt(per.money) + parseInt(investment)
         };
         fs.writeFileSync(messageAuthorPath, newdata);
       }
@@ -678,7 +678,7 @@ bot.on("message", async message => {
       {
         message.channel.send("You Lost " + investment);
         let newdata = {
-          money: parseInt(person.money) - parseInt(investment)
+          money: parseInt(per.money) - parseInt(investment)
         };
         fs.writeFileSync(messageAuthorPath, newdata);
       }
