@@ -654,6 +654,7 @@ bot.on("message", async message => {
       });
       break;
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
+      let messageAuthorPath = './playerdata/' + message.author.username.toString() + '.json';
       if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of copper you want to bet on the coinflip.');
       let moneyType = "copper";         //these four lines shouldn't work and don't do anything, but they work so...
       if (args[2]) moneyType = args[2];
@@ -666,12 +667,22 @@ bot.on("message", async message => {
       {
         message.channel.send("You Won " + investment);
         //(author, reputation, copper, silver, gold, platinum, sunset, discord, )
-        write(messageAuthor, null, read(messageAuthor).copper + parseInt(investment));
+        let rawdata = fs.readFileSync(messageAuthorPath);
+        let person = JSON.parse(rawdata);
+        let newdata = {
+          money: parseInt(read(messageAuthor).copper) + parseInt(investment)
+        };
+        fs.writeFileSync(messageAuthorPath, newdata);
       }
       else
       {
         message.channel.send("You Lost " + investment);
-        write(messageAuthor, null, read(messageAuthor).copper - parseInt(investment));
+        let rawdata = fs.readFileSync(messageAuthorPath);
+        let person = JSON.parse(rawdata);
+        let newdata = {
+          money: parseInt(read(messageAuthor).copper) - parseInt(investment)
+        };
+        fs.writeFileSync(messageAuthorPath, newdata);
       }
       break;
     case "slots":
