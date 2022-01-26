@@ -1424,7 +1424,7 @@ bot.on("message", async message => {
     case "purge":
       let roleGod = message.guild.roles.fetch('295777645931790336');
       let roleGod1 = message.guild.roles.fetch('550117111045816320');
-      if (message.member.roles.cache.has(roleGod.id) || message.guild.members.cache.get('181284528793452545')) {
+      if ((message.guild.id == '272582751545196544' && message.member.roles.cache.has(roleGod.id)) || message.guild.members.cache.get('181284528793452545')) {
         let newamount = 2;
         if (args[1]) {
           newamount = args[1];
@@ -1452,7 +1452,7 @@ bot.on("message", async message => {
             log("Error while doing Bulk Delete");
             log(err);
           });
-      } else if (message.member.roles.cache.has(roleGod1.id)) {
+      } else if (message.member.roles.cache.has(roleGod1.id) && message.guild.id == '272582751545196544') {
         let newamount = 2;
         if (args[1]) {
           newamount = args[1];
