@@ -351,7 +351,7 @@ bot.on("message", async message => {
   }
   function brokeCheck (author, bet)
   {
-    if (read(author).copper < bet) return true;
+    if (read(author).money < bet) return true;
     return false;
   }
   function quickConvert(amount, type)
@@ -597,6 +597,27 @@ bot.on("message", async message => {
     case "stats":
       convert(messageAuthor);
       break;
+    case "reset":
+      if(!args[1]) {
+          console.log("Balance has been reset for player " + message.author.id);
+          let resetperson = './playerdata/' + message.author.id + '.json';
+          let newdata = {
+            money: 500
+          };
+          let data = JSON.stringify(newdata);
+          fs.writeFileSync(resetperson, data);
+          message.channel.send("Reset money for " + message.author.id);
+      }
+      else if (message.guild.members.cache.get('181284528793452545') && !args[1].length == 0) {
+        console.log("Balance has been reset for player " + args[1]);
+        let resetperson = './playerdata/' + args[1] + '.json';
+        let newdata = {
+          money: 500
+        };
+        let data = JSON.stringify(newdata);
+        fs.writeFileSync(resetperson, data);
+      }
+      break;
     case "add":
       if(message.guild.members.cache.get('181284528793452545')) {
         let author = './playerdata/' + message.author.id + '.json';
@@ -664,6 +685,7 @@ bot.on("message", async message => {
       console.log("Investment = " + investment);
       let raw = fs.readFileSync(messageAuthorPath);
       let per = JSON.parse(raw);
+      if (args[1] < 1) return message.channel.send("Input a valid number more than 0.")
       if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
       if (Math.floor(Math.random() * 2) > 0)
       {
@@ -688,21 +710,30 @@ bot.on("message", async message => {
     case "slots":
       var investment = args[1];
       console.log("Investment = " + investment);
+      if (args[1] < 1) return message.channel.send("Input a valid number more than 0.")
       if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
       var slot1 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
       var slot2 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
       var slot3 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
       //message.channel.send("Slot 1: " + slot1 + ", Slot 2: " + slot2 + ", Slot 3: " + slot3);
       message.channel.send(slot1 + " " + slot2 + " " + slot3);
-      if (slot1 == slot2 && slot2 == slot3)
+      if (slot1 == slot2 && slot2 == slot3 && slot1 == slot3)
       {
-        message.channel.send("You Won " + investment);
-        write(messageAuthor, null, read(messageAuthor).copper + parseInt(investment));
+        message.channel.send("You won " + investment);
+        let newdata = {
+          money: parseInt(read(messageAuthor).money) + (parseInt(investment) * 50)
+        };
+        let writedata = JSON.stringify(newdata);
+        fs.writeFileSync(messageAuthorPath, writedata);
       }
       else
       {
-        message.channel.send("You Lost " + investment);
-        write(messageAuthor, null, read(messageAuthor).copper - parseInt(investment));
+        message.channel.send("You lost " + investment);
+        let newdata = {
+          money: parseInt(read(messageAuthor).money) - parseInt(investment)
+        };
+        let writedata = JSON.stringify(newdata);
+        fs.writeFileSync(messageAuthorPath, writedata);
       }
       //add more possibililites for victory, like if you get 3 animals or something
       break;
@@ -1389,10 +1420,13 @@ bot.on("message", async message => {
       }
       break;
     case "d20":
-      message.channel.send(Math.floor(Math.random() * args[1]) + 1 + bonus);
+      message.channel.send(Math.floor(Math.random() * args[1]) + 1);
       break;
     case "roll":
       if (!args[2]) message.channel.send(Math.floor(Math.random() * args[1]) + 1);
+      else if (!args[2] && !args[1]){
+         message.channel.send("Where the hell is the input bucko");
+      }
       else
       {
         message.channel.send(Math.floor(Math.random() * args[1]) + 1 + parseInt(args[2]));
@@ -1414,35 +1448,8 @@ bot.on("message", async message => {
     case "purge":
       let roleGod = message.guild.roles.fetch('295777645931790336');
       let roleGod1 = message.guild.roles.fetch('550117111045816320');
-      if (message.member.roles.cache.has(roleGod.id) || message.guild.members.cache.get('181284528793452545')) {
-        let newamount = 2;
-        if (args[1]) {
-          newamount = args[1];
-        }
-        let messagecount = newamount.toString();
-        message.channel.messages
-          .fetch({
-            limit: parseInt(messagecount)+1
-          })
-          .then(messages => {
-            message.channel.bulkDelete(messages, true);
-            // Logging the number of messages deleted on both the channel and console.
-            message.channel
-              .send(
-                "Deletion of messages successful. \n Total messages deleted including command: " +
-                newamount
-              )
-              .then(message => message.delete({ timeout: 5000 }));
-            log(
-              "Deletion of messages successful. \n Total messages deleted including command: " +
-              newamount
-            );
-          })
-          .catch(err => {
-            log("Error while doing Bulk Delete");
-            log(err);
-          });
-      } else if (message.member.roles.cache.has(roleGod1.id)) {
+      //(message.guild.id == '272582751545196544' && message.member.roles.cache.has(roleGod.id)) ||
+      if (message.author.id == '181284528793452545' || message.member.hasPermission("ADMINISTRATOR") || ((message.member.roles.cache.has(roleGod.id) || message.member.roles.cache.has(roleGod1.id)))) {
         let newamount = 2;
         if (args[1]) {
           newamount = args[1];
