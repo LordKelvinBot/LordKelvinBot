@@ -761,7 +761,6 @@ bot.on("message", async message => {
       if(args[1]) {
         if(russianActive(args[1])) {
           message.channel.send("Game found, joining game.");
-          message.delete({ timeout: 500 });
         }
         else {
           message.channel.send("Game not found. Do russianstart to initiate a game.")
