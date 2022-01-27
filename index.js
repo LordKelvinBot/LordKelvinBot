@@ -77,7 +77,6 @@ var servers = {};
 var slotMachine = [":tongue:", ":sweat_drops:", ":tophat:", ":fire:", ":eggplant:"];
 var thing = 1;
 var timeChancer = 45;
-let messageAuthorPath = './playerdata/' + message.author.id + '.json';
 forceFetchUsers: true
 
 var wsettings = {
@@ -299,7 +298,7 @@ bot.on("message", async message => {
   } // exit
 
   //gambling functions
-  let messageAuthor = message.author.id + '.json';
+  let  = message.author.id + '.json';
   function read (author)
   {
     var authorDirect = './playerdata/' + author;
@@ -695,6 +694,7 @@ bot.on("message", async message => {
       if (args[2]) moneyType = args[2];
       if (!validType(moneyType)) return message.channel.send("Not a valid type of currency");
       moneyType = checkMoneyType(moneyType);*/
+      let messageAuthorPath = './playerdata/' + message.author.id + '.json';
       var investment = parseInt(args[1]);
       console.log("Investment = " + investment);
       let raw = fs.readFileSync(messageAuthorPath);
@@ -758,14 +758,14 @@ bot.on("message", async message => {
       convert(messageAuthor);
       break;
     case "russian":
-      /*if(args[1]) {
+      if(args[1]) {
         if(russianActive(args[1])) {
           message.channel.send("Game found, joining game.");
         }
         else {
           message.channel.send("Game not found. Do russianstart to initiate a game.")
         }
-      }*/
+      }
       break;
     case "russianstart":
       break;
