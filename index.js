@@ -299,6 +299,7 @@ bot.on("message", async message => {
 
   //gambling functions
   let messageAuthor = message.author.id + '.json';
+  let messageAuthorPath = './playerdata/' + message.author.id + '.json';
   function read (author)
   {
     var authorDirect = './playerdata/' + author;
@@ -694,7 +695,6 @@ bot.on("message", async message => {
       if (args[2]) moneyType = args[2];
       if (!validType(moneyType)) return message.channel.send("Not a valid type of currency");
       moneyType = checkMoneyType(moneyType);*/
-      let messageAuthorPath = './playerdata/' + message.author.id + '.json';
       var investment = parseInt(args[1]);
       console.log("Investment = " + investment);
       let raw = fs.readFileSync(messageAuthorPath);
