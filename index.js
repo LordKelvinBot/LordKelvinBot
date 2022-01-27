@@ -93,11 +93,11 @@ function russianActive(input) {
   gameData = "./rdata/" + input + '.json';
   fs.readFile(gameData, (err, data) => {
     if (err) {
-      log("Game does not exist");
+      console.log("Game does not exist");
       return false;
     }
     else {
-      log("Game exists, player joining");
+      console.log("Game exists, player joining");
       return true;
     }
   });
