@@ -90,6 +90,20 @@ function generateHex() {
   return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 
+function russianActive(input) {
+  gameData = "./rdata/" + input + '.json';
+  fs.readFile(gameData, (err, data) => {
+    if (err) {
+      log("Game does not exist");
+      return false;
+    }
+    else {
+      log("Game exists, player joining");
+      return true;
+    }
+  });
+}
+
 bot.on("message", async message => {
   console.log(message.content);
 
@@ -741,6 +755,19 @@ bot.on("message", async message => {
     //test command for setting json file values. Use with 'hey areg '
       write(messageAuthor, args[2], args[1]);
       convert(messageAuthor);
+      break;
+    case "russian":
+      if(args[1]) {
+        if(russianActive(args[1])) {
+          message.channel.send("Game found, joining game.");
+          message.delete({ timeout: 500 });
+        }
+        else {
+          message.channel.send("Game not found. Do russianstart to initiate a game.")
+        }
+      }
+      break;
+    case "russianstart":
       break;
     case "img":
       if (!args[1]) {
