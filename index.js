@@ -758,14 +758,14 @@ bot.on("message", async message => {
       convert(messageAuthor);
       break;
     case "russian":
-      if(args[1]) {
+      /*if(args[1]) {
         if(russianActive(args[1])) {
           message.channel.send("Game found, joining game.");
         }
         else {
           message.channel.send("Game not found. Do russianstart to initiate a game.")
         }
-      }
+      }*/
       break;
     case "russianstart":
       break;
