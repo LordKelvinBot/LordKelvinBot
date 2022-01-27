@@ -298,7 +298,7 @@ bot.on("message", async message => {
   } // exit
 
   //gambling functions
-  let  = message.author.id + '.json';
+  let messageAuthor = message.author.id + '.json';
   function read (author)
   {
     var authorDirect = './playerdata/' + author;
