@@ -821,9 +821,6 @@ bot.on("message", async message => {
         balanceCheck(message.author.id);
       }
       break;
-    case "register": //THEORETICALLY DEPRECATED
-      register(message.author.id);
-      break;
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
       if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of money you want to bet on the coinflip.');
       if (!isRegistered(message.author.id) && !args[1]) {
