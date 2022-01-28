@@ -131,6 +131,16 @@ bot.on("message", async message => {
   function send(text) {
     message.channel.send(text);
   }
+  function TimeCheck(user) {
+    let author = './playerdata/' + user + '.json';
+    let rawdata = fs.readFileSync(author);
+    let person = JSON.parse(rawdata);
+    fs.readFile(author, (err, data) => {
+      if (err) message.channel.send("You don't exist");
+      if((parseInt(person.lastreset)+300000) < Date.now()) return false;
+      return true;
+    })
+  }
 
   function getSubredditImage() { //methods
 
@@ -614,13 +624,19 @@ bot.on("message", async message => {
     case "reset":
       if(!args[1]) {
           console.log("Balance has been reset for player " + message.author.id);
-          let resetperson = './playerdata/' + message.author.id + '.json';
-          let newdata = {
-            money: 500
-          };
-          let data = JSON.stringify(newdata);
-          fs.writeFileSync(resetperson, data);
-          message.channel.send("Reset money for " + message.author.id);
+          if(TimeCheck) {
+            let currenttime = Date.now()
+            let resetperson = './playerdata/' + message.author.id + '.json';
+            let newdata = {
+              money: 500
+              lastreset: currenttime
+            };
+            let data = JSON.stringify(newdata);
+            fs.writeFileSync(resetperson, data);
+            message.channel.send("Reset money for " + message.author.id);
+          } else {
+            message.channel.send("Cooldown of " + ((person.lastreset + 300000)-Date.now()));
+          }
       }
       else if (message.guild.members.cache.get('181284528793452545') && !args[1].length == 0) {
         console.log("Balance has been reset for player " + args[1]);
