@@ -137,10 +137,13 @@ bot.on("message", async message => {
     let person = JSON.parse(rawdata);
     fs.readFile(author, (err, data) => {
       if (err) message.channel.send("You don't exist");
-      if(((parseInt(person.lastreset)+300000) - parseInt(Date.now())) < 0) {
+      if(((parseInt(person.lastreset)+300000) - parseInt(Date.now())) <= 0) {
+        console.log("True is not working");
         return true;
+      } else {
+        console.log("This do be working");
+        return false;
       }
-      return false;
     })
   }
 
