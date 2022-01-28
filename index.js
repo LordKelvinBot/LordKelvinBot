@@ -148,6 +148,7 @@ bot.on("message", async message => {
         pp = false;
       }
     })
+    console.log(((parseInt(person.lastreset)+300000) - parseInt(Date.now())));
     return pp;
   }
 
