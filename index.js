@@ -1411,7 +1411,7 @@ bot.on("message", async message => {
               .setTitle("Gambling Commands. None of these really work that well, and if more than one person uses it, it will 100% break.")
               .addField("balance", "Shows your current balance", true)
               .addField("coinflip", "Flips a coin. Win 2x. Usage: coinflip (amount)", true)
-              .addField("slots", "Slot machine. Win 50x. Usage: slots (amount)", true);
+              .addField("slots", "Slot machine. Win 50x. Usage: slots (amount)", true)
               .addField("roulette", "Basic roulette. Use with 'hey roulette [Number Guess] [color] [Betting cash]");
             message.channel.send(embed4);
             break;
@@ -1837,7 +1837,7 @@ bot.on("message", async message => {
       message.channel.send("Didn't work");
       break;
     case "roulette":
-      
+
       break;
     case "largeembed":
       var i = 1;
