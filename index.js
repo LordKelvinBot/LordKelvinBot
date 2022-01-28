@@ -146,6 +146,7 @@ bot.on("message", async message => {
       console.log("False");
       pp = false;
     }
+    console.log("Testg " + testg)
   }
 
   function getSubredditImage() { //methods
