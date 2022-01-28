@@ -136,7 +136,7 @@ bot.on("message", async message => {
     let deta = fs.readFileSync(author);
     let person = JSON.parse(deta);
     timeleft = ((parseInt(person.lastreset)+300000) - parseInt(Date.now()));
-    if(testleft <= 0) {
+    if(timeleft <= 0) {
       valid = true;
     } else {
       valid = false;
