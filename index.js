@@ -630,8 +630,10 @@ bot.on("message", async message => {
       if(!args[1]) {
         let currenttime = Date.now()
         let resetperson = './playerdata/' + message.author.id + '.json';
+        let timercheck = TimeCheck(message.author.id);
+        console.log("Timer Check " + timercheck)
         console.log(Date.now());
-        if(TimeCheck(message.author.id) == true) {
+        if(timercheck) {
           console.log("Balance has been reset for player " + message.author.id);
           let newdata = {
             money: 500,
@@ -640,7 +642,7 @@ bot.on("message", async message => {
           let data = JSON.stringify(newdata);
           fs.writeFileSync(resetperson, data);
           message.channel.send("Reset money for " + message.author.id);
-        } else if (TimeCheck(message.author.id) == false){
+        } else if (!timercheck){
           let rawdata = fs.readFileSync(resetperson);
           let resetdata = JSON.parse(rawdata);
           message.channel.send("Cooldown of " + ((((resetdata.lastreset + 300000)-Date.now())/1000)/60) + " minutes.");
