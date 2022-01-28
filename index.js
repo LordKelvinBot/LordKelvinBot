@@ -138,10 +138,8 @@ bot.on("message", async message => {
     fs.readFile(author, (err, data) => {
       if (err) message.channel.send("You don't exist");
       if(((parseInt(person.lastreset)+300000) - parseInt(Date.now())) <= 0) {
-        console.log("True is not working");
         return true;
       } else {
-        console.log("This do be working");
         return false;
       }
     })
@@ -630,7 +628,7 @@ bot.on("message", async message => {
       if(!args[1]) {
         let currenttime = Date.now()
         let resetperson = './playerdata/' + message.author.id + '.json';
-        if(TimeCheck(message.author.id)) {
+        if(!TimeCheck(message.author.id)) {
           console.log("Balance has been reset for player " + message.author.id);
           let newdata = {
             money: 500,
