@@ -813,7 +813,7 @@ bot.on("message", async message => {
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
       if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of money you want to bet on the coinflip.');
       if (!isRegistered(message.author.id)) {
-        await sleep(1500);
+        await sleep(500);
         coinflip(args[1],message.author.id);
       } else {
         coinflip(args[1],message.author.id);
@@ -825,7 +825,7 @@ bot.on("message", async message => {
       break;
     case "slots":
       if (!isRegistered(message.author.id)) {
-        await sleep(1500);
+        await sleep(500);
         slots(args[1],message.author.id);
       } else {
         slots(args[1],message.author.id);
