@@ -135,7 +135,9 @@ bot.on("message", async message => {
     let author = './playerdata/' + user + '.json';
     fs.readFile(author, (err, data) => {
       let person = JSON.parse(data);
-      if (err) message.channel.send("You don't exist");
+      if (err) {
+        message.channel.send("You don't exist");
+      }
       if(((parseInt(person.lastreset)+300000) - parseInt(Date.now())) <= 0) {
         console.log("reset time " + person.lastreset)
         console.log("True");
