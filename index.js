@@ -183,7 +183,24 @@ bot.on("message", async message => {
     message.channel.send(dogEmbed);
     return;
   }
-
+  function register(ab) {
+    let a = ab + '.json';
+    fs.stat('./playerdata/' + a, function(err) {
+      if (!err) {
+        console.log("file exists");
+        message.channel.send("You are already registered.");
+      }
+      else if (err.code === 'ENOENT') {
+        console.error('file does not exist');
+        let newdata = {
+          money: 1000
+        };
+        let data = JSON.stringify(newdata);
+        fs.writeFileSync('./playerdata/' + a, data);
+        message.channel.send("You have been registered.");
+      }
+    });
+  }
   async function getXKCD(comic) { //promises method getXKCD variable(comic)
 
     if (comic < 0) {
@@ -713,22 +730,7 @@ bot.on("message", async message => {
       message.channel.send("Balance: $" + person.money);
       break;
     case "register": //THEORETICALLY DEPRECATED
-      let author2 = message.author.id + '.json';
-      fs.stat('./playerdata/' + author2, function(err) {
-        if (!err) {
-          console.log("file exists");
-          message.channel.send("You are already registered.");
-        }
-        else if (err.code === 'ENOENT') {
-          console.error('file does not exist');
-          let newdata = {
-            money: 1000
-          };
-          let data = JSON.stringify(newdata);
-          fs.writeFileSync('./playerdata/' + author2, data);
-          message.channel.send("You have been registered.");
-        }
-      });
+      register(message.author.id);
       break;
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
       if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of money you want to bet on the coinflip.');
