@@ -804,11 +804,14 @@ bot.on("message", async message => {
           message.channel.send("Game found, joining game.");
         }
         else {
-          message.channel.send("Game not found. Do russianstart to initiate a game.")
+          message.channel.send("Game not found. Do russiancreate to initiate a game.")
         }
       }
       break;
-    case "russianstart":
+    case "russiancreate":
+      if(!args[1]) {
+        message.channel.send("WIP. Type in a number after to make a lobby ID.")
+      }
       break;
     case "img":
       if (!args[1]) {
