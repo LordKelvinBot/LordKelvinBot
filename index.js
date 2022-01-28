@@ -629,7 +629,7 @@ bot.on("message", async message => {
       if(!args[1]) {
         let currenttime = Date.now()
         let resetperson = './playerdata/' + message.author.id + '.json';
-        if(TimeCheck(message.author.id) === true) {
+        if(TimeCheck(message.author.id) == true) {
           console.log("Balance has been reset for player " + message.author.id);
           let newdata = {
             money: 500,
