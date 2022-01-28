@@ -147,6 +147,7 @@ bot.on("message", async message => {
         return false;
       }
     })
+    return null;
   }
 
   function getSubredditImage() { //methods
