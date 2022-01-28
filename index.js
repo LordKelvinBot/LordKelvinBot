@@ -632,7 +632,7 @@ bot.on("message", async message => {
         fs.writeFileSync(resetperson, data);
       }
       break;
-    case "add":
+    case "addbal":
       if(message.guild.members.cache.get('181284528793452545')) {
         let author = './playerdata/' + message.author.id + '.json';
         let rawdata = fs.readFileSync(author);
