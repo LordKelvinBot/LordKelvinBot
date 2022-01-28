@@ -138,15 +138,16 @@ bot.on("message", async message => {
       if (err) {
         message.channel.send("You don't exist");
       }
+      if(((parseInt(person.lastreset)+300000) - parseInt(Date.now())) <= 0) {
+        console.log("reset time " + person.lastreset)
+        console.log("True");
+        return true;
+      } else {
+        console.log("False");
+        return false;
+      }
     })
-    if(((parseInt(person.lastreset)+300000) - parseInt(Date.now())) <= 0) {
-      console.log("reset time " + person.lastreset)
-      console.log("True");
-      return true;
-    } else {
-      console.log("False");
-      return false;
-    }
+    return null;
   }
 
   function getSubredditImage() { //methods
