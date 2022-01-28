@@ -335,6 +335,8 @@ bot.on("message", async message => {
     //message.channel.send("Slot 1: " + slot1 + ", Slot 2: " + slot2 + ", Slot 3: " + slot3);
     message.channel.send(slot1 + " " + slot2 + " " + slot3);
     let mAuthor = './playerdata/' + id + '.json';
+    let raw = fs.readFileSync(mAuthor);
+    let per = JSON.parse(raw);
     if (slot1 == slot2 && slot2 == slot3 && slot1 == slot3)
     {
       message.channel.send("You won $" + (parseInt(investment) * 50));
