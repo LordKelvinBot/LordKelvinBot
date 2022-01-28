@@ -635,7 +635,7 @@ bot.on("message", async message => {
             fs.writeFileSync(resetperson, data);
             message.channel.send("Reset money for " + message.author.id);
           } else {
-            message.channel.send("Cooldown of " + ((resetperson.lastreset + 300000)-Date.now()));
+            message.channel.send("Cooldown of " + ((data.lastreset + 300000)-Date.now()));
           }
       }
       break;
