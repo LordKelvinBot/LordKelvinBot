@@ -640,7 +640,7 @@ bot.on("message", async message => {
           let data = JSON.stringify(newdata);
           fs.writeFileSync(resetperson, data);
           message.channel.send("Reset money for " + message.author.id);
-        } else {
+        } else if (TimeCheck(message.author.id) == false){
           let rawdata = fs.readFileSync(resetperson);
           let resetdata = JSON.parse(rawdata);
           message.channel.send("Cooldown of " + ((((resetdata.lastreset + 300000)-Date.now())/1000)/60) + " minutes.");
