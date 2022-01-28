@@ -188,6 +188,7 @@ bot.on("message", async message => {
     fs.readFile(au, (err, data) => {
       if (err) {
         log("Does not exist");
+        register(m)
         return false;
       } else {
         return true;
@@ -320,7 +321,34 @@ bot.on("message", async message => {
       })
   }
   //will/is/are/am/was/does/should/do/can
-
+  function coinflip(amount, id) {
+    let path = "./playerdata/" + id + ".json";
+    var investment = parseInt(amount);
+    console.log("Investment = " + investment);
+    let raw = fs.readFileSync(path);
+    let per = JSON.parse(raw);
+    if (args[1] < 1) return message.channel.send("Input a valid number more than 0.")
+    if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
+    if (Math.floor(Math.random() * 2) > 0)
+    {
+      message.channel.send("You won $" + investment);
+      //(author, reputation, copper, silver, gold, platinum, sunset, discord, )
+      let newdata = {
+        money: parseInt(per.money) + parseInt(investment)
+      };
+      let writedata = JSON.stringify(newdata);
+      fs.writeFileSync(path, writedata);
+    }
+    else
+    {
+      message.channel.send("You lost $" + investment);
+      let newdata = {
+        money: parseInt(per.money) - parseInt(investment)
+      };
+      let writedata = JSON.stringify(newdata);
+      fs.writeFileSync(path, writedata);
+    }
+  }
   function sendM(name) {
     message.channel.send({
       files: ["./images/m/" + name + ".jpg"]
@@ -747,36 +775,15 @@ bot.on("message", async message => {
       break;
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
       if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of money you want to bet on the coinflip.');
-      if (!isRegistered(message.author.id)) return register(message.author.id);
+      if (!isRegistered(message.author.id)) {
+        message.channel.send("Automatically registered.")
+      } else {
+        coinflip(args[1],message.author.id);
+      }
       /*let moneyType = "copper";         //these four lines shouldn't work and don't do anything, but they work so...
       if (args[2]) moneyType = args[2];
       if (!validType(moneyType)) return message.channel.send("Not a valid type of currency");
       moneyType = checkMoneyType(moneyType);*/
-      var investment = parseInt(args[1]);
-      console.log("Investment = " + investment);
-      let raw = fs.readFileSync(messageAuthorPath);
-      let per = JSON.parse(raw);
-      if (args[1] < 1) return message.channel.send("Input a valid number more than 0.")
-      if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
-      if (Math.floor(Math.random() * 2) > 0)
-      {
-        message.channel.send("You won $" + investment);
-        //(author, reputation, copper, silver, gold, platinum, sunset, discord, )
-        let newdata = {
-          money: parseInt(per.money) + parseInt(investment)
-        };
-        let writedata = JSON.stringify(newdata);
-        fs.writeFileSync(messageAuthorPath, writedata);
-      }
-      else
-      {
-        message.channel.send("You lost $" + investment);
-        let newdata = {
-          money: parseInt(per.money) - parseInt(investment)
-        };
-        let writedata = JSON.stringify(newdata);
-        fs.writeFileSync(messageAuthorPath, writedata);
-      }
       break;
     case "slots":
       var investment = args[1];
