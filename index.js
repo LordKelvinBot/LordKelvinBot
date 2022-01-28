@@ -183,7 +183,7 @@ bot.on("message", async message => {
     message.channel.send(dogEmbed);
     return;
   }
-  async function isRegistered(m) {
+  function isRegistered(m) {
     au = "./playerdata/" + m + ".json";
     fs.access(au,fs.F_OK, (err) => {
       if(err) {
