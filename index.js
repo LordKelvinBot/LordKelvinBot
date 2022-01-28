@@ -134,11 +134,13 @@ bot.on("message", async message => {
   function TimeCheck(user) {
     let pp = null;
     let author = './playerdata/' + user + '.json';
+    let testg = 0;
     fs.readFile(author, (err, data) => {
       let person = JSON.parse(data);
       if (err) {
         message.channel.send("You don't exist");
       }
+      testg = ((parseInt(person.lastreset)+300000) - parseInt(Date.now()));
       if(((parseInt(person.lastreset)+300000) - parseInt(Date.now())) <= 0) {
         console.log("reset time " + person.lastreset)
         console.log("True");
@@ -148,7 +150,7 @@ bot.on("message", async message => {
         pp = false;
       }
     })
-    console.log(((parseInt(person.lastreset)+300000) - parseInt(Date.now())));
+    console.log(testg);
     return pp;
   }
 
