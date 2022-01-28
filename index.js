@@ -183,17 +183,18 @@ bot.on("message", async message => {
     message.channel.send(dogEmbed);
     return;
   }
-  function isRegistered(m) {
+  async function isRegistered(m) {
     au = "./playerdata/" + m + ".json";
     fs.readFile(au, (err, data) => {
       if (err) {
         log("Does not exist");
         register(m)
-        return false;
+        const testg = false;
       } else {
-        return true;
+        const testg = true;
       }
     });
+    return testg;
   }
   function register(ab) {
     let a = ab + '.json';
