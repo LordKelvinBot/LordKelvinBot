@@ -336,7 +336,8 @@ bot.on("message", async message => {
       message.channel.send("You won $" + investment);
       //(author, reputation, copper, silver, gold, platinum, sunset, discord, )
       let newdata = {
-        money: parseInt(per.money) + parseInt(investment)
+        money: parseInt(per.money) + parseInt(investment),
+        lastreset: parseInt(per.lastreset)
       };
       let writedata = JSON.stringify(newdata);
       fs.writeFileSync(path, writedata);
@@ -345,7 +346,8 @@ bot.on("message", async message => {
     {
       message.channel.send("You lost $" + investment);
       let newdata = {
-        money: parseInt(per.money) - parseInt(investment)
+        money: parseInt(per.money) - parseInt(investment),
+        lastreset: parseInt(per.lastreset)
       };
       let writedata = JSON.stringify(newdata);
       fs.writeFileSync(path, writedata);
@@ -802,7 +804,8 @@ bot.on("message", async message => {
       {
         message.channel.send("You won $" + (parseInt(investment) * 50));
         let newdata = {
-          money: parseInt(read(messageAuthor).money) + (parseInt(investment) * 50)
+          money: parseInt(read(messageAuthor).money) + (parseInt(investment) * 50),
+          lastreset: parseInt(per.lastreset)
         };
         let writedata = JSON.stringify(newdata);
         fs.writeFileSync(mAuthor, writedata);
@@ -811,7 +814,8 @@ bot.on("message", async message => {
       {
         message.channel.send("You lost $" + investment);
         let newdata = {
-          money: parseInt(read(messageAuthor).money) - parseInt(investment)
+          money: parseInt(read(messageAuthor).money) - parseInt(investment),
+          lastreset: parseInt(per.lastreset)
         };
         let writedata = JSON.stringify(newdata);
         fs.writeFileSync(mAuthor, writedata);
