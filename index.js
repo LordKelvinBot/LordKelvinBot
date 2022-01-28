@@ -319,13 +319,45 @@ bot.on("message", async message => {
       })
   }
   //will/is/are/am/was/does/should/do/can
+  function slots(amount, id) {
+    var investment = amount;
+    console.log("Investment = " + investment);
+    if (amount <= 1) return message.channel.send("Input a valid number more than 0.")
+    if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
+    var slot1 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
+    var slot2 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
+    var slot3 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
+    //message.channel.send("Slot 1: " + slot1 + ", Slot 2: " + slot2 + ", Slot 3: " + slot3);
+    message.channel.send(slot1 + " " + slot2 + " " + slot3);
+    let mAuthor = './playerdata/' + id + '.json';
+    if (slot1 == slot2 && slot2 == slot3 && slot1 == slot3)
+    {
+      message.channel.send("You won $" + (parseInt(investment) * 50));
+      let newdata = {
+        money: parseInt(read(messageAuthor).money) + (parseInt(investment) * 50),
+        lastreset: parseInt(per.lastreset)
+      };
+      let writedata = JSON.stringify(newdata);
+      fs.writeFileSync(mAuthor, writedata);
+    }
+    else
+    {
+      message.channel.send("You lost $" + investment);
+      let newdata = {
+        money: parseInt(read(messageAuthor).money) - parseInt(investment),
+        lastreset: parseInt(per.lastreset)
+      };
+      let writedata = JSON.stringify(newdata);
+      fs.writeFileSync(mAuthor, writedata);
+    }
+  }
   function coinflip(amount, id) {
     let path = "./playerdata/" + id + ".json";
     var investment = parseInt(amount);
     console.log("Investment = " + investment);
     let raw = fs.readFileSync(path);
     let per = JSON.parse(raw);
-    if (args[1] < 1) return message.channel.send("Input a valid number more than 0.")
+    if (amount <= 1) return message.channel.send("Input a valid number more than 0.")
     if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
     if (Math.floor(Math.random() * 2) > 0)
     {
@@ -786,35 +818,10 @@ bot.on("message", async message => {
       moneyType = checkMoneyType(moneyType);*/
       break;
     case "slots":
-      var investment = args[1];
-      console.log("Investment = " + investment);
-      if (args[1] < 1) return message.channel.send("Input a valid number more than 0.")
-      if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
-      var slot1 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
-      var slot2 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
-      var slot3 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
-      //message.channel.send("Slot 1: " + slot1 + ", Slot 2: " + slot2 + ", Slot 3: " + slot3);
-      message.channel.send(slot1 + " " + slot2 + " " + slot3);
-      let mAuthor = './playerdata/' + message.author.id + '.json';
-      if (slot1 == slot2 && slot2 == slot3 && slot1 == slot3)
-      {
-        message.channel.send("You won $" + (parseInt(investment) * 50));
-        let newdata = {
-          money: parseInt(read(messageAuthor).money) + (parseInt(investment) * 50),
-          lastreset: parseInt(per.lastreset)
-        };
-        let writedata = JSON.stringify(newdata);
-        fs.writeFileSync(mAuthor, writedata);
-      }
-      else
-      {
-        message.channel.send("You lost $" + investment);
-        let newdata = {
-          money: parseInt(read(messageAuthor).money) - parseInt(investment),
-          lastreset: parseInt(per.lastreset)
-        };
-        let writedata = JSON.stringify(newdata);
-        fs.writeFileSync(mAuthor, writedata);
+      if (!isRegistered(message.author.id)) {
+        slots(args[1],message.author.id);
+      } else {
+        slots(args[1],message.author.id);
       }
       //add more possibililites for victory, like if you get 3 animals or something
       break;
