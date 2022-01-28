@@ -635,17 +635,8 @@ bot.on("message", async message => {
             fs.writeFileSync(resetperson, data);
             message.channel.send("Reset money for " + message.author.id);
           } else {
-            message.channel.send("Cooldown of " + ((person.lastreset + 300000)-Date.now()));
+            message.channel.send("Cooldown of " + ((resetperson.lastreset + 300000)-Date.now()));
           }
-      }
-      else if (message.guild.members.cache.get('181284528793452545') && !args[1].length == 0) {
-        console.log("Balance has been reset for player " + args[1]);
-        let resetperson = './playerdata/' + args[1] + '.json';
-        let newdata = {
-          money: 500
-        };
-        let data = JSON.stringify(newdata);
-        fs.writeFileSync(resetperson, data);
       }
       break;
     case "addbal":
