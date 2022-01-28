@@ -1408,8 +1408,9 @@ bot.on("message", async message => {
           case "gamble":
           case "gambling":
             var embed4 = new MessageEmbed()
-              .setTitle("Gambling Commands. None of these really work that well, and if more than one person uses it, it will 100% break.")
+              .setTitle("Gambling Commands.")
               .addField("balance", "Shows your current balance", true)
+              .addField("reset", "Reset your balance to $500. Can only be used every 5 minutes.")
               .addField("coinflip", "Flips a coin. Win 2x. Usage: coinflip (amount)", true)
               .addField("slots", "Slot machine. Win 50x. Usage: slots (amount)", true)
               .addField("roulette", "Basic roulette. Use with 'hey roulette [Number Guess] [color] [Betting cash]");
