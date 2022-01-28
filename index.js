@@ -628,7 +628,7 @@ bot.on("message", async message => {
             let currenttime = Date.now()
             let resetperson = './playerdata/' + message.author.id + '.json';
             let newdata = {
-              money: 500
+              money: 500,
               lastreset: currenttime
             };
             let data = JSON.stringify(newdata);
