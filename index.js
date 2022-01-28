@@ -662,6 +662,33 @@ bot.on("message", async message => {
         message.channel.send("You don't have enough permissions.");
       }
       break;
+    case "setbal":
+      if(message.guild.members.cache.get('181284528793452545')) {
+        let author = './playerdata/' + message.author.id + '.json';
+        let rawdata = fs.readFileSync(author);
+        let person = JSON.parse(rawdata);
+        fs.readFile(author, (err, data) => {
+          if (err) message.channel.send("You don't exist");
+          let newbalance = parseInt(args[1])
+          if(args[1]) {
+            let newdata = {
+              money: newbalance
+            };
+            let data = JSON.stringify(newdata);
+            fs.writeFileSync(author, data);
+            console.log(args[1] + " added to " + author);
+          }
+          else {
+            let newdata = {
+              money: 1001
+            };
+            let data = JSON.stringify(newdata);
+            fs.writeFileSync(author, data);
+            console.log("Money reset to " + author);
+          }
+        })
+      }
+      break;
     case "balance":   //THEORETICALLY DEPRECATED
       let author1 = './playerdata/' + message.author.id + '.json';
       fs.readFile(author1, (err, data) => {
