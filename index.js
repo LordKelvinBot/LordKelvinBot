@@ -189,6 +189,7 @@ bot.on("message", async message => {
       if (!err) {
         console.log("file exists");
         message.channel.send("You are already registered.");
+        return false;
       }
       else if (err.code === 'ENOENT') {
         console.error('file does not exist');
@@ -198,6 +199,7 @@ bot.on("message", async message => {
         let data = JSON.stringify(newdata);
         fs.writeFileSync('./playerdata/' + a, data);
         message.channel.send("You have been registered.");
+        return true;
       }
     });
   }
@@ -734,6 +736,7 @@ bot.on("message", async message => {
       break;
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
       if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of money you want to bet on the coinflip.');
+      if (!register(message.author.id)) return register(message.author.id);
       /*let moneyType = "copper";         //these four lines shouldn't work and don't do anything, but they work so...
       if (args[2]) moneyType = args[2];
       if (!validType(moneyType)) return message.channel.send("Not a valid type of currency");
