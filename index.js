@@ -1837,7 +1837,7 @@ bot.on("message", async message => {
       message.channel.send("Didn't work");
       break;
     case "roulette":
-
+      
       break;
     case "largeembed":
       var i = 1;
