@@ -131,6 +131,17 @@ bot.on("message", async message => {
   function send(text) {
     message.channel.send(text);
   }
+  function balanceCheck(id) {
+    let author = './playerdata/' + id + '.json';
+    fs.readFile(author, (err, data) => {
+      if (err) {
+        message.channel.send("You don't exist");
+      }
+    });
+    let rawdata = fs.readFileSync(author);
+    let person = JSON.parse(rawdata);
+    message.channel.send("Balance: $" + person.money);
+  }
   function TimeCheck(user) {
     let author = './playerdata/' + user + '.json';
     let deta = fs.readFileSync(author);
@@ -800,14 +811,13 @@ bot.on("message", async message => {
         })
       }
       break;
-    case "balance":   //THEORETICALLY DEPRECATED
-      let author1 = './playerdata/' + message.author.id + '.json';
-      fs.readFile(author1, (err, data) => {
-        if (err) message.channel.send("You don't exist");
-      });
-      let rawdata = fs.readFileSync(author1);
-      let person = JSON.parse(rawdata);
-      message.channel.send("Balance: $" + person.money);
+    case "balance":
+      if (!isRegistered(message.author.id)) {
+        await sleep(500);
+        balanceCheck(message.author.id);
+      } else {
+        balanceCheck(message.author.id);
+      }
       break;
     case "register": //THEORETICALLY DEPRECATED
       register(message.author.id);
