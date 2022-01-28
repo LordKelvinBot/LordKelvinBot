@@ -146,7 +146,7 @@ bot.on("message", async message => {
       console.log("False");
       pp = false;
     }
-  })
+  }
   return pp;
   }
 
