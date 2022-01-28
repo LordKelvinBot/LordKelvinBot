@@ -137,7 +137,7 @@ bot.on("message", async message => {
     let person = JSON.parse(rawdata);
     fs.readFile(author, (err, data) => {
       if (err) message.channel.send("You don't exist");
-      if(((parseInt(person.lastreset)+300000) - Date.now()) < 0) {
+      if(((person.lastreset+300000) - Date.now()) < 0) {
         return true;
       }
       return false;
