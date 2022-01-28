@@ -185,16 +185,14 @@ bot.on("message", async message => {
   }
   async function isRegistered(m) {
     au = "./playerdata/" + m + ".json";
-    fs.readFile(au, (err, data) => {
-      if (err) {
-        log("Does not exist");
-        register(m)
-        const testg = false;
-      } else {
-        const testg = true;
+    try {
+      if(fs.existsSync(au)) {
+        return true;
       }
-    });
-    return testg;
+    } catch (err) {
+      register(m);
+      return false;
+    }
   }
   function register(ab) {
     let a = ab + '.json';
@@ -779,11 +777,11 @@ bot.on("message", async message => {
       break;
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
       if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of money you want to bet on the coinflip.');
-      /*if (!isRegistered(message.author.id)) {
-        message.channel.send("Automatically registered.")
-      } else {*/
+      if (!isRegistered(message.author.id)) {
         coinflip(args[1],message.author.id);
-      //}
+      } else {
+        coinflip(args[1],message.author.id);
+      }
       /*let moneyType = "copper";         //these four lines shouldn't work and don't do anything, but they work so...
       if (args[2]) moneyType = args[2];
       if (!validType(moneyType)) return message.channel.send("Not a valid type of currency");
@@ -840,6 +838,9 @@ bot.on("message", async message => {
     case "russiancreate":
       if(!args[1]) {
         message.channel.send("WIP. Type in a number after to make a lobby ID.")
+      } else if (args[1]) {
+        message.channel.send("Game created, you have been added to the game")
+
       }
       break;
     case "img":
