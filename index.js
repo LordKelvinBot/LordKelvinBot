@@ -373,6 +373,7 @@ bot.on("message", async message => {
     let path = "./playerdata/" + id + ".json";
     var investment = parseInt(amount);
     console.log("Investment = " + investment);
+    await sleep(500);
     let raw = fs.readFileSync(path);
     let per = JSON.parse(raw);
     if (amount <= 1) return message.channel.send("Input a valid number more than 0.")
