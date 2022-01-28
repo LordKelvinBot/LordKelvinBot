@@ -821,19 +821,6 @@ bot.on("message", async message => {
       } else {
         balanceCheck(message.author.id);
       }
-    case "bal":
-    case "balance":   //THEORETICALLY DEPRECATED
-      let author1 = './playerdata/' + message.author.id + '.json';
-      fs.readFile(author1, (err, data) => {
-        if (err) message.channel.send("You don't exist");
-      });
-      let rawdata = fs.readFileSync(author1);
-      let person = JSON.parse(rawdata);
-      message.channel.send("Balance: $" + person.money);
-      break;
-    case "register": //THEORETICALLY DEPRECATED
-      register(message.author.id);
->>>>>>> Stashed changes
       break;
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
       if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of money you want to bet on the coinflip.');
