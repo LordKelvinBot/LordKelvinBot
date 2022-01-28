@@ -623,8 +623,8 @@ bot.on("message", async message => {
       break;
     case "reset":
       if(!args[1]) {
-          console.log("Balance has been reset for player " + message.author.id);
           if(TimeCheck) {
+            console.log("Balance has been reset for player " + message.author.id);
             let currenttime = Date.now()
             let resetperson = './playerdata/' + message.author.id + '.json';
             let newdata = {
