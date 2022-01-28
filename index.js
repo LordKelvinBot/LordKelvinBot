@@ -138,7 +138,7 @@ bot.on("message", async message => {
     let deta = fs.readFileSync(author);
     let person = JSON.parse(deta);
     testg = ((parseInt(person.lastreset)+300000) - parseInt(Date.now()));
-    if(((parseInt(person.lastreset)+300000) - parseInt(Date.now())) <= 0) {
+    if(testg <= 0) {
       console.log("reset time " + person.lastreset)
       console.log("True");
       pp = true;
