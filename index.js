@@ -642,7 +642,7 @@ bot.on("message", async message => {
         } else {
           let rawdata = fs.readFileSync(resetperson);
           let resetdata = JSON.parse(rawdata);
-          message.channel.send("Cooldown of " + (((resetdata.lastreset + 300000)-Date.now())/1000))/60/60 + " minutes.";
+          message.channel.send("Cooldown of " + ((((resetdata.lastreset + 300000)-Date.now())/1000)/60)/60 + " minutes.");
         }
       }
       break;
