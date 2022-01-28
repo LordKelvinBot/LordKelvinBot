@@ -761,7 +761,7 @@ bot.on("message", async message => {
       let mAuthor = './playerdata/' + message.author.id + '.json';
       if (slot1 == slot2 && slot2 == slot3 && slot1 == slot3)
       {
-        message.channel.send("You won " + investment);
+        message.channel.send("You won " + (parseInt(investment) * 50));
         let newdata = {
           money: parseInt(read(messageAuthor).money) + (parseInt(investment) * 50)
         };
