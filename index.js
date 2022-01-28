@@ -185,14 +185,15 @@ bot.on("message", async message => {
   }
   async function isRegistered(m) {
     au = "./playerdata/" + m + ".json";
-    try {
-      if(fs.existsSync(au)) {
-        return true;
+    fs.access(au,fs.F_OK, (err) => {
+      if(err) {
+        console.log("file not found, creating one")
+        register(m)
+        return false
       }
-    } catch (err) {
-      register(m);
-      return false;
-    }
+      console.log("file exists")
+      return true
+    })
   }
   function register(ab) {
     let a = ab + '.json';
