@@ -132,22 +132,16 @@ bot.on("message", async message => {
     message.channel.send(text);
   }
   function TimeCheck(user) {
-    var pp;
     let author = './playerdata/' + user + '.json';
-    let testg = 0;
     let deta = fs.readFileSync(author);
     let person = JSON.parse(deta);
-    testg = ((parseInt(person.lastreset)+300000) - parseInt(Date.now()));
-    if(testg <= 0) {
-      console.log("reset time " + person.lastreset)
-      console.log("True");
-      pp = true;
+    timeleft = ((parseInt(person.lastreset)+300000) - parseInt(Date.now()));
+    if(testleft <= 0) {
+      valid = true;
     } else {
-      console.log("False");
-      pp = false;
+      valid = false;
     }
-    console.log("Testg " + testg)
-    return pp;
+    return valid;
   }
 
   function getSubredditImage() { //methods
