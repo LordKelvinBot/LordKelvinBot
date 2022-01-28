@@ -132,6 +132,7 @@ bot.on("message", async message => {
     message.channel.send(text);
   }
   function TimeCheck(user) {
+    let pp = false;
     let author = './playerdata/' + user + '.json';
     fs.readFile(author, (err, data) => {
       let person = JSON.parse(data);
@@ -141,13 +142,13 @@ bot.on("message", async message => {
       if(((parseInt(person.lastreset)+300000) - parseInt(Date.now())) <= 0) {
         console.log("reset time " + person.lastreset)
         console.log("True");
-        return true;
+        pp = true;
       } else {
         console.log("False");
-        return false;
+        pp = false;
       }
     })
-    return null;
+    return pp;
   }
 
   function getSubredditImage() { //methods
