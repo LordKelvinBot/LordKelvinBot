@@ -369,7 +369,7 @@ bot.on("message", async message => {
       fs.writeFileSync(mAuthor, writedata);
     }
   }
-  function coinflip(amount, id) {
+  async function coinflip(amount, id) {
     let path = "./playerdata/" + id + ".json";
     var investment = parseInt(amount);
     console.log("Investment = " + investment);
