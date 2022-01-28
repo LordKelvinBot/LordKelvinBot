@@ -183,6 +183,17 @@ bot.on("message", async message => {
     message.channel.send(dogEmbed);
     return;
   }
+  function isRegistered(m) {
+    au = "./playerdata/" + m + ".json";
+    fs.readFile(au, (err, data) => {
+      if (err) {
+        log("Does not exist");
+        return false;
+      } else {
+        return true;
+      }
+    });
+  }
   function register(ab) {
     let a = ab + '.json';
     fs.stat('./playerdata/' + a, function(err) {
@@ -736,7 +747,7 @@ bot.on("message", async message => {
       break;
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
       if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of money you want to bet on the coinflip.');
-      if (!register(message.author.id)) return null;
+      if (!isRegistered) return register(message.author.id);
       /*let moneyType = "copper";         //these four lines shouldn't work and don't do anything, but they work so...
       if (args[2]) moneyType = args[2];
       if (!validType(moneyType)) return message.channel.send("Not a valid type of currency");
