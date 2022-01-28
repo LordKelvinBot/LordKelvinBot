@@ -135,23 +135,19 @@ bot.on("message", async message => {
     var pp;
     let author = './playerdata/' + user + '.json';
     let testg = 0;
-    fs.readFile(author, (err, data) => {
-      let person = JSON.parse(data);
-      if (err) {
-        message.channel.send("You don't exist");
-      }
-      testg = ((parseInt(person.lastreset)+300000) - parseInt(Date.now()));
-      if(((parseInt(person.lastreset)+300000) - parseInt(Date.now())) <= 0) {
-        console.log("reset time " + person.lastreset)
-        console.log("True");
-        pp = true;
-      } else {
-        console.log("False");
-        pp = false;
-      }
-    })
-    console.log("testg" + testg);
-    return pp;
+    let deta = fs.readFileSync(author);
+    let person = JSON.parse(deta);
+    testg = ((parseInt(person.lastreset)+300000) - parseInt(Date.now()));
+    if(((parseInt(person.lastreset)+300000) - parseInt(Date.now())) <= 0) {
+      console.log("reset time " + person.lastreset)
+      console.log("True");
+      pp = true;
+    } else {
+      console.log("False");
+      pp = false;
+    }
+  })
+  return pp;
   }
 
   function getSubredditImage() { //methods
