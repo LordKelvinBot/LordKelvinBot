@@ -199,7 +199,6 @@ bot.on("message", async message => {
     fs.stat('./playerdata/' + a, function(err) {
       if (!err) {
         console.log("file exists");
-        message.channel.send("You are already registered.");
         return false;
       }
       else if (err.code === 'ENOENT') {
@@ -210,7 +209,6 @@ bot.on("message", async message => {
         };
         let data = JSON.stringify(newdata);
         fs.writeFileSync('./playerdata/' + a, data);
-        message.channel.send("You have been registered.");
         return true;
       }
     });
