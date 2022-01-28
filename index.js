@@ -133,9 +133,8 @@ bot.on("message", async message => {
   }
   function TimeCheck(user) {
     let author = './playerdata/' + user + '.json';
-    let rawdata = fs.readFileSync(author);
-    let person = JSON.parse(rawdata);
     fs.readFile(author, (err, data) => {
+      let person = JSON.parse(data);
       if (err) message.channel.send("You don't exist");
       if(((parseInt(person.lastreset)+300000) - parseInt(Date.now())) <= 0) {
         console.log("True");
@@ -642,7 +641,7 @@ bot.on("message", async message => {
         } else {
           let rawdata = fs.readFileSync(resetperson);
           let resetdata = JSON.parse(rawdata);
-          message.channel.send("Cooldown of " + ((((resetdata.lastreset + 300000)-Date.now())/1000)/60) + " seconds.");
+          message.channel.send("Cooldown of " + ((((resetdata.lastreset + 300000)-Date.now())/1000)/60) + " minutes.");
         }
       }
       break;
