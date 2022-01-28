@@ -132,7 +132,7 @@ bot.on("message", async message => {
     message.channel.send(text);
   }
   function TimeCheck(user) {
-    let pp = null;
+    var pp = null;
     let author = './playerdata/' + user + '.json';
     let testg = 0;
     fs.readFile(author, (err, data) => {
