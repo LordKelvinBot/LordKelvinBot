@@ -143,7 +143,11 @@ bot.on("message", async message => {
     }
     return valid;
   }
-
+  function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
   function getSubredditImage() { //methods
 
     fetch('https://www.reddit.com/r/cats.json')
