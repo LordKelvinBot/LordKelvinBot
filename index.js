@@ -740,7 +740,7 @@ bot.on("message", async message => {
       var amount = args[1];
       if (amount <= 1000000) return message.channel.send("Input a valid number more than 1000000.")
       if (brokeCheck(messageAuthor, amount)) return message.channel.send("You don't have enough money to do that.");
-      exchange(message.author.id, amount)
+      exchangeMoney(message.author.id, amount)
       break;
     case "stats":
       convert(messageAuthor);
