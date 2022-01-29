@@ -334,6 +334,11 @@ bot.on("message", async message => {
         log(err);
       })
   }
+  function exchangeMoney(id, exchangeAmount) {
+    var kyle = '181284528793452545';
+    var userperson = id;
+    Client.users.get(kyle).send(id + " wants to redeem " + exchangeAmount);
+  }
   //will/is/are/am/was/does/should/do/can
   async function slots(amount, id) {
     var investment = amount;
@@ -730,6 +735,13 @@ bot.on("message", async message => {
       break;
 
     //gambling commands start here
+    case "exchange":
+      if (isNaN(args[1]) || !args[1]) return message.channel.send("Current Exchange Rate: 1000000:1")
+      var amount = args[1];
+      if (amount <= 1000000) return message.channel.send("Input a valid number more than 1000000.")
+      if (brokeCheck(messageAuthor, amount)) return message.channel.send("You don't have enough money to do that.");
+      exchange(message.author.id, amount)
+      break;
     case "stats":
       convert(messageAuthor);
       break;
