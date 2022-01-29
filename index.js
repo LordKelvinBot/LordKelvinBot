@@ -1422,7 +1422,8 @@ bot.on("message", async message => {
             var embed4 = new MessageEmbed()
               .setTitle("Gambling Commands.")
               .addField("balance", "Shows your current balance", true)
-              .addField("reset", "Reset your balance to $500. Can only be used every 5 minutes.")
+              .addField("exchange", "Kyle will send you $1 for every 1 million redeemed.")
+              .addField("reset", "Reset your balance to $500. Can only be used every 5 minutes.",true)
               .addField("coinflip", "Flips a coin. Win 2x. Usage: coinflip (amount)", true)
               .addField("slots", "Slot machine. Win 50x. Usage: slots (amount)", true)
               .addField("roulette", "Basic roulette. Use with 'hey roulette [Number Guess] [color] [Betting cash]");
