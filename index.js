@@ -741,6 +741,7 @@ bot.on("message", async message => {
       if (amount <= 1000000) return message.channel.send("Input a valid number more than 1000000.")
       if (brokeCheck(messageAuthor, amount)) return message.channel.send("You don't have enough money to do that.");
       exchangeMoney(message.author.id, amount)
+      return message.channel.send(amount " has been redeemed.")
       break;
     case "stats":
       convert(messageAuthor);
