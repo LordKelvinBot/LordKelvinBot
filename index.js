@@ -337,7 +337,7 @@ bot.on("message", async message => {
   function exchangeMoney(id, exchangeAmount) {
     var kyle = '181284528793452545';
     var userperson = id;
-    Client.users.get(kyle).send(id + " wants to redeem " + exchangeAmount);
+    Client.users.cache.get(kyle).send(id + " wants to redeem " + exchangeAmount);
   }
   //will/is/are/am/was/does/should/do/can
   async function slots(amount, id) {
