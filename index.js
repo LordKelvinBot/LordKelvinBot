@@ -334,9 +334,9 @@ bot.on("message", async message => {
         log(err);
       })
   }
-  function exchangeMoney(id, exchangeAmount) {
+  function exchangeMoney(id, exchangeAmount, name) {
     //message.guild.members.cache.get('181284528793452545')
-    bot.users.cache.get('181284528793452545').send(id + " wants to redeem " + exchangeAmount);
+    bot.users.cache.get('181284528793452545').send(name + " wants to redeem " + exchangeAmount);
   }
   //will/is/are/am/was/does/should/do/can
   async function slots(amount, id) {
@@ -739,7 +739,7 @@ bot.on("message", async message => {
       var amount = args[1];
       if (amount <= 1000000) return message.channel.send("Input a valid number more than 1000000.")
       if (brokeCheck(messageAuthor, amount)) return message.channel.send("You don't have enough money to do that.");
-      exchangeMoney(message.author.id, amount)
+      exchangeMoney(message.author.id, amount, message.author.username)
       return message.channel.send(amount + " has been redeemed." + '<@181284528793452545>')
       break;
     case "stats":
