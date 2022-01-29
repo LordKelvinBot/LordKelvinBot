@@ -1426,7 +1426,7 @@ bot.on("message", async message => {
               .addField("reset", "Reset your balance to $500. Can only be used every 5 minutes.",true)
               .addField("coinflip", "Flips a coin. Win 2x. Usage: coinflip (amount)", true)
               .addField("slots", "Slot machine. Win 50x. Usage: slots (amount)", true)
-              .addField("roulette", "Basic roulette. Use with 'hey roulette [Number Guess] [color] [Betting cash]");
+              .addField("roulette", "NOT WORKING. Basic roulette. Use with 'hey roulette [Number Guess] [color] [Betting cash]");
             message.channel.send(embed4);
             break;
           default:
