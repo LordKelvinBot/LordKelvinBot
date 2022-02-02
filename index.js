@@ -159,15 +159,6 @@ bot.on("message", async message => {
       setTimeout(resolve, ms);
     });
   }
-  function getUserFromMention(mention) {
-    if (mention.startsWith('<@') && mention.endsWith('>')) {
-      mention = mention.slice(2, -1);
-      if (mention.startsWith('!')) {
-        mention = mention.slice(1);
-      }
-      return client.users.cache.get(mention);
-    }
-  }
   function getIDFromMention(mention) {
   	const matches = mention.match(/^<@!?(\d+)>$/); // Uses RegEx to sort ID
   	if (!matches) return;
@@ -193,13 +184,13 @@ bot.on("message", async message => {
     });
     let rawdata = fs.readFileSync(author);
     let person = JSON.parse(rawdata);
-    person.money = person.money - amount;
+    person.money = parseInt(person.money) - parseInt(amount);
     fs.writeFileSync(author, JSON.stringify(person));
     let newdata = fs.readFileSync(newuserpath);
     let newperson = JSON.parse(newdata);
-    newperson.money = newperson.money + amount;
+    newperson.money = parseInt(newperson.money) + parseInt(amount);
     fs.writeFileSync(newuserpath, JSON.stringify(newperson));
-    return message.channel.send(amount + " has successfully been sent to " + getUserFromMention(newuser));
+    return message.channel.send(amount + " has successfully been sent to " + "<@" + newuserid + ">");
   }
   function getSubredditImage() { //methods
 
