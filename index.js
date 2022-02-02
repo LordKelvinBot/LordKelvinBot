@@ -159,6 +159,50 @@ bot.on("message", async message => {
       setTimeout(resolve, ms);
     });
   }
+  function getUserFromMention(mention) {
+    if (!mention) return;
+    if (mention.startsWith('<@') && mention.endsWith('>')) {
+      mention = mention.slice(2, -1);
+      if (mention.startsWith('!')) {
+        mention = mention.slice(1);
+      }
+      return client.users.cache.get(mention);
+    }
+  }
+  function getIDFromMention(mention) {
+  	const matches = mention.match(/^<@!?(\d+)>$/); // Uses RegEx to sort ID
+  	if (!matches) return;
+  	const id = matches[1];
+  	return id;
+    }
+  }
+  function sendMoney(olduser, newuser, amount) {
+    if (!newuser || !amount || isNaN(amount)) return message.channel.send("Please mention the user you want to send money to, then add the amount.");
+    if (amount < 1) return message.channel.send("Input a valid number more than 0.")
+    if (brokeCheck(messageAuthor, amount)) return message.channel.send("You don't have enough money to do that.");
+    var newuserid = getIDFromMention(newuser);
+    let author = './playerdata/' + olduser + '.json';
+    let newuserpath = './playerdata/' + newuserid + '.json';
+    fs.readFile(author, (err, data) => {
+      if (err) {
+        return message.channel.send("You don't exist");
+      }
+    });
+    fs.readFile(newuserpath, (err, data) => {
+      if (err) {
+        return message.channel.send("The person you're trying to send to doesn't exist");
+      }
+    });
+    let rawdata = fs.readFileSync(author);
+    let person = JSON.parse(rawdata);
+    person.money = person.money - amount;
+    fs.writeFileSync(author, JSON.stringify(person));
+    let newdata = fs.readFileSync(newuserpath);
+    let newperson = JSON.parse(newdata);
+    newperson.money = newperson.money + amount;
+    fs.writeFileSync(newuserpath, JSON.stringify(newperson));
+    return message.channel.send(amount + " has successfully been sent to " + getUserFromMention(newuser));
+  }
   function getSubredditImage() { //methods
 
     fetch('https://www.reddit.com/r/cats.json')
@@ -819,6 +863,18 @@ bot.on("message", async message => {
         balanceCheck(message.author.id);
       } else {
         balanceCheck(message.author.id);
+      }
+      break;
+    case "send":
+      if(!isRegistered(message.author.id)) {
+        await sleep(500);
+        if (!args[0]) return message.channel.send("Please mention the user you want to send money to with the amount of money.");
+        if (isNaN(args[1])) return message.channel.send("Please use a number to send money.");
+        sendMoney(message.author.id, args[0], args[1]);
+      } else {
+        if (!args[0]) return message.channel.send("Please mention the user you want to send money to with the amount of money.");
+        if (isNaN(args[1])) return message.channel.send("Please use a number to send money.");
+        sendMoney(message.author.id, args[0], args[1]);
       }
       break;
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
