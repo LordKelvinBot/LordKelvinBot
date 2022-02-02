@@ -376,6 +376,7 @@ bot.on("message", async message => {
     var investment = amount;
     console.log("Investment = " + investment);
     await sleep(100);
+    if(isNaN(amount)) return message.channel.send("Enter a valid number.")
     if (amount <= 1) return message.channel.send("Input a valid number more than 0.")
     if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
     var slot1 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
