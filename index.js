@@ -378,11 +378,15 @@ bot.on("message", async message => {
         log(err);
       })
   }
+  function exchangeMoney(id, exchangeAmount, name) {
+    //message.guild.members.cache.get('181284528793452545')
+    bot.users.cache.get('181284528793452545').send(name + " wants to redeem " + exchangeAmount);
+  }
   //will/is/are/am/was/does/should/do/can
   async function slots(amount, id) {
     var investment = amount;
     console.log("Investment = " + investment);
-    await sleep(500);
+    await sleep(100);
     if (amount <= 1) return message.channel.send("Input a valid number more than 0.")
     if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
     var slot1 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
@@ -774,6 +778,14 @@ bot.on("message", async message => {
       break;
 
     //gambling commands start here
+    case "exchange":
+      if (isNaN(args[1]) || !args[1]) return message.channel.send("Current Exchange Rate: 1000000:1")
+      var amount = args[1];
+      if (amount <= 1000000) return message.channel.send("Input a valid number more than 1000000.")
+      if (brokeCheck(messageAuthor, amount)) return message.channel.send("You don't have enough money to do that.");
+      exchangeMoney(message.author.id, amount, message.author.username)
+      return message.channel.send(amount + " has been redeemed. DM " + '<@181284528793452545>');
+      break;
     case "stats":
       convert(messageAuthor);
       break;
@@ -857,6 +869,7 @@ bot.on("message", async message => {
         })
       }
       break;
+    case "bal":
     case "balance":
       if (!isRegistered(message.author.id)) {
         await sleep(500);
@@ -1463,11 +1476,13 @@ bot.on("message", async message => {
           case "gamble":
           case "gambling":
             var embed4 = new MessageEmbed()
-              .setTitle("Gambling Commands. None of these really work that well, and if more than one person uses it, it will 100% break.")
-              .addField("register", "Registers you as a player", true)
+              .setTitle("Gambling Commands.")
               .addField("balance", "Shows your current balance", true)
-              .addField("coinflip", "Flips a coin. Win/Lose $500", true)
-              .addField("roulette", "Basic roulette. Use with 'hey roulette [Number Guess] [color] [Betting cash]");
+              .addField("exchange", "Kyle will send you $1 for every 1 million redeemed.")
+              .addField("reset", "Reset your balance to $500. Can only be used every 5 minutes.",true)
+              .addField("coinflip", "Flips a coin. Win 2x. Usage: coinflip (amount)", true)
+              .addField("slots", "Slot machine. Win 50x. Usage: slots (amount)", true)
+              .addField("roulette", "NOT WORKING. Basic roulette. Use with 'hey roulette [Number Guess] [color] [Betting cash]");
             message.channel.send(embed4);
             break;
           default:
