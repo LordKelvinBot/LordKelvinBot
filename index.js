@@ -160,7 +160,6 @@ bot.on("message", async message => {
     });
   }
   function getUserFromMention(mention) {
-    if (!mention) return;
     if (mention.startsWith('<@') && mention.endsWith('>')) {
       mention = mention.slice(2, -1);
       if (mention.startsWith('!')) {
@@ -174,7 +173,6 @@ bot.on("message", async message => {
   	if (!matches) return;
   	const id = matches[1];
   	return id;
-    }
   }
   function sendMoney(olduser, newuser, amount) {
     if (!newuser || !amount || isNaN(amount)) return message.channel.send("Please mention the user you want to send money to, then add the amount.");
