@@ -879,13 +879,13 @@ bot.on("message", async message => {
     case "send":
       if(!isRegistered(message.author.id)) {
         await sleep(500);
-        if (!args[0]) return message.channel.send("Please mention the user you want to send money to with the amount of money.");
-        if (isNaN(args[1])) return message.channel.send("Please use a number to send money.");
-        sendMoney(message.author.id, args[0], args[1]);
+        if (!args[1]) return message.channel.send("Please mention the user you want to send money to with the amount of money.");
+        if (isNaN(args[2])) return message.channel.send("Please use a number to send money.");
+        sendMoney(message.author.id, args[1], args[2]);
       } else {
-        if (!args[0]) return message.channel.send("Please mention the user you want to send money to with the amount of money.");
-        if (isNaN(args[1])) return message.channel.send("Please use a number to send money.");
-        sendMoney(message.author.id, args[0], args[1]);
+        if (!args[1]) return message.channel.send("Please mention the user you want to send money to with the amount of money.");
+        if (isNaN(args[2])) return message.channel.send("Please use a number to send money.");
+        sendMoney(message.author.id, args[1], args[2]);
       }
       break;
     case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
