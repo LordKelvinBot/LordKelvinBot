@@ -372,7 +372,7 @@ bot.on("message", async message => {
     bot.users.cache.get('181284528793452545').send(name + " wants to redeem " + exchangeAmount);
   }
   //will/is/are/am/was/does/should/do/can
-  function slots(amount, id) {
+  async function slots(amount, id) {
     var investment = amount;
     console.log("Investment = " + investment);
     await sleep(100);
