@@ -392,10 +392,10 @@ bot.on("message", async message => {
         .setColor(generateHex())
         .setTitle("Result")
         .setDescription(slot1 + " " + slot2 + " " + slot3)
-        .addField("You won", "$" + (parseInt(investment) * 50));
+        .addField("You won", "$" + (parseInt(investment) * 25));
       message.channel.send(moneyEmbed);
       let newdata = {
-        money: parseInt(read(messageAuthor).money) + (parseInt(investment) * 50),
+        money: parseInt(read(messageAuthor).money) + (parseInt(investment) * 25),
         lastreset: parseInt(per.lastreset)
       };
       let writedata = JSON.stringify(newdata);
