@@ -372,7 +372,7 @@ bot.on("message", async message => {
     bot.users.cache.get('181284528793452545').send(name + " wants to redeem " + exchangeAmount);
   }
   //will/is/are/am/was/does/should/do/can
-  async function slots(amount, id) {
+  function slots(amount, id) {
     var investment = amount;
     console.log("Investment = " + investment);
     await sleep(100);
@@ -389,7 +389,12 @@ bot.on("message", async message => {
     let per = JSON.parse(raw);
     if (slot1 == slot2 && slot2 == slot3 && slot1 == slot3)
     {
-      message.channel.send("You won $" + (parseInt(investment) * 50));
+      var moneyEmbed = new MessageEmbed()
+        .setColor(generateHex())
+        .setTitle("Result")
+        .setDescription(slot1 + " " + slot2 + " " + slot3)
+        .addField("You won $" + (parseInt(investment) * 50);
+      message.channel.send(moneyEmbed);
       let newdata = {
         money: parseInt(read(messageAuthor).money) + (parseInt(investment) * 50),
         lastreset: parseInt(per.lastreset)
@@ -399,7 +404,12 @@ bot.on("message", async message => {
     }
     else
     {
-      message.channel.send("You lost $" + investment);
+      var moneyEmbed = new MessageEmbed()
+        .setColor(generateHex())
+        .setTitle("Result")
+        .setDescription(slot1 + " " + slot2 + " " + slot3)
+        .addField("You lost $" + investment);
+      message.channel.send(moneyEmbed);
       let newdata = {
         money: parseInt(read(messageAuthor).money) - parseInt(investment),
         lastreset: parseInt(per.lastreset)
