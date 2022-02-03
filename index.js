@@ -185,10 +185,12 @@ bot.on("message", async message => {
     let rawdata = fs.readFileSync(author);
     let person = JSON.parse(rawdata);
     person.money = parseInt(person.money) - parseInt(amount);
+    person.lastreset = parseInt(person.lastreset);
     fs.writeFileSync(author, JSON.stringify(person));
     let newdata = fs.readFileSync(newuserpath);
     let newperson = JSON.parse(newdata);
     newperson.money = parseInt(newperson.money) + parseInt(amount);
+    newperson.lastreset = parseInt(newperson.lastreset);
     fs.writeFileSync(newuserpath, JSON.stringify(newperson));
     return message.channel.send(amount + " has successfully been sent to " + "<@" + newuserid + ">");
   }
