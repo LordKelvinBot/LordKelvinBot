@@ -854,6 +854,7 @@ bot.on("message", async message => {
           if(args[1]) {
             let newdata = {
               money: newbalance
+              lastreset: person.lastreset
             };
             let data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
@@ -862,6 +863,7 @@ bot.on("message", async message => {
           else {
             let newdata = {
               money: 1001
+              lastreset: person.lastreset
             };
             let data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
