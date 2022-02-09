@@ -791,6 +791,7 @@ bot.on("message", async message => {
       convert(messageAuthor);
       break;
     case "reset":
+      if(brokeCheck(messageAuthor, 1)) return message.channel.send("You don't have zero money.");
       if(!args[1]) {
         let currenttime = Date.now()
         let resetperson = './playerdata/' + message.author.id + '.json';
