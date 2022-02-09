@@ -853,7 +853,7 @@ bot.on("message", async message => {
           let newbalance = parseInt(args[1])
           if(args[1]) {
             let newdata = {
-              money: newbalance
+              money: newbalance,
               lastreset: person.lastreset
             };
             let data = JSON.stringify(newdata);
@@ -862,7 +862,7 @@ bot.on("message", async message => {
           }
           else {
             let newdata = {
-              money: 1001
+              money: 1001,
               lastreset: person.lastreset
             };
             let data = JSON.stringify(newdata);
