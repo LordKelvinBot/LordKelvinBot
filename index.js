@@ -106,21 +106,6 @@ function russianActive(input) {
   });
 }
 
-async function blackjackFunction(message, args, client) {
-    let game = await blackjack(message, {normalEmbed: true, buttons: true})
-    switch (game.result) {
-        case "Win":
-            message.channel.send("You won $" + args);
-            break;
-        case "LOSE":
-            message.channel.send("You lost $" + args);
-            break;
-        case "TIE":
-            message.channel.send("You tied.");
-            break;
-    }
-}
-
 bot.on("message", async message => {
   console.log(message.content);
 
@@ -940,7 +925,6 @@ bot.on("message", async message => {
       //add more possibililites for victory, like if you get 3 animals or something
       break;
     case "bj":
-      blackjackFunction(message);
       break;
     case "areg":
     //test command for setting json file values. Use with 'hey areg '
