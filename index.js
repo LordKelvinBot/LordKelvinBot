@@ -817,6 +817,7 @@ bot.on("message", async message => {
       convert(messageAuthor);
       break;
     case "reset":
+      if(!brokeCheck(messageAuthor, 1)) return message.channel.send("You don't have zero money.");
       if(!args[1]) {
         let currenttime = Date.now()
         let resetperson = './playerdata/' + message.author.id + '.json';
@@ -879,7 +880,8 @@ bot.on("message", async message => {
           let newbalance = parseInt(args[1])
           if(args[1]) {
             let newdata = {
-              money: newbalance
+              money: newbalance,
+              lastreset: person.lastreset
             };
             let data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
@@ -887,7 +889,8 @@ bot.on("message", async message => {
           }
           else {
             let newdata = {
-              money: 1001
+              money: 1001,
+              lastreset: person.lastreset
             };
             let data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
