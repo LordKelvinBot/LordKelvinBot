@@ -106,7 +106,7 @@ function russianActive(input) {
   });
 }
 
-async function blackjack(message, args, client) => {
+async function blackjack(message, args, client) {
     let game = await blackjack(message, {normalEmbed: true, buttons: true})
     switch (game.result) {
         case "Win":
