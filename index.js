@@ -62,8 +62,6 @@ const wt = require('weather-js');
 const moment = require("moment");
 const blackjack = require("discord-blackjack");
 require("moment-duration-format");
-const blackjack = require("discord-blackjack")
-const Discord = require("discord.js")
 
 module.exports = {
     name: "blackjack",
