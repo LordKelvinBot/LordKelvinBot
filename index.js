@@ -60,7 +60,33 @@ const ytdl = require('ytdl-core');
 const dt = require('date-fns/toDate');
 const wt = require('weather-js');
 const moment = require("moment");
+const blackjack = require("discord-blackjack");
 require("moment-duration-format");
+const blackjack = require("discord-blackjack")
+const Discord = require("discord.js")
+
+module.exports = {
+    name: "blackjack",
+    async execute(message, args, client) => {
+        let game = await blackjack(message, {normalEmbed: true, buttons: true})
+        switch (game.result) {
+            case "Win":
+                message.channel.send("You won $" + args);
+                break;
+
+            case "LOSE":
+                message.channel.send("You lost $" + args);
+                break;
+
+            case "TIE":
+                message.channel.send("You tied.");
+                break;
+        }
+
+    }
+}
+
+
 //var ytpl = require('ytpl');
 
 //other Consts
@@ -917,6 +943,9 @@ bot.on("message", async message => {
         message.channel.send("Make sure you add an amount!  ")
       }
       //add more possibililites for victory, like if you get 3 animals or something
+      break;
+    case "bj":
+      blackjack(message);
       break;
     case "areg":
     //test command for setting json file values. Use with 'hey areg '
