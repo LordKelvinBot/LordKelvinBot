@@ -63,27 +63,6 @@ const moment = require("moment");
 const blackjack = require("discord-blackjack");
 require("moment-duration-format");
 
-module.exports = {
-    name: "blackjack",
-    async execute(message, args, client) => {
-        let game = await blackjack(message, {normalEmbed: true, buttons: true})
-        switch (game.result) {
-            case "Win":
-                message.channel.send("You won $" + args);
-                break;
-
-            case "LOSE":
-                message.channel.send("You lost $" + args);
-                break;
-
-            case "TIE":
-                message.channel.send("You tied.");
-                break;
-        }
-
-    }
-}
-
 
 //var ytpl = require('ytpl');
 
@@ -125,6 +104,21 @@ function russianActive(input) {
       return true;
     }
   });
+}
+
+async function blackjack(message, args, client) => {
+    let game = await blackjack(message, {normalEmbed: true, buttons: true})
+    switch (game.result) {
+        case "Win":
+            message.channel.send("You won $" + args);
+            break;
+        case "LOSE":
+            message.channel.send("You lost $" + args);
+            break;
+        case "TIE":
+            message.channel.send("You tied.");
+            break;
+    }
 }
 
 bot.on("message", async message => {
