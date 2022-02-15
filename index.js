@@ -163,7 +163,7 @@ bot.on("message", async message => {
     });
   }
   function compareWeatherDates(date, parsed) {
-      for(int i = 0; i < 5; i++) {
+      for (var i = 0; i < 5; i++) {
         if(date == parsed.forecast[i].day) {
           return i;
         }
