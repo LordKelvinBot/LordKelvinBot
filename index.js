@@ -162,6 +162,14 @@ bot.on("message", async message => {
       setTimeout(resolve, ms);
     });
   }
+  function compareWeatherDates(date, parsed) {
+      for(int i = 0; i < 5; i++) {
+        if(date == parsed.forecast[i].day) {
+          return i;
+        }
+      }
+      return 0;
+  }
   function getIDFromMention(mention) {
   	const matches = mention.match(/^<@!?(\d+)>$/); // Uses RegEx to sort ID
   	if (!matches) return;
@@ -709,13 +717,14 @@ bot.on("message", async message => {
           if(err) console.log(err);
           console.log(JSON.stringify(parsed, null, 2));
           parsed = parsed[0];
+          let raindate = compareWeatherDates(parsed.current.day, parsed);
           let wsend = new MessageEmbed()
             .setTitle(parsed.location.name)
             .setDescription(parsed.current.date)
             .addField("Current Temperature: ", parsed.current.temperature + " F", true)
             .addField("Sky: ", parsed.current.skytext, true)
             .addField("Humidity: ", parsed.current.humidity + "%")
-            .addField("Wind: ", parsed.current.windspeed)
+            .addField("Wind: ", parsed.current.winddisplay + " | Chance of Rain: " + parsed.forecast[raindate].precip)
           message.channel.send(wsend);
         });
       } else {
@@ -723,13 +732,14 @@ bot.on("message", async message => {
           if(err) console.log(err);
           console.log(JSON.stringify(parsed, null, 2));
           parsed = parsed[0];
+          let raindate = compareWeatherDates(parsed.current.day, parsed);
           let wsend = new MessageEmbed()
             .setTitle(parsed.location.name)
             .setDescription(parsed.current.date)
             .addField("Current Temperature: ", parsed.current.temperature + " F", true)
             .addField("Sky: ", parsed.current.skytext, true)
             .addField("Humidity: ", parsed.current.humidity + "%")
-            .addField("Wind: ", parsed.current.windspeed)
+            .addField("Wind: ", parsed.current.winddisplay + " | Chance of Rain: " + parsed.forecast[raindate].precip)
           message.channel.send(wsend);
         });
       }
