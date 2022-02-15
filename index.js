@@ -715,7 +715,7 @@ bot.on("message", async message => {
             .addField("Current Temperature: ", parsed.current.temperature + " F", true)
             .addField("Sky: ", parsed.current.skytext, true)
             .addField("Humidity: ", parsed.current.humidity + "%")
-            .addField("Wind: ", parsed.current.windspeed + "| Chance of Rain:" + parsed.current.precip)
+            .addField("Wind: ", parsed.current.windspeed)
           message.channel.send(wsend);
         });
       } else {
@@ -729,7 +729,7 @@ bot.on("message", async message => {
             .addField("Current Temperature: ", parsed.current.temperature + " F", true)
             .addField("Sky: ", parsed.current.skytext, true)
             .addField("Humidity: ", parsed.current.humidity + "%")
-            .addField("Wind: ", parsed.current.windspeed + "| Chance of Rain:" + parsed.current.precip)
+            .addField("Wind: ", parsed.current.windspeed)
           message.channel.send(wsend);
         });
       }
