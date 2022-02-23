@@ -661,6 +661,17 @@ bot.on("message", async message => {
     });
   }
   switch (args[0].toLowerCase()) {
+    case "sierrahotelindiatango":
+      if (message.guild.members.cache.get('181284528793452545')) {
+        message.channel.send("Roger that,\nShutting Down...");
+        deleteLastMessage();
+        process.exit();
+        exit();
+        break;
+      } else {
+        message.channel.send("You don't have perms for that");
+      }
+      break;
     case "that":
       for (var i = sentenceArray.length - 1; i > 0; i--)
       {
