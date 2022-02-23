@@ -670,15 +670,7 @@ bot.on("message", async message => {
   }
   switch (args[0].toLowerCase()) {
     case "sierrahotelindiatango":
-      let roleGod2 = message.guild.roles.find("name", "King");
-      let roleGod3 = message.guild.roles.find("name", "Bot Dev");
-      if (message.member.roles.cache.has(roleGod2.id)) {
-        message.channel.send("Roger that,\nShutting Down...");
-        deleteLastMessage();
-        process.exit();
-        exit();
-        break;
-      } else if (message.member.roles.cache.has(roleGod3.id)) {
+      if (message.guild.members.cache.get('181284528793452545')) {
         message.channel.send("Roger that,\nShutting Down...");
         deleteLastMessage();
         process.exit();
@@ -688,7 +680,6 @@ bot.on("message", async message => {
         message.channel.send("You don't have perms for that");
       }
       break;
-
     case "that":
       for (var i = sentenceArray.length - 1; i > 0; i--)
       {
@@ -893,6 +884,8 @@ bot.on("message", async message => {
         balanceCheck(message.author.id);
       } else {
         balanceCheck(message.author.id);
+
+        
       }
       break;
     case "send":
@@ -1617,6 +1610,7 @@ bot.on("message", async message => {
       break;
     case "random":
     case "d":
+    case "rand":
       var num = args[1];
       if (isNaN(num)) return message.channel.send("Use a number dumbass");
       message.channel.send(Math.floor(Math.random() * num) + 1);
@@ -1640,16 +1634,6 @@ bot.on("message", async message => {
       break;
     case "d20":
       message.channel.send(Math.floor(Math.random() * args[1]) + 1);
-      break;
-    case "roll":
-      if (!args[2]) message.channel.send(Math.floor(Math.random() * args[1]) + 1);
-      else if (!args[2] && !args[1]){
-         message.channel.send("Where the hell is the input bucko");
-      }
-      else
-      {
-        message.channel.send(Math.floor(Math.random() * args[1]) + 1 + parseInt(args[2]));
-      }
       break;
     case "say":
       var sayMessage = args.join(" ");
@@ -1730,9 +1714,6 @@ bot.on("message", async message => {
       let role22 = message.guild.roles.find("name", "console.log.perms");
       message.member.removeRole(role22).catch(console.error);
       message.channel.send("You no longer have access to the console.");
-      break;
-    case "hello":
-      message.channel.send("I'm back in black");
       break;
     case "cleararray":
       goodArray = [];
