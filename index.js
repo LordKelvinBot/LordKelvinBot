@@ -45,7 +45,7 @@ global.servers = {};
 'use strict';
 const { Discord , Intents , Client , MessageEmbed} = require("discord.js");
 const superagent = require("superagent");
-const fetch = require('node-fetch');
+import fetch from "node-fetch";
 const randomPuppy = require('random-puppy');
 const {fetchSubreddit} = require('fetch-subreddit');
 const api = "https://jsonplaceholder.typicode.com/posts";
