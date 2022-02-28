@@ -106,7 +106,7 @@ function russianActive(input) {
   });
 }
 
-bot.on("message", async message => {
+bot.on("messageCreate", async message => {
   console.log(message.content);
 
   var messageContent = message.content;
@@ -421,7 +421,7 @@ bot.on("message", async message => {
         .setTitle("Result")
         .setDescription(slot1 + " " + slot2 + " " + slot3)
         .addField("You lost ", "$" + investment);
-      message.channel.send(moneyEmbed);
+      message.channel.send({ embeds: [moneyEmbed]});
       let newdata = {
         money: parseInt(read(messageAuthor).money) - parseInt(investment),
         lastreset: parseInt(per.lastreset)
@@ -885,7 +885,7 @@ bot.on("message", async message => {
       } else {
         balanceCheck(message.author.id);
 
-        
+
       }
       break;
     case "send":
