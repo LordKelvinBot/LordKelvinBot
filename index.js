@@ -697,7 +697,7 @@ bot.on("message", async message => {
       break;
     case "time":
       var myDate = new Date(Date.now());
-      let timeembed = new MessageEmbed();
+      let timeembed = new MessageEmbed()
         .setTitle("Times around the World")
         .setDescription("World Times")
         .addField("PST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}))
