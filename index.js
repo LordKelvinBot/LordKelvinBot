@@ -697,7 +697,20 @@ bot.on("message", async message => {
       break;
     case "time":
       var myDate = new Date(Date.now());
-      message.channel.send("PST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
+      let timeembed = new MessageEmbed();
+        .addTitle("Times around the World")
+        .addDescription("World Times")
+        .addField("PST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}))
+        .addField("MST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Denver"}))
+        .addField("CST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Chicago"}))
+        .addField("EST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/New_York"}))
+        .addField("Shanghai, CN: " + myDate.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}))
+        .addField("Seoul, SK: " + myDate.toLocaleString("en-US", {timeZone: "Asia/Seoul"}))
+        .addField("Hong Kong: " + myDate.toLocaleString("en-US", {timeZone: "Asia/Hong_Kong"}))
+        .addField("Berlin, DE: " + myDate.toLocaleString("en-US", {timeZone: "Europe/Berlin"}))
+        .addField("Paris, FR: " + myDate.toLocaleString("en-US", {timeZone: "Europe/Paris"}))
+      message.channel.send(timeembed);
+      /*message.channel.send("PST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
       message.channel.send("MST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Denver"}));
       message.channel.send("CST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Chicago"}));
       message.channel.send("EST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/New_York"}));
@@ -705,7 +718,7 @@ bot.on("message", async message => {
       message.channel.send("Seoul, SK: " + myDate.toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
       message.channel.send("Hong Kong: " + myDate.toLocaleString("en-US", {timeZone: "Asia/Hong_Kong"}));
       message.channel.send("Berlin, DE: " + myDate.toLocaleString("en-US", {timeZone: "Europe/Berlin"}));
-      message.channel.send("Paris, FR: " + myDate.toLocaleString("en-US", {timeZone: "Europe/Paris"}));
+      message.channel.send("Paris, FR: " + myDate.toLocaleString("en-US", {timeZone: "Europe/Paris"}));*/
       break;
     case "weather":
       if(args[1]) {
