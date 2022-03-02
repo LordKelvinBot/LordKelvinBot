@@ -701,6 +701,7 @@ bot.on("message", async message => {
       message.channel.send("MST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Denver"}));
       message.channel.send("CST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Chicago"}));
       message.channel.send("EST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/New_York"}));
+      message.channel.send("China: " + myDate.toLocaleString("en-US", {timeZone: "China/Bejing"}));
       break;
     case "weather":
       if(args[1]) {
