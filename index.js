@@ -701,7 +701,10 @@ bot.on("message", async message => {
       message.channel.send("MST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Denver"}));
       message.channel.send("CST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Chicago"}));
       message.channel.send("EST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/New_York"}));
-      message.channel.send("China: " + myDate.toLocaleString("en-US", {timeZone: "China/Bejing"}));
+      message.channel.send("Shanghai, CN: " + myDate.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}));
+      message.channel.send("Seoul, SK: " + myDate.toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
+      message.channel.send("Hong Kong: " + myDate.toLocaleString("en-US", {timeZone: "Asia/Hong_Kong"}));
+      message.channel.send("Berlin, DE: " + myDate.toLocaleString("en-US", {timeZone: "Europe/Berlin"}));
       break;
     case "weather":
       if(args[1]) {
