@@ -865,7 +865,17 @@ bot.on("message", async message => {
             let data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
             console.log(args[1] + " set to " + author);
-          })
+          }
+          else {
+            let newdata = {
+              money: 1001,
+              lastreset: person.lastreset
+            };
+            let data = JSON.stringify(newdata);
+            fs.writeFileSync(author, data);
+            console.log("Money reset to " + author);
+          }
+        })
       }
       break;
     case "bal":
