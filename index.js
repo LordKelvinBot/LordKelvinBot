@@ -698,8 +698,8 @@ bot.on("message", async message => {
     case "time":
       var myDate = new Date(Date.now());
       let timeembed = new MessageEmbed();
-        .addTitle("Times around the World")
-        .addDescription("World Times")
+        .setTitle("Times around the World")
+        .setDescription("World Times")
         .addField("PST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}))
         .addField("MST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Denver"}))
         .addField("CST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Chicago"}))
