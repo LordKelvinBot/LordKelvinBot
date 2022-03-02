@@ -705,6 +705,7 @@ bot.on("message", async message => {
       message.channel.send("Seoul, SK: " + myDate.toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
       message.channel.send("Hong Kong: " + myDate.toLocaleString("en-US", {timeZone: "Asia/Hong_Kong"}));
       message.channel.send("Berlin, DE: " + myDate.toLocaleString("en-US", {timeZone: "Europe/Berlin"}));
+      message.channel.send("Paris, FR: " + myDate.toLocaleString("en-US", {timeZone: "Europe/Paris"}));
       break;
     case "weather":
       if(args[1]) {
