@@ -784,7 +784,8 @@ bot.on("message", async message => {
 
     //gambling commands start here
     case "exchange":
-      if (isNaN(args[1]) || !args[1]) return message.channel.send("Current Exchange Rate: 1000000:1")
+      if (isNaN(args[1]) || !args[1]) return message.channel.send("Current Exchange Rate: 1000000:1");
+      if(!brokeCheck(messageAuthor, 1000000)) return message.channel.send("You must have more than 1 million to redeem money.");
       var amount = args[1];
       if (amount <= 1000000) return message.channel.send("Input a valid number more than 1000000.")
       if (brokeCheck(messageAuthor, amount)) return message.channel.send("You don't have enough money to do that.");
@@ -885,7 +886,7 @@ bot.on("message", async message => {
       } else {
         balanceCheck(message.author.id);
 
-        
+
       }
       break;
     case "send":
