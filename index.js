@@ -728,8 +728,8 @@ bot.on("message", async message => {
       break;
     case "ai":
         const response = await openai.createCompletion("davinci", {
-          prompt: "Say this is a test",
-          max_tokens: 5,
+          prompt: "Say test",
+          max_tokens: 1,
         });
         console.log(response);
         console.log(response.data.choices);
