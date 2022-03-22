@@ -778,12 +778,13 @@ bot.on("message", async message => {
             }
           }
           else {
-            message.channel.send("Currently beta testing. ")
+            message.channel.send("Currently beta testing. ");
           }
         break;
     case "weather":
-      if(args[1]) {
-        wt.find({search: args[1], degreeType: 'F'}, function(err, parsed) {
+      if(args) {
+        args.shift();
+        wt.find({search: args.join(' '), degreeType: 'F'}, function(err, parsed) {
           if(err) console.log(err);
           console.log(JSON.stringify(parsed, null, 2));
           parsed = parsed[0];
@@ -816,7 +817,8 @@ bot.on("message", async message => {
       break;
     case "forecast":
       if(args[1]) {
-        wt.find({search: args[1], degreeType: 'F'}, function(err, parsed) {
+        args.shift();
+        wt.find({search: args.join(' '), degreeType: 'F'}, function(err, parsed) {
           if(err) console.log(err);
           console.log(JSON.stringify(parsed, null, 2));
           parsed = parsed[0];
