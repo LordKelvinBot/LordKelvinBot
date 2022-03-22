@@ -727,7 +727,7 @@ bot.on("message", async message => {
       message.channel.send("Paris, FR: " + myDate.toLocaleString("en-US", {timeZone: "Europe/Paris"}));*/
       break;
     case "ai":
-        const response = await openai.createCompletion("davinci", {
+        const response = await openai.createCompletion("text-davinci-002", {
           prompt: args,
           max_tokens: 10,
         });
