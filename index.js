@@ -732,19 +732,17 @@ bot.on("message", async message => {
         const response = await openai.createCompletion("text-davinci-002", {
           prompt: args.join(' '),
           max_tokens: 100,
-          temperature: 1,
+          temperature: 0.1,
           top_p: 1,
           n: 1,
           stream: false,
-          logprobs: null,
-          stop: "\n"
+          logprobs: null
         });
         console.log(args);
         console.log(response.data.choices[0]);
         if(response.data.choices) {
           aisend = JSON.stringify(response.data.choices[0].text);
-          aisend.replace('"','');
-          aisend.replace('\n','');
+          aisend - aisend.substring(4,aisend.length-1);
           message.channel.send(aisend);
         } else {
           message.channel.send("Response was null/empty");
