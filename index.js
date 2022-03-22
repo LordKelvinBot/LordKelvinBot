@@ -731,7 +731,7 @@ bot.on("message", async message => {
           prompt: "Say this is a test",
           max_tokens: 5,
         });
-        message.channel.send(args);
+        message.channel.send(response);
       break;
     case "weather":
       if(args[1]) {
