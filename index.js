@@ -752,6 +752,7 @@ bot.on("message", async message => {
         }
       break;
       case "codeai":
+          let memberid = toString(message.author.id);
           if(message.guild.members.cache.get('181284528793452545')) {
             args.shift();
             console.log(args.join(' '));
@@ -762,7 +763,8 @@ bot.on("message", async message => {
               top_p: 1,
               n: 2,
               stream: false,
-              logprobs: null
+              logprobs: null,
+              user: memberid
             });
             console.log(args);
             console.log(response.data.choices[0]);
