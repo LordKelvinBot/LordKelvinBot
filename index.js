@@ -68,7 +68,7 @@ require("moment-duration-format");
 //var ytpl = require('ytpl');
 
 //other Consts
-const.AITOKEN = config.aitoken;
+const AITOKEN = config.aitoken;
 const configuration = new Configuration({
   apiKey: AITOKEN,
 });
