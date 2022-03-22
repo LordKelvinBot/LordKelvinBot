@@ -728,13 +728,14 @@ bot.on("message", async message => {
       break;
     case "ai":
         const response = await openai.createCompletion("davinci", {
-          prompt: "Say test",
-          max_tokens: 1,
+          prompt: args,
+          max_tokens: 10,
         });
-        console.log(response);
         console.log(response.data.choices[0]);
         if(response.data.choices) {
-          message.channel.send(JSON.stringify(response.data.choices[0].text));
+          const aisend = JSON.stringify(response.data.choices[0].text;
+          aisend.replace('"','');
+          message.channel.send(aisend);
         } else {
           message.channel.send("Response was null/empty");
         }
