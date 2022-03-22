@@ -732,7 +732,7 @@ bot.on("message", async message => {
         const response = await openai.createCompletion("text-davinci-002", {
           prompt: args.join(' '),
           max_tokens: 25,
-          temperature: 1,
+          temperature: 0.2,
           top_p: 1,
           n: 1,
           stream: false,
