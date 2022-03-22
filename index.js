@@ -729,6 +729,7 @@ bot.on("message", async message => {
     case "ai":
         args.shift();
         console.log(args.join(' '));
+        let memberid = toString(message.author.id);
         const response = await openai.createCompletion("text-curie-001", {
           prompt: args.join(' '),
           max_tokens: 100,
@@ -736,7 +737,8 @@ bot.on("message", async message => {
           top_p: 1,
           n: 1,
           stream: false,
-          logprobs: null
+          logprobs: null,
+          user: memberid
         });
         console.log(args);
         console.log(response.data.choices[0]);
