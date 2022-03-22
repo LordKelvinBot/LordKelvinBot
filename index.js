@@ -733,7 +733,7 @@ bot.on("message", async message => {
         });
         console.log(response.data.choices[0]);
         if(response.data.choices) {
-          const aisend = JSON.stringify(response.data.choices[0].text;
+          const aisend = JSON.stringify(response.data.choices[0].text);
           aisend.replace('"','');
           message.channel.send(aisend);
         } else {
