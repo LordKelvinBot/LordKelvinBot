@@ -773,28 +773,9 @@ bot.on("message", async message => {
               message.channel.send("Response was null/empty");
             }
           }
-        else {
-          args.shift();
-          console.log(args.join(' '));
-          const response = await openai.createCompletion("code-davinci-002", {
-            prompt: args.join(' '),
-            max_tokens: 50,
-            temperature: 0.2,
-            top_p: 1,
-            n: 1,
-            stream: false,
-            logprobs: null
-          });
-          console.log(args);
-          if(response.data.choices) {
-            aisend = JSON.stringify(response.data.choices[0].text);
-            aisend = aisend.substring(1,aisend.length-1);
-            aisend = aisend.replaceAll('\\n', '\n');
-            message.channel.send(aisend);
-          } else {
-            message.channel.send("Response was null/empty");
+          else {
+            message.channel.send("Currently beta testing. ")
           }
-        }
         break;
     case "weather":
       if(args[1]) {
