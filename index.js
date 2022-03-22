@@ -727,14 +727,14 @@ bot.on("message", async message => {
       message.channel.send("Paris, FR: " + myDate.toLocaleString("en-US", {timeZone: "Europe/Paris"}));*/
       break;
     case "ai":
+        args.shift();
         const response = await openai.createCompletion("text-davinci-002", {
-          prompt: args,
+          prompt: args.join(' '),
           max_tokens: 10,
         });
         console.log(response.data.choices[0]);
         if(response.data.choices) {
           const aisend = JSON.stringify(response.data.choices[0].text);
-          aisend.replace('"','');
           message.channel.send(aisend);
         } else {
           message.channel.send("Response was null/empty");
