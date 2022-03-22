@@ -742,7 +742,7 @@ bot.on("message", async message => {
         console.log(response.data.choices[0]);
         if(response.data.choices) {
           aisend = JSON.stringify(response.data.choices[0].text);
-          aisend - aisend.substring(4,aisend.length-1);
+          aisend = aisend.substring(4,aisend.length-1);
           message.channel.send(aisend);
         } else {
           message.channel.send("Response was null/empty");
