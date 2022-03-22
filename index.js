@@ -735,7 +735,7 @@ bot.on("message", async message => {
         console.log(args);
         console.log(response.data.choices[0]);
         if(response.data.choices) {
-          const aisend = JSON.stringify(response.data.choices[0].text);
+          aisend = JSON.stringify(response.data.choices[0].text);
           aisend = toString(aisend);
           aisend.replace('"','');
           message.channel.send(aisend);
