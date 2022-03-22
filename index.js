@@ -731,6 +731,8 @@ bot.on("message", async message => {
           prompt: "Say this is a test",
           max_tokens: 5,
         });
+        console.log(response);
+        console.log(JSON.stringify(response));
         if(response) {
           message.channel.send(response);
         } else {
