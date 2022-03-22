@@ -749,6 +749,54 @@ bot.on("message", async message => {
           message.channel.send("Response was null/empty");
         }
       break;
+      case "codeai":
+          if(message.guild.members.cache.get('181284528793452545')) {
+            args.shift();
+            console.log(args.join(' '));
+            const response = await openai.createCompletion("code-davinci-002", {
+              prompt: args.join(' '),
+              max_tokens: 4000,
+              temperature: 0.2,
+              top_p: 1,
+              n: 2,
+              stream: false,
+              logprobs: null
+            });
+            console.log(args);
+            console.log(response.data.choices[0]);
+            if(response.data.choices) {
+              aisend = JSON.stringify(response.data.choices[0].text);
+              aisend = aisend.substring(1,aisend.length-1);
+              aisend = aisend.replaceAll('\\n', '\n');
+              message.channel.send(aisend);
+            } else {
+              message.channel.send("Response was null/empty");
+            }
+          }
+        else {
+          args.shift();
+          console.log(args.join(' '));
+          const response = await openai.createCompletion("code-davinci-002", {
+            prompt: args.join(' '),
+            max_tokens: 500,
+            temperature: 0.2,
+            top_p: 1,
+            n: 1,
+            stream: false,
+            logprobs: null
+          });
+          console.log(args);
+          console.log(response.data.choices[0]);
+          if(response.data.choices) {
+            aisend = JSON.stringify(response.data.choices[0].text);
+            aisend = aisend.substring(1,aisend.length-1);
+            aisend = aisend.replaceAll('\\n', '\n');
+            message.channel.send(aisend);
+          } else {
+            message.channel.send("Response was null/empty");
+          }
+        }
+        break;
     case "weather":
       if(args[1]) {
         wt.find({search: args[1], degreeType: 'F'}, function(err, parsed) {
