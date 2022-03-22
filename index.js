@@ -728,9 +728,13 @@ bot.on("message", async message => {
       break;
     case "ai":
         args.shift();
+        console.log(args.join(' '));
         const response = await openai.createCompletion("text-davinci-002", {
           prompt: args.join(' '),
           max_tokens: 10,
+          temperature: 1,
+          n: 1,
+
         });
         console.log(args);
         console.log(response.data.choices[0]);
