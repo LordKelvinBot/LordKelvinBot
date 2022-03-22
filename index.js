@@ -731,7 +731,11 @@ bot.on("message", async message => {
           prompt: "Say this is a test",
           max_tokens: 5,
         });
-        message.channel.send(response);
+        if(response != NULL) {
+          message.channel.send(response);
+        } else {
+          message.channel.send("Response was null/empty");
+        }
       break;
     case "weather":
       if(args[1]) {
