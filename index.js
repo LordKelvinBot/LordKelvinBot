@@ -732,9 +732,9 @@ bot.on("message", async message => {
           max_tokens: 1,
         });
         console.log(response);
-        console.log(response.data.choices);
+        console.log(response.data.choices[0]);
         if(response.data.choices) {
-          message.channel.send(JSON.stringify(response.data.choices));
+          message.channel.send(JSON.stringify(response.data.choices[0].text));
         } else {
           message.channel.send("Response was null/empty");
         }
