@@ -676,15 +676,7 @@ bot.on("message", async message => {
   }
   switch (args[0].toLowerCase()) {
     case "sierrahotelindiatango":
-      let roleGod2 = message.guild.roles.find("name", "King");
-      let roleGod3 = message.guild.roles.find("name", "Bot Dev");
-      if (message.member.roles.cache.has(roleGod2.id)) {
-        message.channel.send("Roger that,\nShutting Down...");
-        deleteLastMessage();
-        process.exit();
-        exit();
-        break;
-      } else if (message.member.roles.cache.has(roleGod3.id)) {
+      if (message.guild.members.cache.get('181284528793452545')) {
         message.channel.send("Roger that,\nShutting Down...");
         deleteLastMessage();
         process.exit();
@@ -694,7 +686,6 @@ bot.on("message", async message => {
         message.channel.send("You don't have perms for that");
       }
       break;
-
     case "that":
       for (var i = sentenceArray.length - 1; i > 0; i--)
       {
@@ -712,10 +703,28 @@ bot.on("message", async message => {
       break;
     case "time":
       var myDate = new Date(Date.now());
-      message.channel.send("PST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
+      let timeembed = new MessageEmbed()
+        .setTitle("Times around the World")
+        .setDescription("World Times")
+        .addField("PST Time: " , myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}))
+        .addField("MST Time: " , myDate.toLocaleString("en-US", {timeZone: "America/Denver"}))
+        .addField("CST Time: " , myDate.toLocaleString("en-US", {timeZone: "America/Chicago"}))
+        .addField("EST Time: " , myDate.toLocaleString("en-US", {timeZone: "America/New_York"}))
+        .addField("Shanghai, CN: " , myDate.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}))
+        .addField("Seoul, SK: " , myDate.toLocaleString("en-US", {timeZone: "Asia/Seoul"}))
+        .addField("Hong Kong: " , myDate.toLocaleString("en-US", {timeZone: "Asia/Hong_Kong"}))
+        .addField("Berlin, DE: " , myDate.toLocaleString("en-US", {timeZone: "Europe/Berlin"}))
+        .addField("Paris, FR: " , myDate.toLocaleString("en-US", {timeZone: "Europe/Paris"}))
+      message.channel.send(timeembed);
+      /*message.channel.send("PST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
       message.channel.send("MST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Denver"}));
       message.channel.send("CST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Chicago"}));
       message.channel.send("EST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/New_York"}));
+      message.channel.send("Shanghai, CN: " + myDate.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}));
+      message.channel.send("Seoul, SK: " + myDate.toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
+      message.channel.send("Hong Kong: " + myDate.toLocaleString("en-US", {timeZone: "Asia/Hong_Kong"}));
+      message.channel.send("Berlin, DE: " + myDate.toLocaleString("en-US", {timeZone: "Europe/Berlin"}));
+      message.channel.send("Paris, FR: " + myDate.toLocaleString("en-US", {timeZone: "Europe/Paris"}));*/
       break;
     case "ai":
         const response = await openai.createCompletion("davinci", {
@@ -806,7 +815,8 @@ bot.on("message", async message => {
 
     //gambling commands start here
     case "exchange":
-      if (isNaN(args[1]) || !args[1]) return message.channel.send("Current Exchange Rate: 1000000:1")
+      if (isNaN(args[1]) || !args[1]) return message.channel.send("Current Exchange Rate: 1000000:1");
+      if(brokeCheck(messageAuthor, 1000000)) return message.channel.send("You must have more than 1 million to redeem money.");
       var amount = args[1];
       if (amount <= 1000000) return message.channel.send("Input a valid number more than 1000000.")
       if (brokeCheck(messageAuthor, amount)) return message.channel.send("You don't have enough money to do that.");
@@ -885,7 +895,7 @@ bot.on("message", async message => {
             };
             let data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
-            console.log(args[1] + " added to " + author);
+            console.log(args[1] + " set to " + author);
           }
           else {
             let newdata = {
@@ -906,6 +916,8 @@ bot.on("message", async message => {
         balanceCheck(message.author.id);
       } else {
         balanceCheck(message.author.id);
+
+
       }
       break;
     case "send":
@@ -1630,6 +1642,7 @@ bot.on("message", async message => {
       break;
     case "random":
     case "d":
+    case "rand":
       var num = args[1];
       if (isNaN(num)) return message.channel.send("Use a number dumbass");
       message.channel.send(Math.floor(Math.random() * num) + 1);
@@ -1653,16 +1666,6 @@ bot.on("message", async message => {
       break;
     case "d20":
       message.channel.send(Math.floor(Math.random() * args[1]) + 1);
-      break;
-    case "roll":
-      if (!args[2]) message.channel.send(Math.floor(Math.random() * args[1]) + 1);
-      else if (!args[2] && !args[1]){
-         message.channel.send("Where the hell is the input bucko");
-      }
-      else
-      {
-        message.channel.send(Math.floor(Math.random() * args[1]) + 1 + parseInt(args[2]));
-      }
       break;
     case "say":
       var sayMessage = args.join(" ");
@@ -1743,9 +1746,6 @@ bot.on("message", async message => {
       let role22 = message.guild.roles.find("name", "console.log.perms");
       message.member.removeRole(role22).catch(console.error);
       message.channel.send("You no longer have access to the console.");
-      break;
-    case "hello":
-      message.channel.send("I'm back in black");
       break;
     case "cleararray":
       goodArray = [];
