@@ -777,7 +777,7 @@ bot.on("message", async message => {
           args.shift();
           console.log(args.join(' '));
           const response = await openai.createCompletion("code-davinci-002", {
-            prompt: "// " + args.join(' '),
+            prompt: args.join(' '),
             max_tokens: 50,
             temperature: 0.2,
             top_p: 1,
