@@ -732,6 +732,7 @@ bot.on("message", async message => {
           prompt: args.join(' '),
           max_tokens: 10,
         });
+        console.log(args);
         console.log(response.data.choices[0]);
         if(response.data.choices) {
           const aisend = JSON.stringify(response.data.choices[0].text);
