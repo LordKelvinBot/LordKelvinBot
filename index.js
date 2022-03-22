@@ -752,7 +752,7 @@ bot.on("message", async message => {
         }
       break;
       case "codeai":
-          let memberid = toString(message.author.id);
+          let memberidd = toString(message.author.id);
           if(message.guild.members.cache.get('181284528793452545')) {
             args.shift();
             console.log(args.join(' '));
@@ -764,7 +764,7 @@ bot.on("message", async message => {
               n: 2,
               stream: false,
               logprobs: null,
-              user: memberid
+              user: memberidd
             });
             console.log(args);
             console.log(response.data.choices[0]);
