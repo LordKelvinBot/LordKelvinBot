@@ -731,7 +731,7 @@ bot.on("message", async message => {
           prompt: "Say this is a test",
           max_tokens: 5,
         });
-        if(response != NULL) {
+        if(response) {
           message.channel.send(response);
         } else {
           message.channel.send("Response was null/empty");
