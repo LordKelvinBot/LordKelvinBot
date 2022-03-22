@@ -729,7 +729,7 @@ bot.on("message", async message => {
     case "ai":
         args.shift();
         console.log(args.join(' '));
-        const response = await openai.createCompletion("text-curie-001", {
+        const response = await openai.createCompletion("text-davinci-002", {
           prompt: args.join(' '),
           max_tokens: 50,
           temperature: 1,
