@@ -816,7 +816,7 @@ bot.on("message", async message => {
       }
       break;
     case "forecast":
-      if(args[1]) {
+      if(args) {
         args.shift();
         wt.find({search: args.join(' '), degreeType: 'F'}, function(err, parsed) {
           if(err) console.log(err);
