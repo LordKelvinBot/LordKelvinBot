@@ -732,7 +732,7 @@ bot.on("message", async message => {
         let memberid = toString(message.author.id);
         const response = await openai.createCompletion("text-ada-001", {
           prompt: args.join(' '),
-          max_tokens: 1800,
+          max_tokens: 500,
           temperature: 0.2,
           top_p: 1,
           n: 1,
