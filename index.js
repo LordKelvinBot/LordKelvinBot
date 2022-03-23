@@ -730,7 +730,7 @@ bot.on("message", async message => {
         args.shift();
         console.log(args.join(' '));
         let memberid = toString(message.author.id);
-        const response = await openai.createCompletion("text-curie-001", {
+        const response = await openai.createCompletion("text-ada-001", {
           prompt: args.join(' '),
           max_tokens: 100,
           temperature: 0.2,
