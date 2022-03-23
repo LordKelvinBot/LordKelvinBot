@@ -745,7 +745,11 @@ bot.on("message", async message => {
           aisend = JSON.stringify(response.data.choices[0].text);
           aisend = aisend.substring(1,aisend.length-1);
           aisend = aisend.replaceAll('\\n', '\n');
-          message.channel.send(aisend);
+          if(aisend.length < 4000)
+            message.channel.send(aisend);
+          else {
+            message.channel.send("Message was over 4000 characters");
+          }
         } else {
           message.channel.send("Response was null/empty");
         }
@@ -770,7 +774,11 @@ bot.on("message", async message => {
               aisend = JSON.stringify(response.data.choices[0].text);
               aisend = aisend.substring(1,aisend.length-1);
               aisend = aisend.replaceAll('\\n', '\n');
-              message.channel.send(aisend);
+              if(aisend.length < 4000)
+                message.channel.send(aisend);
+              else {
+                message.channel.send("Message was over 4000 characters");
+              }
             } else {
               message.channel.send("Response was null/empty");
             }
