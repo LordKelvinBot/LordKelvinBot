@@ -1457,6 +1457,7 @@ bot.on("message", async message => {
         case "ZH":
           break;
         }
+        break;
     case "despair":
       var VC = message.member.voiceChannel;
       if (!VC)
