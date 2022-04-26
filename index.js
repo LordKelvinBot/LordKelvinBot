@@ -115,10 +115,6 @@ function russianActive(input) {
 }
 async function translater(textinput, lang) {
   const deeplapi = "https://api-free.deepl.com/v2/translate?auth_key=" + DEEPLT + "&text=" + textinput + "&target_lang=" + lang
-  message.send(textinput);
-  message.send(lang);
-  message.send(deeplapi);
-  console.log(DEEPLT);
   console.log(textinput);
   console.log(lang);
   console.log(deeplapi);
@@ -1436,6 +1432,7 @@ bot.on("message", async message => {
       //https://www.youtube.com/watch?v=8o7I69O1RzE
       break;
     case "translate":
+      console.log(args);
       args.shift();
       langd = args[0];
       inputtext = args.join(' ');
