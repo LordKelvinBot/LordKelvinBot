@@ -113,7 +113,7 @@ function russianActive(input) {
     }
   });
 }
-function translater(textinput, lang) {
+async function translater(textinput, lang) {
   const deeplapi = "https://api-free.deepl.com/v2/translate?auth_key=" + DEEPLT + "&text=" + textinput + "&target_lang=" + lang
   const response = await fetch(deeplapi);
   console.log(response);
