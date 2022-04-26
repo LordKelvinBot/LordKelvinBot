@@ -1429,7 +1429,7 @@ bot.on("message", async message => {
       //https://www.youtube.com/watch?v=8o7I69O1RzE
       break;
     case "translate":
-      args.split()
+      args.shift();
       langd = args[0];
       inputtext = args.join(' ');
       switch(langd){
