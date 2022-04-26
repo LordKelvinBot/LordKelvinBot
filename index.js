@@ -1439,7 +1439,7 @@ bot.on("message", async message => {
       inputtext = args.join(' ');
       switch(langd){
         case "DE":
-          translater(inputtext, "DE");
+          translater(inputtext, "de");
           break;
         case "EN":
           break;
