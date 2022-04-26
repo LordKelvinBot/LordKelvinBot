@@ -1435,6 +1435,7 @@ bot.on("message", async message => {
       console.log(args);
       args.shift();
       langd = args[0];
+      args.shift();
       inputtext = args.join(' ');
       switch(langd){
         case "DE":
