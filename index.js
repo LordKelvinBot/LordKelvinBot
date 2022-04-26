@@ -1432,7 +1432,7 @@ bot.on("message", async message => {
       args.split()
       langd = args[0];
       inputtext = args.join(' ');
-      switch(langd):
+      switch(langd){
         case "DE":
           translater(inputtext, "DE");
           break;
@@ -1456,6 +1456,7 @@ bot.on("message", async message => {
         case "CH":
         case "ZH":
           break;
+        }
     case "despair":
       var VC = message.member.voiceChannel;
       if (!VC)
