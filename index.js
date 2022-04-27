@@ -1510,6 +1510,8 @@ bot.on("message", async message => {
         case "usage":
           deeplusage(message);
           break;
+        default:
+          message.channel.send("Not a supported language");
         }
         break;
     case "despair":
