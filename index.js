@@ -1461,9 +1461,11 @@ bot.on("message", async message => {
           translater(message, inputtext, "es");
           break;
         case "FR":
+        case "fr":
           translater(message, inputtext, "fr");
           break;
         case "IT":
+        case "it":
           translater(message, inputtext, "it");
           break;
         case "JP":
@@ -1472,16 +1474,21 @@ bot.on("message", async message => {
           translater(message, inputtext, "ja");
           break;
         case "NL":
+        case "nl":
           translater(message, inputtext, "nl");
           break;
         case "PL":
+        case "pl":
           translater(message, inputtext, "pl");
           break;
         case "RU":
+        case "ru":
           translater(message, inputtext, "ru");
           break;
         case "CH":
+        case "ch":
         case "ZH":
+        case "zh":
           translater(message, inputtext, "zh");
           break;
         }
