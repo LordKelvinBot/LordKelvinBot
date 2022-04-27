@@ -123,7 +123,7 @@ async function translater(textinput, lang) {
   resp.on('end', () => {
     console.log(JSON.parse(data));
     fulljson = JSON.parse(data);
-    console.log(fulljson.translations[0].text);
+    return fulljson.translations[0].text;
   });
   }).on("error", (err) => {
     console.log("Error: " + err.message);
@@ -1448,11 +1448,11 @@ bot.on("message", async message => {
       switch(langd){
         case "DE":
         case "de":
-          translater(inputtext, "de");
+          message.send(translater(inputtext, "de"));
           break;
         case "EN":
         case "en":
-          translater(inputtext, "en-us");
+          message.send(translater(inputtext, "en-us"));
           break;
         case "ES":
           break;
