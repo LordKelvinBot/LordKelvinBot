@@ -122,7 +122,6 @@ async function translater(message, textinput, lang) {
   });
   resp.on('end', () => {
     fulljson = JSON.parse(data);
-    await sleep(1000);
     message.channel.send(fulljson.translations[0].text);
   });
   }).on("error", (err) => {
