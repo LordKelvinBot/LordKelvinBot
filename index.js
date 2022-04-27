@@ -128,7 +128,6 @@ async function deeplusage(message) {
     console.log("Error: " + err.message);
   });
 }
-}
 async function translater(message, textinput, lang) {
   const deeplapi = "https://api-free.deepl.com/v2/translate?auth_key=" + deeplt + "&text=" + textinput + "&target_lang=" + lang
   https.get(deeplapi, (resp) => {
