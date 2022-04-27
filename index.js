@@ -1459,6 +1459,7 @@ bot.on("message", async message => {
       langd = args[0];
       console.log(langd);
       console.log(args);
+      args.shift();
       if(!args[0]) {
         message.channel.send("Current languages are: DE, EN, ES, FR, IT, JP, NL, PL, RU, ZH");
       }
