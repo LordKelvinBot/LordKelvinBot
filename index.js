@@ -115,7 +115,7 @@ function russianActive(input) {
 }
 async function translater(textinput, lang) {
   const deeplapi = "https://api-free.deepl.com/v2/translate?auth_key=" + deeplt + "&text=" + textinput + "&target_lang=" + lang
-  https.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', (resp) => {
+  https.get(deeplapi, (resp) => {
   let data = '';
   resp.on('data', (chunk) => {
     data += chunk;
