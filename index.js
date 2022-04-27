@@ -121,11 +121,8 @@ async function translater(message, textinput, lang) {
     data += chunk;
   });
   resp.on('end', () => {
-    console.log(JSON.parse(data));
     fulljson = JSON.parse(data);
-    console.log(fulljson.translations[0].text)
-    reply = toString(fulljson.translations[0].text);
-    message.channel.send(reply);
+    await sleep(1000);
     message.channel.send(fulljson.translations[0].text);
   });
   }).on("error", (err) => {
@@ -1466,9 +1463,7 @@ bot.on("message", async message => {
         case "JP":
         case "jp":
         case "JA":
-          done = translater(message, inputtext, "ja");
-          await sleep(2000);
-          message.channel.send(done);
+          translater(message, inputtext, "ja");
           break;
         case "NL":
           break;
