@@ -114,10 +114,24 @@ function russianActive(input) {
   });
 }
 async function translater(textinput, lang) {
+  const transpath = "/v2/translate?auth_key=" + deeplt + "&text=" + textinput + "&target_lang=" + lang
+  const options = {
+    hostname: 'https://api-free.deepl.com/',
+    port: 443,
+    path: transpath,
+    method: 'GET',
+  };
+  console.log(options);
   const deeplapi = "https://api-free.deepl.com/v2/translate?auth_key=" + deeplt + "&text=" + textinput + "&target_lang=" + lang
-  const response = await fetch(deeplapi);
-  const toJson = JSON.stringify(response);
-  console.log(toJson);
+  const req = https.request(options, res => {
+    console.log(`statusCode: ${res.statusCode}`);
+
+    res.on('data', d => {
+      console.log(d);
+    });
+  });
+
+
 }
 bot.on("message", async message => {
   console.log(message.content);
