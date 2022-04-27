@@ -126,7 +126,7 @@ async function translater(message, textinput, lang) {
     console.log(fulljson.translations[0].text)
     reply = toString(fulljson.translations[0].text);
     message.channel.send(reply);
-    return reply;
+    message.channel.send(fulljson.translations[0].text);
   });
   }).on("error", (err) => {
     console.log("Error: " + err.message);
