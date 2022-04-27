@@ -1448,11 +1448,11 @@ bot.on("message", async message => {
       switch(langd){
         case "DE":
         case "de":
-          message.send(translater(inputtext, "de"));
+          message.channel.send(translater(inputtext, "de"));
           break;
         case "EN":
         case "en":
-          message.send(translater(inputtext, "en-us"));
+          message.channel.send(translater(inputtext, "en-us"));
           break;
         case "ES":
           break;
@@ -1463,6 +1463,7 @@ bot.on("message", async message => {
         case "JP":
         case "jp":
         case "JA":
+          message.channel.send(translater(inputtext, "ja"));
           break;
         case "NL":
           break;
