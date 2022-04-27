@@ -113,6 +113,22 @@ function russianActive(input) {
     }
   });
 }
+async function deeplusage(message) {
+  const deeplapid = "https://api-free.deepl.com/v2/usage?auth_key=" + deeplt
+  https.get(deeplapid, (resp) => {
+  let data = '';
+  resp.on('data', (chunk) => {
+    data += chunk;
+  });
+  resp.on('end', () => {
+    fulljson = JSON.parse(data);
+    message.channel.send(fulljson);
+  });
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
+  });
+}
+}
 async function translater(message, textinput, lang) {
   const deeplapi = "https://api-free.deepl.com/v2/translate?auth_key=" + deeplt + "&text=" + textinput + "&target_lang=" + lang
   https.get(deeplapi, (resp) => {
@@ -1490,6 +1506,9 @@ bot.on("message", async message => {
         case "ZH":
         case "zh":
           translater(message, inputtext, "zh");
+          break;
+        case "usage":
+          deeplusage(message);
           break;
         }
         break;
