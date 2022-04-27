@@ -115,11 +115,9 @@ function russianActive(input) {
 }
 async function translater(textinput, lang) {
   const deeplapi = "https://api-free.deepl.com/v2/translate?auth_key=" + deeplt + "&text=" + textinput + "&target_lang=" + lang
-  console.log(textinput);
-  console.log(lang);
-  console.log(deeplapi);
   const response = await fetch(deeplapi);
-  console.log(response);
+  const toJson = JSON.stringify(response);
+  console.log(toJson);
 }
 bot.on("message", async message => {
   console.log(message.content);
@@ -1439,9 +1437,11 @@ bot.on("message", async message => {
       inputtext = args.join('%20');
       switch(langd){
         case "DE":
+        case "de":
           translater(inputtext, "de");
           break;
         case "EN":
+        case "en":
           translater(inputtext, "en-us");
           break;
         case "ES":
@@ -1451,6 +1451,7 @@ bot.on("message", async message => {
         case "IT":
           break;
         case "JP":
+        case "jp":
         case "JA":
           break;
         case "NL":
