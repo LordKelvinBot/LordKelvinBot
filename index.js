@@ -113,7 +113,7 @@ function russianActive(input) {
     }
   });
 }
-async function translater(textinput, lang) {
+async function translater(message, textinput, lang) {
   const deeplapi = "https://api-free.deepl.com/v2/translate?auth_key=" + deeplt + "&text=" + textinput + "&target_lang=" + lang
   https.get(deeplapi, (resp) => {
   let data = '';
@@ -1465,7 +1465,7 @@ bot.on("message", async message => {
         case "JP":
         case "jp":
         case "JA":
-          done = translater(inputtext, "ja");
+          done = translater(message, inputtext, "ja");
           await sleep(2000);
           message.channel.send(done);
           break;
