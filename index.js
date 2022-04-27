@@ -1457,7 +1457,8 @@ bot.on("message", async message => {
       console.log(args);
       args.shift();
       langd = args[0];
-      args.shift();
+      console.log(langd);
+      console.log(args);
       if(!args[0]) {
         message.channel.send("Current languages are: DE, EN, ES, FR, IT, JP, NL, PL, RU, ZH");
       }
@@ -1509,7 +1510,6 @@ bot.on("message", async message => {
         case "usage":
           deeplusage(message);
           break;
-        }
         break;
     case "despair":
       var VC = message.member.voiceChannel;
