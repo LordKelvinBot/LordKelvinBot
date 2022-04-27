@@ -122,6 +122,8 @@ async function translater(textinput, lang) {
   });
   resp.on('end', () => {
     console.log(JSON.parse(data));
+    fulljson = JSON.parse(data);
+    console.log(fulljson.translations[0].text);
   });
   }).on("error", (err) => {
     console.log("Error: " + err.message);
