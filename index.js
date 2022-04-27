@@ -1443,37 +1443,46 @@ bot.on("message", async message => {
       args.shift();
       langd = args[0];
       args.shift();
+      if(!args[0]) {
+        message.channel.send("Current languages are: DE, EN, ES, FR, IT, JP, NL, PL, RU, ZH");
+      }
       inputtext = args.join('%20');
       switch(langd){
         case "DE":
         case "de":
-          message.channel.send(translater(inputtext, "de"));
+          translater(message, inputtext, "de");
           break;
         case "EN":
         case "en":
-          message.channel.send(translater(inputtext, "en-us"));
+          translater(message, inputtext, "en-us");
           break;
         case "ES":
+        case "es":
+          translater(message, inputtext, "es");
           break;
         case "FR":
+          translater(message, inputtext, "fr");
           break;
         case "IT":
+          translater(message, inputtext, "it");
           break;
         case "JP":
         case "jp":
         case "JA":
-          done = translater(message, inputtext, "ja");
-          await sleep(2000);
-          message.channel.send(done);
+          translater(message, inputtext, "ja");
           break;
         case "NL":
+          translater(message, inputtext, "nl");
           break;
         case "PL":
+          translater(message, inputtext, "pl");
           break;
         case "RU":
+          translater(message, inputtext, "ru");
           break;
         case "CH":
         case "ZH":
+          translater(message, inputtext, "zh");
           break;
         }
         break;
