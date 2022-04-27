@@ -1510,6 +1510,7 @@ bot.on("message", async message => {
         case "usage":
           deeplusage(message);
           break;
+        }
         break;
     case "despair":
       var VC = message.member.voiceChannel;
