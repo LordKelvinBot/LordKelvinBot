@@ -1436,7 +1436,7 @@ bot.on("message", async message => {
       args.shift();
       langd = args[0];
       args.shift();
-      inputtext = args.join(' ');
+      inputtext = args.join('%20');
       switch(langd){
         case "DE":
           translater(inputtext, "de");
