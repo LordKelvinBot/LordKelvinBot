@@ -114,24 +114,18 @@ function russianActive(input) {
   });
 }
 async function translater(textinput, lang) {
-  const transpath = "/v2/translate?auth_key=" + deeplt + "&text=" + textinput + "&target_lang=" + lang
-  const options = {
-    hostname: 'api-free.deepl.com',
-    port: 443,
-    path: transpath,
-    method: 'GET',
-  };
-  console.log(options);
   const deeplapi = "https://api-free.deepl.com/v2/translate?auth_key=" + deeplt + "&text=" + textinput + "&target_lang=" + lang
-  const req = https.request(options, res => {
-    console.log(`statusCode: ${res.statusCode}`);
-
-    res.on('data', d => {
-      console.log(d);
-    });
+  https.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', (resp) => {
+  let data = '';
+  resp.on('data', (chunk) => {
+    data += chunk;
   });
-
-
+  resp.on('end', () => {
+    console.log(JSON.parse(data));
+  });
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
+  });
 }
 bot.on("message", async message => {
   console.log(message.content);
