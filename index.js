@@ -116,7 +116,7 @@ function russianActive(input) {
 async function translater(textinput, lang) {
   const transpath = "/v2/translate?auth_key=" + deeplt + "&text=" + textinput + "&target_lang=" + lang
   const options = {
-    hostname: 'https://api-free.deepl.com/',
+    hostname: 'api-free.deepl.com',
     port: 443,
     path: transpath,
     method: 'GET',
