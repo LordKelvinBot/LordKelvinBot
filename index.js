@@ -122,7 +122,7 @@ async function deeplusage(message) {
   });
   resp.on('end', () => {
     fulljson = JSON.parse(data);
-    console.log(fulljson);
+    message.channel.send("Characters Used: " + fulljson.character_count + "\n" + "Max Characters: " + fulljson.character_limit);
   });
   }).on("error", (err) => {
     console.log("Error: " + err.message);
