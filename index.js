@@ -1463,7 +1463,9 @@ bot.on("message", async message => {
         case "JP":
         case "jp":
         case "JA":
-          translater(message, inputtext, "ja");
+          done = translater(message, inputtext, "ja");
+          await sleep(2000);
+          message.channel.send(done);
           break;
         case "NL":
           break;
