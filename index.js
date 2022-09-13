@@ -765,11 +765,7 @@ bot.on("message", async message => {
           model: "text-curie-001",
           prompt: args.join(' '),
           max_tokens: 500,
-          temperature: 0.2,
-          top_p: 1,
-          n: 1,
-          stream: false,
-          logprobs: null
+          temperature: 0.2
         });
         console.log(args);
         console.log(response.data.choices[0]);
