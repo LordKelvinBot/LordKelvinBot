@@ -787,7 +787,8 @@ bot.on("message", async message => {
           if(message.guild.members.cache.get('181284528793452545')) {
             args.shift();
             console.log(args.join(' '));
-            const response = await openai.createCompletion("code-davinci-002", {
+            const response = await openai.createCompletion({
+              model: "code-davinci-002",
               prompt: args.join(' '),
               max_tokens: 500,
               temperature: 0.2,
