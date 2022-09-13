@@ -769,6 +769,7 @@ bot.on("message", async message => {
         });
         console.log(args);
         console.log(response.data.choices[0]);
+        console.log(response.data.choices[0].text);
         if(response.data.choices) {
           aisend = JSON.stringify(response.data.choices[0].text);
           aisend = aisend.substring(1,aisend.length-1);
