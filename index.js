@@ -267,12 +267,10 @@ bot.on("message", async message => {
     });
     let jackpotdata = fs.readFileSync(jackpotfile);
     let parsedjackpot = JSON.parse(jackpotdata);
-
     parsedjackpot["entries"].push({user: amount});
   }
   function runJackpot() {
     let check = "./jackpotdata/data.json.lock";
-    for(var i = 0; i < )
   }
   function calculateOdds() {
 
