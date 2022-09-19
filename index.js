@@ -267,7 +267,8 @@ bot.on("message", async message => {
     });
     let jackpotdata = fs.readFileSync(jackpotfile);
     let parsedjackpot = JSON.parse(jackpotdata);
-    parsedjackpot.push(author.id: amount);
+
+    parsedjackpot["entries"].push(user: amount);
   }
   function runJackpot() {
     let check = "./jackpotdata/data.json.lock";
