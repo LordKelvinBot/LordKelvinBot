@@ -267,7 +267,7 @@ bot.on("message", async message => {
     });
     let jackpotdata = fs.readFileSync(jackpotfile);
     let parsedjackpot = JSON.parse(jackpotdata);
-    parsedjackpot["entries"].push({user: amount});
+    parsedjackpot["entries"].push({"user": user, "amount": amount});
     fs.writeFileSync(jackpotfile, JSON.stringify(parsedjackpot));
   }
   function runJackpot() {
