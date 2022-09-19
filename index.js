@@ -967,7 +967,7 @@ bot.on("message", async message => {
       }
       break;
     case "setbal":
-      if(message.guild.members.cache.get('181284528793452545')) {
+      if(message.guild.members.fetch('181284528793452545')) {
         let author = './playerdata/' + message.author.id + '.json';
         let rawdata = fs.readFileSync(author);
         let person = JSON.parse(rawdata);
