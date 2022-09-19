@@ -1108,11 +1108,12 @@ bot.on("message", async message => {
       break;
     case "jackpot":
       if(args[1]) {
-
+        actJackpot(message.author.id, args[1]);
       }
       else {
         message.channel.send("Please put an amount.")
       }
+      break;
     case "russiancreate":
       if(!args[1]) {
         message.channel.send("WIP. Type in a number after to make a lobby ID.")
