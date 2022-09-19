@@ -242,6 +242,50 @@ bot.on("message", async message => {
     fs.writeFileSync(newuserpath, JSON.stringify(newperson));
     return message.channel.send(amount + " has successfully been sent to " + "<@" + newuserid + ">");
   }
+  function actJackpot(user, amount) {
+    if (!user || !amount || isNaN(amount)) return message.channel.send("Please input a number");
+    if (amount < 1) return message.channel.send("Input a valid number more than 0.");
+    if (brokeCheck(messageAuthor, amount)) return message.channel.send("You don't have enough money to do that.");
+    let check = "./jackpotdata/data.json.lock";
+    let jackpotfile = './jackpotdata/data.json';
+    let author = './playerdata/' + user + '.json';
+    if(check.exists) return message.channel.send("Round is locked.");
+    fs.readFile(author, (err, data) => {
+      if (err) {
+        return message.channel.send("You don't exist");
+      }
+    });
+    let rawdata = fs.readFileSync(author);
+    let person = JSON.parse(rawdata);
+    person.money = parseInt(person.money) - parseInt(amount);
+    person.lastreset = parseInt(person.lastreset);
+    fs.writeFileSync(author, JSON.stringify(person));
+    fs.readFile(jackpotfile, (err, data) => {
+      if (err) {
+        return message.channel.send("Contact admin.");
+      }
+    });
+    let jackpotdata = fs.readFileSync(jackpotfile);
+    let parsedjackpot = JSON.parse(jackpotdata);
+    parsedjackpot.push(author.id: amount);
+  }
+  function runJackpot() {
+    let check = "./jackpotdata/data.json.lock";
+    for(var i = 0; i < )
+  }
+  function calculateOdds() {
+
+  }
+  async function startJackpotTimer() {
+    let lockfile = "./jackpotdata/data.json.lock";
+    sleep(60000);
+    try {
+      fs.writeFileSync(lockfile);
+    } catch (err) {
+      console.error(err);
+    }
+    runJackpot();
+  }
   function getSubredditImage() { //methods
 
     fetch('https://www.reddit.com/r/cats.json')
@@ -1062,12 +1106,18 @@ bot.on("message", async message => {
         }
       }
       break;
+    case "jackpot":
+      if(args[1]) {
+
+      }
+      else {
+        message.channel.send("Please put an amount.")
+      }
     case "russiancreate":
       if(!args[1]) {
         message.channel.send("WIP. Type in a number after to make a lobby ID.")
       } else if (args[1]) {
         message.channel.send("Game created, you have been added to the game")
-
       }
       break;
     case "img":
