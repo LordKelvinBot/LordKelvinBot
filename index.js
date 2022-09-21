@@ -1164,7 +1164,7 @@ bot.on("message", async message => {
         actJackpot(message.author.id, args[1]);
       }
       else {
-        message.channel.send("Please put an amount.")
+        DisplayAllOdds();
       }
       break;
     case "russiancreate":
