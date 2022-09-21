@@ -259,7 +259,10 @@ bot.on("message", async message => {
     let parsedjackpot = JSON.parse(jackpotdata);
     let rawdata = fs.readFileSync(author);
     let person = JSON.parse(rawdata);
-    if(parsedjackpot["entries"].hasOwnProperty)
+    for(var user in parsedjackpot["entries"]) {
+      if(message.author.id == parsedjackpot["entries"][user]["user"]) return message.channel.send("You've already entered.");
+      console.log(user + ": " + parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"])
+    }
     person.money = parseInt(person.money) - parseInt(amount);
     person.lastreset = parseInt(person.lastreset);
     fs.writeFileSync(author, JSON.stringify(person));
