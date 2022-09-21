@@ -293,7 +293,7 @@ bot.on("message", async message => {
     let jackpotfile = './jackpotdata/data.json';
     let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
     for(var user in parsedjackpot["entries"]) {
-      console.log(user + ": " + user.user + ": " + parsedjackpot["entries"].user.amount)
+      console.log(user + ": " + user[user]+ ": " + user[amount])
     }
   }
   async function startJackpotTimer() {
