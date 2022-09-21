@@ -310,9 +310,11 @@ bot.on("message", async message => {
     for(var user in parsedjackpot["entries"]) {
       console.log(parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"]);
       total += parsedjackpot["entries"][user]["amount"];
-      if(parsedjackpot["entries"][user]["user"] == author) myamount = parsedjackpot["entries"][user]["amount"];
+      if(parsedjackpot["entries"][user]["user"] == author) {
+        myamount = parsedjackpot["entries"][user]["amount"];
+      }
     }
-    message.channel.send("<@" + message.author.id + "> " + "odds are " + (myamount.divide(total)));
+    message.channel.send("<@" + message.author.id + "> " + "odds are " + (myamount/parseFloat(total)));
   }
   function DisplayAllOdds() {
     total = 0;
