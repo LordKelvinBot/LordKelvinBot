@@ -270,16 +270,31 @@ bot.on("message", async message => {
     });
     parsedjackpot["entries"].push({"user": user, "amount": amount});
     fs.writeFileSync(jackpotfile, JSON.stringify(parsedjackpot));
-    return message.channel.send("User <@" + message.author.id + ">" + "added " + amount + " to jackpot.")
+    if(parsedjackpot.length >= 2) {
+      message.channel.send("Jackpot closing in 60 seconds.")
+      startJackpotTimer();
+    }
+    return message.channel.send("User <@" + message.author.id + ">" + " added " + amount + " to jackpot.")
   }
   function runJackpot() {
     let check = "./jackpotdata/data.json.lock";
+    let jackpotfile = './jackpotdata/data.json';
+    fs.readFile(jackpotfile, (err, data) => {
+      if (err) {
+        return message.channel.send("Contact admin.");
+      }
+    });
+    let jackpotdata = fs.readFileSync(jackpotfile);
     if(check.exists) {
-      
+      calculateOdds();
     }
   }
   function calculateOdds() {
-
+    let jackpotfile = './jackpotdata/data.json';
+    let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
+    for(var user in parsedjackpot) {
+      console.log(user + ": " + parsedjackpot[user])
+    }
   }
   async function startJackpotTimer() {
     let lockfile = "./jackpotdata/data.json.lock";
@@ -931,6 +946,9 @@ bot.on("message", async message => {
           message.channel.send(wsend);
         });
       }
+      break;
+    case "calculate":
+      calculateOdds();
       break;
     case "uptime":
       let totalSeconds = (bot.uptime / 1000);
