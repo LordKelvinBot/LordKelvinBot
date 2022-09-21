@@ -312,7 +312,7 @@ bot.on("message", async message => {
       total += parsedjackpot["entries"][user]["amount"];
       if(parsedjackpot["entries"][user]["user"] == author) myamount = parsedjackpot["entries"][user]["amount"];
     }
-    message.channel.send("<@" + message.author.id + "> " + "odds are " + myamount/total);
+    message.channel.send("<@" + message.author.id + "> " + "odds are " + (myamount.divide(total)));
   }
   function DisplayAllOdds() {
     total = 0;
@@ -325,6 +325,12 @@ bot.on("message", async message => {
       console.log(parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"]);
       message.channel.send("<@" + parsedjackpot["entries"][user]["user"] + "> " + "odds are " + parsedjackpot["entries"][user]["amount"]/total);
     }
+  }
+  function inJackpot() {
+    for(var user in parsedjackpot["entries"]) {
+      if(parsedjackpot["entries"][user]["user"] == message.author.id) return true;
+    }
+    return false;
   }
   async function startJackpotTimer() {
     let lockfile = "./jackpotdata/data.json.lock";
@@ -1162,6 +1168,9 @@ bot.on("message", async message => {
     case "jackpot":
       if(args[1]) {
         actJackpot(message.author.id, args[1]);
+      }
+      else if (inJackpot()) {
+        calculateMyOdds();
       }
       else {
         DisplayAllOdds();
