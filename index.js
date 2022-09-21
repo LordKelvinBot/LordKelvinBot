@@ -292,8 +292,8 @@ bot.on("message", async message => {
   function calculateOdds() {
     let jackpotfile = './jackpotdata/data.json';
     let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
-    for(var user in parsedjackpot) {
-      console.log(user + ": " + parsedjackpot[user])
+    for(var user in parsedjackpot["entries"]) {
+      console.log(user + ": " + user.amount)
     }
   }
   async function startJackpotTimer() {
