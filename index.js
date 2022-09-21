@@ -255,8 +255,11 @@ bot.on("message", async message => {
         return message.channel.send("You don't exist");
       }
     });
+    let jackpotdata = fs.readFileSync(jackpotfile);
+    let parsedjackpot = JSON.parse(jackpotdata);
     let rawdata = fs.readFileSync(author);
     let person = JSON.parse(rawdata);
+    if(parsedjackpot["entries"].hasOwnProperty)
     person.money = parseInt(person.money) - parseInt(amount);
     person.lastreset = parseInt(person.lastreset);
     fs.writeFileSync(author, JSON.stringify(person));
@@ -265,13 +268,13 @@ bot.on("message", async message => {
         return message.channel.send("Contact admin.");
       }
     });
-    let jackpotdata = fs.readFileSync(jackpotfile);
-    let parsedjackpot = JSON.parse(jackpotdata);
     parsedjackpot["entries"].push({"user": user, "amount": amount});
     fs.writeFileSync(jackpotfile, JSON.stringify(parsedjackpot));
+    return message.channel.send("User <@" + message.author.id + ">" + "added " + amount + " to jackpot.")
   }
   function runJackpot() {
     let check = "./jackpotdata/data.json.lock";
+    if(!)
   }
   function calculateOdds() {
 
