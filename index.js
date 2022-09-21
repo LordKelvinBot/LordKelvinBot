@@ -301,18 +301,18 @@ bot.on("message", async message => {
       total += parsedjackpot["entries"][user]["amount"];
     }
   }
-  function calculateMyOdds(author) {
+  function calculateMyOdds() {
     total = 0;
     myamount = 0;
     let jackpotfile = './jackpotdata/data.json';
     let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
-    let author = author.id;
+    let author = message.author.id;
     for(var user in parsedjackpot["entries"]) {
       console.log(parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"]);
       total += parsedjackpot["entries"][user]["amount"];
       if(parsedjackpot["entries"][user]["user"] == author) myamount = parsedjackpot["entries"][user]["amount"];
     }
-    message.channel.send("<@" + author.id + "> " + "odds are " + myamount/total);
+    message.channel.send("<@" + message.author.id + "> " + "odds are " + myamount/total);
   }
   function DisplayAllOdds() {
     total = 0;
