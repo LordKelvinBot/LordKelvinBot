@@ -327,6 +327,8 @@ bot.on("message", async message => {
     }
   }
   function inJackpot() {
+    let jackpotfile = './jackpotdata/data.json';
+    let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
     for(var user in parsedjackpot["entries"]) {
       if(parsedjackpot["entries"][user]["user"] == message.author.id) return true;
     }
