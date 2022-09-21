@@ -273,7 +273,7 @@ bot.on("message", async message => {
     });
     parsedjackpot["entries"].push({"user": user, "amount": amount});
     fs.writeFileSync(jackpotfile, JSON.stringify(parsedjackpot));
-    if(parsedjackpot.length >= 2) {
+    if(parsedjackpot["entries"].length >= 2) {
       message.channel.send("Jackpot closing in 60 seconds.")
       startJackpotTimer();
     }
@@ -293,10 +293,37 @@ bot.on("message", async message => {
     }
   }
   function calculateOdds() {
+    total = 0;
     let jackpotfile = './jackpotdata/data.json';
     let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
     for(var user in parsedjackpot["entries"]) {
-      console.log(user + ": " + parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"])
+      console.log(parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"]);
+      total += parsedjackpot["entries"][user]["amount"];
+    }
+  }
+  function calculateMyOdds(author) {
+    total = 0;
+    myamount = 0;
+    let jackpotfile = './jackpotdata/data.json';
+    let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
+    let author = author.id;
+    for(var user in parsedjackpot["entries"]) {
+      console.log(parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"]);
+      total += parsedjackpot["entries"][user]["amount"];
+      if(parsedjackpot["entries"][user]["user"] == author) myamount = parsedjackpot["entries"][user]["amount"];
+    }
+    message.channel.send("<@" + author.id + "> " + "odds are " + myamount/total);
+  }
+  function DisplayAllOdds() {
+    total = 0;
+    let jackpotfile = './jackpotdata/data.json';
+    let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
+    for(var user in parsedjackpot["entries"]) {
+      total += parsedjackpot["entries"][user]["amount"];
+    }
+    for(var user in parsedjackpot["entries"]) {
+      console.log(parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"]);
+      message.channel.send("<@" + parsedjackpot["entries"][user]["user"] + "> " + "odds are " + parsedjackpot["entries"][user]["amount"]/total);
     }
   }
   async function startJackpotTimer() {
