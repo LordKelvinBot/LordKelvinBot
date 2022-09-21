@@ -274,7 +274,9 @@ bot.on("message", async message => {
   }
   function runJackpot() {
     let check = "./jackpotdata/data.json.lock";
-    if(!)
+    if(check.exists) {
+      
+    }
   }
   function calculateOdds() {
 
