@@ -857,10 +857,10 @@ bot.on("message", async message => {
         let memberiddd = toString(message.author.id);
         const responses = await openai.createChatCompletion({
           model: "gpt-3.5-turbo",
-          messages: [{role: "user", content: "Hello world"}],
+          messages: [{role: "user", content: messageargs}],
         });
         console.log(responses.data.choices[0].message);
-        if (response.data.choices) {
+        if (responses.data.choices) {
           aisend = JSON.stringify(responses.data.choices[0].message.content);
           aisend = aisend.substring(1, aisend.length - 1);
           aisend = aisend.replaceAll('\\n', '\n');
