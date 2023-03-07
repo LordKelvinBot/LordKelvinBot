@@ -855,9 +855,9 @@ bot.on("message", async message => {
         console.log(args.join(' '));
         messageargs = args.join(' ');
         let memberiddd = toString(message.author.id);
-        const responses = await openai.createCompletion({
+        const responses = await openai.createChatCompletion({
           model: "gpt-3.5-turbo",
-          messages: [{role: "user", content: messageargs}],
+          messages: [{role: "user", content: "Hello world"}],
         });
         console.log(responses.data.choices[0].message);
         if (response.data.choices) {
