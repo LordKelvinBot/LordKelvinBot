@@ -854,15 +854,15 @@ bot.on("message", async message => {
         args.shift();
         console.log(args.join(' '));
         let memberiddd = toString(message.author.id);
-        const response = await openai.createCompletion({
+        const responses = await openai.createCompletion({
           model: "gpt-3.5-turbo",
           messages: [{role: "user", content: args.join(' ')}],
         });
         console.log(args);
-        console.log(response.data.choices[0]);
-        console.log(response.data.choices[0].text);
+        console.log(responses.data.choices[0]);
+        console.log(responses.data.choices[0].text);
         if (response.data.choices) {
-          aisend = JSON.stringify(response.data.choices[0].text);
+          aisend = JSON.stringify(responses.data.choices[0].text);
           aisend = aisend.substring(1, aisend.length - 1);
           aisend = aisend.replaceAll('\\n', '\n');
           if (aisend.length < 4000)
@@ -879,7 +879,7 @@ bot.on("message", async message => {
           if(message.guild.members.cache.get('181284528793452545')) {
             args.shift();
             console.log(args.join(' '));
-            const response = await openai.createCompletion({
+            const responsed = await openai.createCompletion({
               model: "code-davinci-002",
               prompt: args.join(' '),
               max_tokens: 500,
@@ -890,9 +890,9 @@ bot.on("message", async message => {
               logprobs: null
             });
             console.log(args);
-            console.log(response.data.choices[0]);
+            console.log(responsed.data.choices[0]);
             if(response.data.choices) {
-              aisend = JSON.stringify(response.data.choices[0].text);
+              aisend = JSON.stringify(responsed.data.choices[0].text);
               aisend = aisend.substring(1,aisend.length-1);
               aisend = aisend.replaceAll('\\n', '\n');
               if(aisend.length < 4000)
