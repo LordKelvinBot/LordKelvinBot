@@ -293,48 +293,11 @@ bot.on("message", async message => {
     }
   }
   function calculateOdds() {
-    total = 0;
     let jackpotfile = './jackpotdata/data.json';
     let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
     for(var user in parsedjackpot["entries"]) {
-      console.log(parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"]);
-      total += parsedjackpot["entries"][user]["amount"];
+      console.log(user + ": " + parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"])
     }
-  }
-  function calculateMyOdds() {
-    total = 0;
-    myamount = 0;
-    let jackpotfile = './jackpotdata/data.json';
-    let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
-    let author = message.author.id;
-    for(var user in parsedjackpot["entries"]) {
-      console.log(parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"]);
-      total += parsedjackpot["entries"][user]["amount"];
-      if(parsedjackpot["entries"][user]["user"] == author) {
-        myamount = parsedjackpot["entries"][user]["amount"];
-      }
-    }
-    message.channel.send("<@" + message.author.id + "> " + "odds are " + (myamount/parseFloat(total)));
-  }
-  function DisplayAllOdds() {
-    total = 0;
-    let jackpotfile = './jackpotdata/data.json';
-    let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
-    for(var user in parsedjackpot["entries"]) {
-      total += parsedjackpot["entries"][user]["amount"];
-    }
-    for(var user in parsedjackpot["entries"]) {
-      console.log(parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"]);
-      message.channel.send("<@" + parsedjackpot["entries"][user]["user"] + "> " + "odds are " + parsedjackpot["entries"][user]["amount"]/total);
-    }
-  }
-  function inJackpot() {
-    let jackpotfile = './jackpotdata/data.json';
-    let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
-    for(var user in parsedjackpot["entries"]) {
-      if(parsedjackpot["entries"][user]["user"] == message.author.id) return true;
-    }
-    return false;
   }
   async function startJackpotTimer() {
     let lockfile = "./jackpotdata/data.json.lock";
@@ -887,6 +850,30 @@ bot.on("message", async message => {
           message.channel.send("Response was null/empty");
         }
       break;
+      case "chat":
+        args.shift();
+        console.log(args.join(' '));
+        let memberid = toString(message.author.id);
+        const response = await openai.createCompletion({
+          model: "gpt-3.5-turbo",
+          messages: [{role: "user", content: args.join(' ')}],
+        });
+        console.log(args);
+        console.log(response.data.choices[0]);
+        console.log(response.data.choices[0].text);
+        if (response.data.choices) {
+          aisend = JSON.stringify(response.data.choices[0].text);
+          aisend = aisend.substring(1, aisend.length - 1);
+          aisend = aisend.replaceAll('\\n', '\n');
+          if (aisend.length < 4000)
+            message.channel.send(aisend);
+          else {
+            message.channel.send("Message was over 4000 characters");
+          }
+        } else {
+          message.channel.send("Response was null/empty");
+        }
+        break;
       case "codeai":
           let memberidd = toString(message.author.id);
           if(message.guild.members.cache.get('181284528793452545')) {
@@ -1173,11 +1160,8 @@ bot.on("message", async message => {
       if(args[1]) {
         actJackpot(message.author.id, args[1]);
       }
-      else if (inJackpot()) {
-        calculateMyOdds();
-      }
       else {
-        DisplayAllOdds();
+        message.channel.send("Please put an amount.")
       }
       break;
     case "russiancreate":
