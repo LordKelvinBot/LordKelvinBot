@@ -858,9 +858,7 @@ bot.on("message", async message => {
           model: "gpt-3.5-turbo",
           messages: [{role: "user", content: args.join(' ')}],
         });
-        console.log(args);
-        console.log(responses.data.choices[0]);
-        console.log(responses.data.choices[0].text);
+        console.log(responses.data.choices[0].message);
         if (response.data.choices) {
           aisend = JSON.stringify(responses.data.choices[0].message.content);
           aisend = aisend.substring(1, aisend.length - 1);
