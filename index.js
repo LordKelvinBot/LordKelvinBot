@@ -862,7 +862,7 @@ bot.on("message", async message => {
         console.log(responses.data.choices[0]);
         console.log(responses.data.choices[0].text);
         if (response.data.choices) {
-          aisend = JSON.stringify(responses.data.choices[0].text);
+          aisend = JSON.stringify(responses.data.choices[0].message.content);
           aisend = aisend.substring(1, aisend.length - 1);
           aisend = aisend.replaceAll('\\n', '\n');
           if (aisend.length < 4000)
