@@ -853,13 +853,13 @@ bot.on("message", async message => {
       case "chat":
         args.shift();
         console.log(args.join(' '));
+        messageargs = args.join(' ');
         let memberiddd = toString(message.author.id);
         const responses = await openai.createCompletion({
           model: "gpt-3.5-turbo",
-          messages: [{role: "user", content: args.join(' ')}],
+          messages: [{role: "user", content: messageargs}],
         });
-        console.log(responses);
-        //console.log(responses.data.choices[0].message);
+        console.log(responses.data.choices[0].message);
         if (response.data.choices) {
           aisend = JSON.stringify(responses.data.choices[0].message.content);
           aisend = aisend.substring(1, aisend.length - 1);
