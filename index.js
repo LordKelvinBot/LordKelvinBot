@@ -853,7 +853,7 @@ bot.on("message", async message => {
       case "chat":
         args.shift();
         console.log(args.join(' '));
-        let memberid = toString(message.author.id);
+        let memberiddd = toString(message.author.id);
         const response = await openai.createCompletion({
           model: "gpt-3.5-turbo",
           messages: [{role: "user", content: args.join(' ')}],
