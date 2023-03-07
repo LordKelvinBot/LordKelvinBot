@@ -43,16 +43,28 @@ global.servers = {};
 
 //requires
 'use strict';
-const { Configuration, OpenAIApi } = require("openai");
-const { Discord , Intents , Client , MessageEmbed} = require("discord.js");
+const {
+  Configuration,
+  OpenAIApi
+} = require("openai");
+const {
+  Discord,
+  Intents,
+  Client,
+  MessageEmbed
+} = require("discord.js");
 const superagent = require("superagent");
 const fetch = require('node-fetch');
 const randomPuppy = require('random-puppy');
-const {fetchSubreddit} = require('fetch-subreddit');
+const {
+  fetchSubreddit
+} = require('fetch-subreddit');
 const api = "https://jsonplaceholder.typicode.com/posts";
 const pics = "https://www.reddit.com/r/pics.json";
 const snoowrap = require('snoowrap');
-const bot = new Client({ intents: [Intents.FLAGS.GUILDS]});
+const bot = new Client({
+  intents: [Intents.FLAGS.GUILDS]
+});
 const Jimp = require('jimp');
 const snekfetch = require("snekfetch");
 const fs = require('fs');
@@ -106,8 +118,7 @@ function russianActive(input) {
     if (err) {
       console.log("Game does not exist");
       return false;
-    }
-    else {
+    } else {
       console.log("Game exists, player joining");
       return true;
     }
@@ -116,14 +127,14 @@ function russianActive(input) {
 async function deeplusage(message) {
   const deeplapid = "https://api-free.deepl.com/v2/usage?auth_key=" + deeplt
   https.get(deeplapid, (resp) => {
-  let data = '';
-  resp.on('data', (chunk) => {
-    data += chunk;
-  });
-  resp.on('end', () => {
-    fulljson = JSON.parse(data);
-    message.channel.send("Characters Used: " + fulljson.character_count + "\n" + "Max Characters: " + fulljson.character_limit);
-  });
+    let data = '';
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+    resp.on('end', () => {
+      fulljson = JSON.parse(data);
+      message.channel.send("Characters Used: " + fulljson.character_count + "\n" + "Max Characters: " + fulljson.character_limit);
+    });
   }).on("error", (err) => {
     console.log("Error: " + err.message);
   });
@@ -131,14 +142,14 @@ async function deeplusage(message) {
 async function translater(message, textinput, lang) {
   const deeplapi = "https://api-free.deepl.com/v2/translate?auth_key=" + deeplt + "&text=" + textinput + "&target_lang=" + lang
   https.get(deeplapi, (resp) => {
-  let data = '';
-  resp.on('data', (chunk) => {
-    data += chunk;
-  });
-  resp.on('end', () => {
-    fulljson = JSON.parse(data);
-    message.channel.send(fulljson.translations[0].text);
-  });
+    let data = '';
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+    resp.on('end', () => {
+      fulljson = JSON.parse(data);
+      message.channel.send(fulljson.translations[0].text);
+    });
   }).on("error", (err) => {
     console.log("Error: " + err.message);
   });
@@ -148,12 +159,10 @@ bot.on("message", async message => {
 
   var messageContent = message.content;
   var justInCase = 0;
-  while (messageContent.indexOf("@") > -1)
-  {
+  while (messageContent.indexOf("@") > -1) {
     message.content.replace("@", "@ ");
     justInCase++;
-    if (justInCase > 15)
-    {
+    if (justInCase > 15) {
       break;
     }
   }
@@ -171,6 +180,7 @@ bot.on("message", async message => {
   function send(text) {
     message.channel.send(text);
   }
+
   function balanceCheck(id) {
     let author = './playerdata/' + id + '.json';
     fs.readFile(author, (err, data) => {
@@ -182,37 +192,42 @@ bot.on("message", async message => {
     let person = JSON.parse(rawdata);
     message.channel.send("Balance: $" + person.money);
   }
+
   function TimeCheck(user) {
     let author = './playerdata/' + user + '.json';
     let deta = fs.readFileSync(author);
     let person = JSON.parse(deta);
-    timeleft = ((parseInt(person.lastreset)+300000) - parseInt(Date.now()));
-    if(timeleft <= 0) {
+    timeleft = ((parseInt(person.lastreset) + 300000) - parseInt(Date.now()));
+    if (timeleft <= 0) {
       valid = true;
     } else {
       valid = false;
     }
     return valid;
   }
+
   function sleep(ms) {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
   }
+
   function compareWeatherDates(date, parsed) {
-      for (var i = 0; i < 5; i++) {
-        if(date == parsed.forecast[i].day) {
-          return i;
-        }
+    for (var i = 0; i < 5; i++) {
+      if (date == parsed.forecast[i].day) {
+        return i;
       }
-      return 0;
+    }
+    return 0;
   }
+
   function getIDFromMention(mention) {
-  	const matches = mention.match(/^<@!?(\d+)>$/); // Uses RegEx to sort ID
-  	if (!matches) return;
-  	const id = matches[1];
-  	return id;
+    const matches = mention.match(/^<@!?(\d+)>$/); // Uses RegEx to sort ID
+    if (!matches) return;
+    const id = matches[1];
+    return id;
   }
+
   function sendMoney(olduser, newuser, amount) {
     if (!newuser || !amount || isNaN(amount)) return message.channel.send("Please mention the user you want to send money to, then add the amount.");
     if (amount < 1) return message.channel.send("Input a valid number more than 0.")
@@ -242,6 +257,7 @@ bot.on("message", async message => {
     fs.writeFileSync(newuserpath, JSON.stringify(newperson));
     return message.channel.send(amount + " has successfully been sent to " + "<@" + newuserid + ">");
   }
+
   function actJackpot(user, amount) {
     if (!user || !amount || isNaN(amount)) return message.channel.send("Please input a number");
     if (amount < 1) return message.channel.send("Input a valid number more than 0.");
@@ -249,7 +265,7 @@ bot.on("message", async message => {
     let check = "./jackpotdata/data.json.lock";
     let jackpotfile = './jackpotdata/data.json';
     let author = './playerdata/' + user + '.json';
-    if(check.exists) return message.channel.send("Round is locked.");
+    if (check.exists) return message.channel.send("Round is locked.");
     fs.readFile(author, (err, data) => {
       if (err) {
         return message.channel.send("You don't exist");
@@ -259,9 +275,9 @@ bot.on("message", async message => {
     let parsedjackpot = JSON.parse(jackpotdata);
     let rawdata = fs.readFileSync(author);
     let person = JSON.parse(rawdata);
-    for(var user in parsedjackpot["entries"]) {
-      if(message.author.id == parsedjackpot["entries"][user]["user"]) return message.channel.send("You've already entered.");
-      console.log(user + ": " + parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"])
+    for (var user in parsedjackpot["entries"]) {
+      if (message.author.id == parsedjackpot["entries"][user]["user"]) return message.channel.send("You've already entered.");
+      console.log(user + ": " + parsedjackpot["entries"][user]["user"] + ": " + parsedjackpot["entries"][user]["amount"])
     }
     person.money = parseInt(person.money) - parseInt(amount);
     person.lastreset = parseInt(person.lastreset);
@@ -271,14 +287,18 @@ bot.on("message", async message => {
         return message.channel.send("Contact admin.");
       }
     });
-    parsedjackpot["entries"].push({"user": user, "amount": amount});
+    parsedjackpot["entries"].push({
+      "user": user,
+      "amount": amount
+    });
     fs.writeFileSync(jackpotfile, JSON.stringify(parsedjackpot));
-    if(parsedjackpot["entries"].length >= 2) {
+    if (parsedjackpot["entries"].length >= 2) {
       message.channel.send("Jackpot closing in 60 seconds.")
       startJackpotTimer();
     }
     return message.channel.send("User <@" + message.author.id + ">" + " added " + amount + " to jackpot.")
   }
+
   function runJackpot() {
     let check = "./jackpotdata/data.json.lock";
     let jackpotfile = './jackpotdata/data.json';
@@ -288,51 +308,55 @@ bot.on("message", async message => {
       }
     });
     let jackpotdata = fs.readFileSync(jackpotfile);
-    if(check.exists) {
+    if (check.exists) {
       calculateOdds();
     }
   }
+
   function calculateOdds() {
     total = 0;
     let jackpotfile = './jackpotdata/data.json';
     let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
-    for(var user in parsedjackpot["entries"]) {
-      console.log(parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"]);
+    for (var user in parsedjackpot["entries"]) {
+      console.log(parsedjackpot["entries"][user]["user"] + ": " + parsedjackpot["entries"][user]["amount"]);
       total += parsedjackpot["entries"][user]["amount"];
     }
   }
+
   function calculateMyOdds() {
     total = 0;
     myamount = 0;
     let jackpotfile = './jackpotdata/data.json';
     let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
     let author = message.author.id;
-    for(var user in parsedjackpot["entries"]) {
-      console.log(parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"]);
+    for (var user in parsedjackpot["entries"]) {
+      console.log(parsedjackpot["entries"][user]["user"] + ": " + parsedjackpot["entries"][user]["amount"]);
       total += parsedjackpot["entries"][user]["amount"];
-      if(parsedjackpot["entries"][user]["user"] == author) {
+      if (parsedjackpot["entries"][user]["user"] == author) {
         myamount = parsedjackpot["entries"][user]["amount"];
       }
     }
-    message.channel.send("<@" + message.author.id + "> " + "odds are " + (myamount/parseFloat(total)));
+    message.channel.send("<@" + message.author.id + "> " + "odds are " + (myamount / parseFloat(total)));
   }
+
   function DisplayAllOdds() {
     total = 0;
     let jackpotfile = './jackpotdata/data.json';
     let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
-    for(var user in parsedjackpot["entries"]) {
+    for (var user in parsedjackpot["entries"]) {
       total += parsedjackpot["entries"][user]["amount"];
     }
-    for(var user in parsedjackpot["entries"]) {
-      console.log(parsedjackpot["entries"][user]["user"]+ ": " + parsedjackpot["entries"][user]["amount"]);
-      message.channel.send("<@" + parsedjackpot["entries"][user]["user"] + "> " + "odds are " + parsedjackpot["entries"][user]["amount"]/total);
+    for (var user in parsedjackpot["entries"]) {
+      console.log(parsedjackpot["entries"][user]["user"] + ": " + parsedjackpot["entries"][user]["amount"]);
+      message.channel.send("<@" + parsedjackpot["entries"][user]["user"] + "> " + "odds are " + parsedjackpot["entries"][user]["amount"] / total);
     }
   }
+
   function inJackpot() {
     let jackpotfile = './jackpotdata/data.json';
     let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
-    for(var user in parsedjackpot["entries"]) {
-      if(parsedjackpot["entries"][user]["user"] == message.author.id) return true;
+    for (var user in parsedjackpot["entries"]) {
+      if (parsedjackpot["entries"][user]["user"] == message.author.id) return true;
     }
     return false;
   }
@@ -346,6 +370,7 @@ bot.on("message", async message => {
     }
     runJackpot();
   }
+
   function getSubredditImage() { //methods
 
     fetch('https://www.reddit.com/r/cats.json')
@@ -385,10 +410,11 @@ bot.on("message", async message => {
     message.channel.send(dogEmbed);
     return;
   }
+
   function isRegistered(m) {
     au = "./playerdata/" + m + ".json";
-    fs.access(au,fs.F_OK, (err) => {
-      if(err) {
+    fs.access(au, fs.F_OK, (err) => {
+      if (err) {
         console.log("file not found, creating one")
         register(m)
         return false
@@ -397,14 +423,14 @@ bot.on("message", async message => {
       return true
     })
   }
+
   function register(ab) {
     let a = ab + '.json';
     fs.stat('./playerdata/' + a, function(err) {
       if (!err) {
         console.log("file exists");
         return false;
-      }
-      else if (err.code === 'ENOENT') {
+      } else if (err.code === 'ENOENT') {
         console.error('file does not exist');
         let newdata = {
           money: 1000,
@@ -455,8 +481,8 @@ bot.on("message", async message => {
     var voiceChannel = message.member.voiceChannel;
     voiceChannel.join().then(connection => {
       console.log("joined channel");
-  //    new String() = String convertedToString;
-  //    String convertedToString = Object.toString(server.queue[0]);
+      //    new String() = String convertedToString;
+      //    String convertedToString = Object.toString(server.queue[0]);
       const stream = ytdl(convertedToString, {
         filter: 'audioonly',
         quality: 'highestaudio'
@@ -513,7 +539,9 @@ bot.on("message", async message => {
         limit: 1
       })
       .then(messages => {
-        message.delete({ timeout: 500 });
+        message.delete({
+          timeout: 500
+        });
         // //Logging the number of messages deleted on both the channel and console.
       })
       .catch(err => {
@@ -521,6 +549,7 @@ bot.on("message", async message => {
         log(err);
       })
   }
+
   function exchangeMoney(id, exchangeAmount, name) {
     //message.guild.members.cache.get('181284528793452545')
     bot.users.cache.get('181284528793452545').send(name + " wants to redeem " + exchangeAmount);
@@ -530,7 +559,7 @@ bot.on("message", async message => {
     var investment = amount;
     console.log("Investment = " + investment);
     await sleep(100);
-    if(isNaN(amount)) return message.channel.send("Enter a valid number.")
+    if (isNaN(amount)) return message.channel.send("Enter a valid number.")
     if (amount <= 1) return message.channel.send("Input a valid number more than 0.")
     if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
     var slot1 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
@@ -540,8 +569,7 @@ bot.on("message", async message => {
     let mAuthor = './playerdata/' + id + '.json';
     let raw = fs.readFileSync(mAuthor);
     let per = JSON.parse(raw);
-    if (slot1 == slot2 && slot2 == slot3 && slot1 == slot3)
-    {
+    if (slot1 == slot2 && slot2 == slot3 && slot1 == slot3) {
       var moneyEmbed = new MessageEmbed()
         .setColor(generateHex())
         .setTitle("Result")
@@ -554,9 +582,7 @@ bot.on("message", async message => {
       };
       let writedata = JSON.stringify(newdata);
       fs.writeFileSync(mAuthor, writedata);
-    }
-    else
-    {
+    } else {
       var moneyEmbed = new MessageEmbed()
         .setColor(generateHex())
         .setTitle("Result")
@@ -580,8 +606,7 @@ bot.on("message", async message => {
     let per = JSON.parse(raw);
     if (amount <= 1) return message.channel.send("Input a valid number more than 0.")
     if (brokeCheck(messageAuthor, investment)) return message.channel.send("You don't have enough money to do that.");
-    if (Math.floor(Math.random() * 2) > 0)
-    {
+    if (Math.floor(Math.random() * 2) > 0) {
       message.channel.send("You won $" + investment);
       //(author, reputation, copper, silver, gold, platinum, sunset, discord, )
       let newdata = {
@@ -590,9 +615,7 @@ bot.on("message", async message => {
       };
       let writedata = JSON.stringify(newdata);
       fs.writeFileSync(path, writedata);
-    }
-    else
-    {
+    } else {
       message.channel.send("You lost $" + investment);
       let newdata = {
         money: parseInt(per.money) - parseInt(investment),
@@ -602,6 +625,7 @@ bot.on("message", async message => {
       fs.writeFileSync(path, writedata);
     }
   }
+
   function sendM(name) {
     message.channel.send({
       files: ["./images/m/" + name + ".jpg"]
@@ -623,8 +647,8 @@ bot.on("message", async message => {
   //gambling functions
   let messageAuthor = message.author.id + '.json';
   let messageAuthorPath = './playerdata/' + message.author.id + '.json';
-  function read (author)
-  {
+
+  function read(author) {
     var authorDirect = './playerdata/' + author;
     fs.readFile(authorDirect, (err, data) => {
       if (err) log("Does not exist");
@@ -633,14 +657,14 @@ bot.on("message", async message => {
     let person = JSON.parse(rawdata);
     return person;
   }
-  function write (author, reputation, copper)
-  {
+
+  function write(author, reputation, copper) {
 
     log("Pre-stuff Data: " + reputation + copper);
     fs.stat('./playerdata/' + author, function(err) {
       if (!err) {
         log("file exists");
-        log ("File author: " + author);
+        log("File author: " + author);
         log("Inside .stat Data (File exists): " + reputation + copper);
         log('Updating existing player JSON file of ' + author + ' With the values copper:' + copper);
         if (copper == null) copper = read(author).copper;
@@ -653,8 +677,7 @@ bot.on("message", async message => {
         let data = JSON.stringify(newdata);
         fs.writeFileSync('./playerdata/' + author, data);
         log("Data written sucessfully");
-      }
-      else if (err.code === 'ENOENT') {
+      } else if (err.code === 'ENOENT') {
         log('file does not exist');
         log("Inside .stat Data (File does not exist): " + reputation + copper);
         log('Creating new player JSON file of ' + author + ' With the values copper:' + copper);
@@ -669,8 +692,8 @@ bot.on("message", async message => {
     });
 
   }
-  function repCheck (author)
-  {
+
+  function repCheck(author) {
     let rep = read(author).reputation;
     if (rep >= 10000) return "Abraham Lincoln Himself   :sunglasses:";
     if (rep >= 5000) return "Keanu Reeves";
@@ -686,21 +709,20 @@ bot.on("message", async message => {
     if (rep <= -50) return ":thinking:";
     if (rep <= -10) return "Neutral-";
   }
-  function brokeCheck (author, bet)
-  {
+
+  function brokeCheck(author, bet) {
     if (read(author).money < bet) return true;
     return false;
   }
-  function quickConvert(amount, type)
-  {
+
+  function quickConvert(amount, type) {
     //types: 0 = copper, 1 = silver, etc.
-    return amount*(Math.pow(100, type));
+    return amount * (Math.pow(100, type));
 
   }
-  function validType (type)
-  {
-    switch (type.toLowerCase())
-    {
+
+  function validType(type) {
+    switch (type.toLowerCase()) {
       case "copper":
       case "c":
       case "cop":
@@ -719,10 +741,9 @@ bot.on("message", async message => {
         return false;
     }
   }
-  function checkMoneyType (type)
-  {
-    switch (type.toLowerCase())
-    {
+
+  function checkMoneyType(type) {
+    switch (type.toLowerCase()) {
       case "copper":
       case "c":
       case "cop":
@@ -747,8 +768,8 @@ bot.on("message", async message => {
         return false;
     }
   }
-  function convert (author)
-  {
+
+  function convert(author) {
 
     log('CONVERTING');
     fs.stat('./playerdata/' + author, function(err) {
@@ -760,31 +781,26 @@ bot.on("message", async message => {
         let platinum = 0;
 
         //Extreme Overflow
-        while (copper >= 1000000)
-        {
+        while (copper >= 1000000) {
           copper -= 1000000;
           platinum += 1;
         }
-        while (copper >= 10000)
-        {
+        while (copper >= 10000) {
           copper -= 10000;
           gold += 1;
         }
         //Overflow
-        while (copper >= 100)
-        {
+        while (copper >= 100) {
           copper -= 100;
           silver += 1;
           console.log("copper = " + copper + "\nsilver = " + silver);
         }
-        while (silver >= 100)
-        {
+        while (silver >= 100) {
           silver -= 100;
           gold += 1;
           console.log("silver = " + silver + "\ngold = " + gold);
         }
-        while (gold >= 100)
-        {
+        while (gold >= 100) {
           gold -= 100;
           platinum += 1;
           console.log("gold = " + gold + "\nplatinum = " + platinum);
@@ -797,16 +813,15 @@ bot.on("message", async message => {
           .setThumbnail(message.author.avatarURL)
           .addField("Reputation", read(author).reputation + "\nReputation Level: " + repCheck(messageAuthor))
           .addField("Money", "Copper: " + copper + "\nSilver: " + silver + "\nGold: " + gold + "\nPlatinum: " + platinum);
-          message.channel.send(moneyEmbed);
-      }
-      else if (err.code === 'ENOENT') {
+        message.channel.send(moneyEmbed);
+      } else if (err.code === 'ENOENT') {
         log("Error: File does not exist."); //happens when a user hasn't create a json file in playerdata. Use another write() function?
         message.channel.send('You don\'t have an existing file, so one will be created.');
         write(messageAuthor, 0, 0);
-        setTimeout(function(){
+        setTimeout(function() {
           convert(messageAuthor); //recursion, monkaS
-        }, 2000);                 //timeout function, in place so the recursion doesn't happen too fast. If something breaks
-      }                           //and the file can't be created, this will cause huge delays and stuff
+        }, 2000); //timeout function, in place so the recursion doesn't happen too fast. If something breaks
+      } //and the file can't be created, this will cause huge delays and stuff
     });
   }
   switch (args[0].toLowerCase()) {
@@ -822,16 +837,14 @@ bot.on("message", async message => {
       }
       break;
     case "that":
-      for (var i = sentenceArray.length - 1; i > 0; i--)
-      {
+      for (var i = sentenceArray.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
         var temp = sentenceArray[i];
         sentenceArray[i] = sentenceArray[j];
         sentenceArray[j] = temp;
       }
       var messageToBeSent = "";
-      for (var k = 0; k < sentenceArray.length; k++)
-      {
+      for (var k = 0; k < sentenceArray.length; k++) {
         messageToBeSent += sentenceArray[k] + " ";
       }
       message.channel.send(messageToBeSent);
@@ -841,15 +854,33 @@ bot.on("message", async message => {
       let timeembed = new MessageEmbed()
         .setTitle("Times around the World")
         .setDescription("World Times")
-        .addField("PST Time: " , myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}))
-        .addField("MST Time: " , myDate.toLocaleString("en-US", {timeZone: "America/Denver"}))
-        .addField("CST Time: " , myDate.toLocaleString("en-US", {timeZone: "America/Chicago"}))
-        .addField("EST Time: " , myDate.toLocaleString("en-US", {timeZone: "America/New_York"}))
-        .addField("Shanghai, CN: " , myDate.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}))
-        .addField("Seoul, SK: " , myDate.toLocaleString("en-US", {timeZone: "Asia/Seoul"}))
-        .addField("Hong Kong: " , myDate.toLocaleString("en-US", {timeZone: "Asia/Hong_Kong"}))
-        .addField("Berlin, DE: " , myDate.toLocaleString("en-US", {timeZone: "Europe/Berlin"}))
-        .addField("Paris, FR: " , myDate.toLocaleString("en-US", {timeZone: "Europe/Paris"}))
+        .addField("PST Time: ", myDate.toLocaleString("en-US", {
+          timeZone: "America/Los_Angeles"
+        }))
+        .addField("MST Time: ", myDate.toLocaleString("en-US", {
+          timeZone: "America/Denver"
+        }))
+        .addField("CST Time: ", myDate.toLocaleString("en-US", {
+          timeZone: "America/Chicago"
+        }))
+        .addField("EST Time: ", myDate.toLocaleString("en-US", {
+          timeZone: "America/New_York"
+        }))
+        .addField("Shanghai, CN: ", myDate.toLocaleString("en-US", {
+          timeZone: "Asia/Shanghai"
+        }))
+        .addField("Seoul, SK: ", myDate.toLocaleString("en-US", {
+          timeZone: "Asia/Seoul"
+        }))
+        .addField("Hong Kong: ", myDate.toLocaleString("en-US", {
+          timeZone: "Asia/Hong_Kong"
+        }))
+        .addField("Berlin, DE: ", myDate.toLocaleString("en-US", {
+          timeZone: "Europe/Berlin"
+        }))
+        .addField("Paris, FR: ", myDate.toLocaleString("en-US", {
+          timeZone: "Europe/Paris"
+        }))
       message.channel.send(timeembed);
       /*message.channel.send("PST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
       message.channel.send("MST Time: " + myDate.toLocaleString("en-US", {timeZone: "America/Denver"}));
@@ -861,24 +892,78 @@ bot.on("message", async message => {
       message.channel.send("Berlin, DE: " + myDate.toLocaleString("en-US", {timeZone: "Europe/Berlin"}));
       message.channel.send("Paris, FR: " + myDate.toLocaleString("en-US", {timeZone: "Europe/Paris"}));*/
       break;
+    case "chat":
+      args.shift();
+      console.log(args.join(' '));
+      let memberid = toString(message.author.id);
+      const response = await openai.createCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [{role: "user", content: args.join(' ')}],
+      });
+      console.log(args);
+      console.log(response.data.choices[0]);
+      console.log(response.data.choices[0].text);
+      if (response.data.choices) {
+        aisend = JSON.stringify(response.data.choices[0].text);
+        aisend = aisend.substring(1, aisend.length - 1);
+        aisend = aisend.replaceAll('\\n', '\n');
+        if (aisend.length < 4000)
+          message.channel.send(aisend);
+        else {
+          message.channel.send("Message was over 4000 characters");
+        }
+      } else {
+        message.channel.send("Response was null/empty");
+      }
+      break;
     case "ai":
+      args.shift();
+      console.log(args.join(' '));
+      let memberid = toString(message.author.id);
+      const response = await openai.createCompletion({
+        model: "text-curie-001",
+        prompt: args.join(' '),
+        max_tokens: 500,
+        temperature: 0.2
+      });
+      console.log(args);
+      console.log(response.data.choices[0]);
+      console.log(response.data.choices[0].text);
+      if (response.data.choices) {
+        aisend = JSON.stringify(response.data.choices[0].text);
+        aisend = aisend.substring(1, aisend.length - 1);
+        aisend = aisend.replaceAll('\\n', '\n');
+        if (aisend.length < 4000)
+          message.channel.send(aisend);
+        else {
+          message.channel.send("Message was over 4000 characters");
+        }
+      } else {
+        message.channel.send("Response was null/empty");
+      }
+      break;
+    case "codeai":
+      let memberidd = toString(message.author.id);
+      if (message.guild.members.cache.get('181284528793452545')) {
         args.shift();
         console.log(args.join(' '));
-        let memberid = toString(message.author.id);
         const response = await openai.createCompletion({
-          model: "text-curie-001",
+          model: "code-davinci-002",
           prompt: args.join(' '),
           max_tokens: 500,
-          temperature: 0.2
+          temperature: 0.2,
+          top_p: 1,
+          n: 2,
+          stream: false,
+          logprobs: null
         });
         console.log(args);
         console.log(response.data.choices[0]);
-        console.log(response.data.choices[0].text);
-        if(response.data.choices) {
+        if (response.data.choices) {
           aisend = JSON.stringify(response.data.choices[0].text);
-          aisend = aisend.substring(1,aisend.length-1);
+          aisend = aisend.substring(1, aisend.length - 1);
           aisend = aisend.replaceAll('\\n', '\n');
-          if(aisend.length < 4000)
+          if (aisend.length < 4000)
             message.channel.send(aisend);
           else {
             message.channel.send("Message was over 4000 characters");
@@ -886,46 +971,18 @@ bot.on("message", async message => {
         } else {
           message.channel.send("Response was null/empty");
         }
+      } else {
+        message.channel.send("Currently beta testing. ");
+      }
       break;
-      case "codeai":
-          let memberidd = toString(message.author.id);
-          if(message.guild.members.cache.get('181284528793452545')) {
-            args.shift();
-            console.log(args.join(' '));
-            const response = await openai.createCompletion({
-              model: "code-davinci-002",
-              prompt: args.join(' '),
-              max_tokens: 500,
-              temperature: 0.2,
-              top_p: 1,
-              n: 2,
-              stream: false,
-              logprobs: null
-            });
-            console.log(args);
-            console.log(response.data.choices[0]);
-            if(response.data.choices) {
-              aisend = JSON.stringify(response.data.choices[0].text);
-              aisend = aisend.substring(1,aisend.length-1);
-              aisend = aisend.replaceAll('\\n', '\n');
-              if(aisend.length < 4000)
-                message.channel.send(aisend);
-              else {
-                message.channel.send("Message was over 4000 characters");
-              }
-            } else {
-              message.channel.send("Response was null/empty");
-            }
-          }
-          else {
-            message.channel.send("Currently beta testing. ");
-          }
-        break;
     case "weather":
-      if(args) {
+      if (args) {
         args.shift();
-        wt.find({search: args.join(' '), degreeType: 'F'}, function(err, parsed) {
-          if(err) console.log(err);
+        wt.find({
+          search: args.join(' '),
+          degreeType: 'F'
+        }, function(err, parsed) {
+          if (err) console.log(err);
           console.log(JSON.stringify(parsed, null, 2));
           parsed = parsed[0];
           let raindate = compareWeatherDates(parsed.current.day, parsed);
@@ -939,8 +996,11 @@ bot.on("message", async message => {
           message.channel.send(wsend);
         });
       } else {
-        wt.find({search: 'San Gabriel, CA', degreeType: 'F'}, function(err, parsed) {
-          if(err) console.log(err);
+        wt.find({
+          search: 'San Gabriel, CA',
+          degreeType: 'F'
+        }, function(err, parsed) {
+          if (err) console.log(err);
           console.log(JSON.stringify(parsed, null, 2));
           parsed = parsed[0];
           let raindate = compareWeatherDates(parsed.current.day, parsed);
@@ -956,10 +1016,13 @@ bot.on("message", async message => {
       }
       break;
     case "forecast":
-      if(args) {
+      if (args) {
         args.shift();
-        wt.find({search: args.join(' '), degreeType: 'F'}, function(err, parsed) {
-          if(err) console.log(err);
+        wt.find({
+          search: args.join(' '),
+          degreeType: 'F'
+        }, function(err, parsed) {
+          if (err) console.log(err);
           console.log(JSON.stringify(parsed, null, 2));
           parsed = parsed[0];
           let wsend = new MessageEmbed()
@@ -972,8 +1035,11 @@ bot.on("message", async message => {
           message.channel.send(wsend);
         });
       } else {
-        wt.find({search: "San Gabriel, CA", degreeType: 'F'}, function(err, parsed) {
-          if(err) console.log(err);
+        wt.find({
+          search: "San Gabriel, CA",
+          degreeType: 'F'
+        }, function(err, parsed) {
+          if (err) console.log(err);
           console.log(JSON.stringify(parsed, null, 2));
           parsed = parsed[0];
           let wsend = new MessageEmbed()
@@ -1006,10 +1072,10 @@ bot.on("message", async message => {
       m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(bot.ws.ping)}ms`);
       break;
 
-    //gambling commands start here
+      //gambling commands start here
     case "exchange":
       if (isNaN(args[1]) || !args[1]) return message.channel.send("Current Exchange Rate: 1000000:1");
-      if(brokeCheck(messageAuthor, 1000000)) return message.channel.send("You must have more than 1 million to redeem money.");
+      if (brokeCheck(messageAuthor, 1000000)) return message.channel.send("You must have more than 1 million to redeem money.");
       var amount = args[1];
       if (amount <= 1000000) return message.channel.send("Input a valid number more than 1000000.")
       if (brokeCheck(messageAuthor, amount)) return message.channel.send("You don't have enough money to do that.");
@@ -1020,14 +1086,14 @@ bot.on("message", async message => {
       convert(messageAuthor);
       break;
     case "reset":
-      if(!brokeCheck(messageAuthor, 1)) return message.channel.send("You don't have zero money.");
-      if(!args[1]) {
+      if (!brokeCheck(messageAuthor, 1)) return message.channel.send("You don't have zero money.");
+      if (!args[1]) {
         let currenttime = Date.now()
         let resetperson = './playerdata/' + message.author.id + '.json';
         let timercheck = TimeCheck(message.author.id);
         console.log("Timer Check " + timercheck)
         console.log(Date.now());
-        if(timercheck) {
+        if (timercheck) {
           console.log("Balance has been reset for player " + message.author.id);
           let newdata = {
             money: 500,
@@ -1036,30 +1102,29 @@ bot.on("message", async message => {
           let data = JSON.stringify(newdata);
           fs.writeFileSync(resetperson, data);
           message.channel.send("Reset money for " + message.author.id);
-        } else if (!timercheck){
+        } else if (!timercheck) {
           let rawdata = fs.readFileSync(resetperson);
           let resetdata = JSON.parse(rawdata);
-          message.channel.send("Cooldown of " + ((((resetdata.lastreset + 300000)-Date.now())/1000)/60) + " minutes.");
+          message.channel.send("Cooldown of " + ((((resetdata.lastreset + 300000) - Date.now()) / 1000) / 60) + " minutes.");
         }
       }
       break;
     case "addbal":
-      if(message.guild.members.cache.get('181284528793452545')) {
+      if (message.guild.members.cache.get('181284528793452545')) {
         let author = './playerdata/' + message.author.id + '.json';
         let rawdata = fs.readFileSync(author);
         let person = JSON.parse(rawdata);
         fs.readFile(author, (err, data) => {
           if (err) message.channel.send("You don't exist");
           let newbalance = parseInt(args[1]) + parseInt(person.money)
-          if(args[1]) {
+          if (args[1]) {
             let newdata = {
               money: newbalance
             };
             let data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
             console.log(args[1] + " added to " + author);
-          }
-          else {
+          } else {
             let newdata = {
               money: 1001
             };
@@ -1068,20 +1133,19 @@ bot.on("message", async message => {
             console.log("Money reset to " + author);
           }
         })
-      }
-      else {
+      } else {
         message.channel.send("You don't have enough permissions.");
       }
       break;
     case "setbal":
-      if(message.guild.members.fetch('181284528793452545')) {
+      if (message.guild.members.fetch('181284528793452545')) {
         let author = './playerdata/' + message.author.id + '.json';
         let rawdata = fs.readFileSync(author);
         let person = JSON.parse(rawdata);
         fs.readFile(author, (err, data) => {
           if (err) message.channel.send("You don't exist");
           let newbalance = parseInt(args[1])
-          if(args[1]) {
+          if (args[1]) {
             let newdata = {
               money: newbalance,
               lastreset: person.lastreset
@@ -1089,8 +1153,7 @@ bot.on("message", async message => {
             let data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
             console.log(args[1] + " set to " + author);
-          }
-          else {
+          } else {
             let newdata = {
               money: 1001,
               lastreset: person.lastreset
@@ -1114,7 +1177,7 @@ bot.on("message", async message => {
       }
       break;
     case "send":
-      if(!isRegistered(message.author.id)) {
+      if (!isRegistered(message.author.id)) {
         await sleep(500);
         if (!args[1]) return message.channel.send("Please mention the user you want to send money to with the amount of money.");
         if (isNaN(args[2])) return message.channel.send("Please use a number to send money.");
@@ -1129,9 +1192,9 @@ bot.on("message", async message => {
       if (isNaN(args[1]) || !args[1]) return message.channel.send('Input the amount of money you want to bet on the coinflip.');
       if (!isRegistered(message.author.id) && !args[1]) {
         await sleep(1500);
-        coinflip(args[1],message.author.id);
-      } else if (args[1]){
-        coinflip(args[1],message.author.id);
+        coinflip(args[1], message.author.id);
+      } else if (args[1]) {
+        coinflip(args[1], message.author.id);
       } else {
         message.channel.send("Make sure you add an amount!")
       }
@@ -1143,11 +1206,10 @@ bot.on("message", async message => {
     case "slots":
       if (!isRegistered(message.author.id) && !args[1]) {
         await sleep(1500);
-        slots(args[1],message.author.id);
-      } else if (args[1]){
-        slots(args[1],message.author.id);
-      }
-      else {
+        slots(args[1], message.author.id);
+      } else if (args[1]) {
+        slots(args[1], message.author.id);
+      } else {
         message.channel.send("Make sure you add an amount!  ")
       }
       //add more possibililites for victory, like if you get 3 animals or something
@@ -1155,33 +1217,30 @@ bot.on("message", async message => {
     case "bj":
       break;
     case "areg":
-    //test command for setting json file values. Use with 'hey areg '
+      //test command for setting json file values. Use with 'hey areg '
       write(messageAuthor, args[2], args[1]);
       convert(messageAuthor);
       break;
     case "russian":
-      if(args[1]) {
-        if(russianActive(args[1])) {
+      if (args[1]) {
+        if (russianActive(args[1])) {
           message.channel.send("Game found, joining game.");
-        }
-        else {
+        } else {
           message.channel.send("Game not found. Do russiancreate to initiate a game.")
         }
       }
       break;
     case "jackpot":
-      if(args[1]) {
+      if (args[1]) {
         actJackpot(message.author.id, args[1]);
-      }
-      else if (inJackpot()) {
+      } else if (inJackpot()) {
         calculateMyOdds();
-      }
-      else {
+      } else {
         DisplayAllOdds();
       }
       break;
     case "russiancreate":
-      if(!args[1]) {
+      if (!args[1]) {
         message.channel.send("WIP. Type in a number after to make a lobby ID.")
       } else if (args[1]) {
         message.channel.send("Game created, you have been added to the game")
@@ -1502,39 +1561,39 @@ bot.on("message", async message => {
       }
 
       break;
-    /*case "colors":
-      if (colors.size < 1) return message.channel.send("No colors set up yet");
-      log(colors.map(c => c.name));
-      var embed999 = new MessageEmbed()
-      .addField("Colors",colors.array().join(" | "))
-      message.channel.send(embed999);
-      break;
-    case "setcolor":
-      let roleDuke = message.guild.roles.find("name", "Duke");
-      if (!(message.member.roles.cache.has(roleDuke.id))) {
-        message.channel.send("You don't have enough perms for that.")
-          .then(message => message.delete(5000));
-        message.channel.fetch({
-          limit: 2
-        }).then(collected => { //collected is a Collection
-          collected.forEach(message => {
-            if (message.content.startsWith("hey")) message.delete(5000);
+      /*case "colors":
+        if (colors.size < 1) return message.channel.send("No colors set up yet");
+        log(colors.map(c => c.name));
+        var embed999 = new MessageEmbed()
+        .addField("Colors",colors.array().join(" | "))
+        message.channel.send(embed999);
+        break;
+      case "setcolor":
+        let roleDuke = message.guild.roles.find("name", "Duke");
+        if (!(message.member.roles.cache.has(roleDuke.id))) {
+          message.channel.send("You don't have enough perms for that.")
+            .then(message => message.delete(5000));
+          message.channel.fetch({
+            limit: 2
+          }).then(collected => { //collected is a Collection
+            collected.forEach(message => {
+              if (message.content.startsWith("hey")) message.delete(5000);
+            });
           });
-        });
-      }
-      let rolecolor = colors.find(role => role.name.toLowerCase() === args[1]);
-      if (!rolecolor) {
-        return message.channel.send("There is no such color");
-      }
-      try {
-        await message.member.removeRoles(colors);
-        await message.member.addRole(rolecolor);
-        message.channel.send("Your color is now changed");
-      } catch (e) {
-        message.channel.send(`Operation Failed! ${e.message}`);
-      }
-      break;
-    */
+        }
+        let rolecolor = colors.find(role => role.name.toLowerCase() === args[1]);
+        if (!rolecolor) {
+          return message.channel.send("There is no such color");
+        }
+        try {
+          await message.member.removeRoles(colors);
+          await message.member.addRole(rolecolor);
+          message.channel.send("Your color is now changed");
+        } catch (e) {
+          message.channel.send(`Operation Failed! ${e.message}`);
+        }
+        break;
+      */
     case "clap":
       args.splice(0, 1);
       message.channel.send(args.join(":clap:"));
@@ -1544,16 +1603,16 @@ bot.on("message", async message => {
       var rated = args.join(" ");
       message.channel.send("I rate " + rated + " a good " + Math.floor(Math.random() * 101) + "/100");
       break;
-    /*
-    case "removecolor":
-      try {
-        await message.member.removeRoles(colors);
-        message.channel.send("Removed your colors");
-      } catch (e) {
-        message.channel.send(`Operation Failed! ${e.message}`);
-      }
-      break;
-    */
+      /*
+      case "removecolor":
+        try {
+          await message.member.removeRoles(colors);
+          message.channel.send("Removed your colors");
+        } catch (e) {
+          message.channel.send(`Operation Failed! ${e.message}`);
+        }
+        break;
+      */
     case "vote":
       args.splice(0, 1);
       deleteLastMessage();
@@ -1576,11 +1635,11 @@ bot.on("message", async message => {
       console.log(langd);
       console.log(args);
       args.shift();
-      if(!args[0]) {
+      if (!args[0]) {
         message.channel.send("Current languages are: DE, EN, ES, FR, IT, JP, NL, PL, RU, ZH");
       }
       inputtext = args.join('%20');
-      switch(langd){
+      switch (langd) {
         case "DE":
         case "de":
           translater(message, inputtext, "de");
@@ -1629,8 +1688,8 @@ bot.on("message", async message => {
           break;
         default:
           message.channel.send("Not a supported language");
-        }
-        break;
+      }
+      break;
     case "despair":
       var VC = message.member.voiceChannel;
       if (!VC)
@@ -1675,23 +1734,23 @@ bot.on("message", async message => {
         message.channel.send(urbanEm);
       });
       break;
-      case "dev":
-        var embed9 = new MessageEmbed()
+    case "dev":
+      var embed9 = new MessageEmbed()
         .setTitle("Developers")
         .setDescription("These are the Developers!")
-        var embed10 = new MessageEmbed()
-          .addField("Role","Original Bot Developer")
-          .setAuthor('Eddie Vaughn', 'https://cdn.discordapp.com/attachments/684671474010947609/732567752518271016/DSC05763.png', 'https://eddiedoesntexistyet.com')
-        var embed11 = new MessageEmbed()
-          .addField("Role","Hoster & Developer")
-          .setAuthor('Kyle Chau', 'https://i.imgur.com/9Qs4rex.jpg', 'https://byle.dev')
-        var embed12 = new MessageEmbed()
-          .addField("Role","Somewhat useful people")
-          .setAuthor('Zi Hao Liang & Kenneth Kwan')
-        message.channel.send(embed9);
-        message.channel.send(embed10);
-        message.channel.send(embed11);
-        message.channel.send(embed12);
+      var embed10 = new MessageEmbed()
+        .addField("Role", "Original Bot Developer")
+        .setAuthor('Eddie Vaughn', 'https://cdn.discordapp.com/attachments/684671474010947609/732567752518271016/DSC05763.png', 'https://eddiedoesntexistyet.com')
+      var embed11 = new MessageEmbed()
+        .addField("Role", "Hoster & Developer")
+        .setAuthor('Kyle Chau', 'https://i.imgur.com/9Qs4rex.jpg', 'https://byle.dev')
+      var embed12 = new MessageEmbed()
+        .addField("Role", "Somewhat useful people")
+        .setAuthor('Zi Hao Liang & Kenneth Kwan')
+      message.channel.send(embed9);
+      message.channel.send(embed10);
+      message.channel.send(embed11);
+      message.channel.send(embed12);
       break;
     case "help":
       if (!args[1]) {
@@ -1788,7 +1847,7 @@ bot.on("message", async message => {
               .setTitle("Gambling Commands.")
               .addField("balance", "Shows your current balance", true)
               .addField("exchange", "Kyle will send you $1 for every 1 million redeemed.")
-              .addField("reset", "Reset your balance to $500. Can only be used every 5 minutes.",true)
+              .addField("reset", "Reset your balance to $500. Can only be used every 5 minutes.", true)
               .addField("coinflip", "Flips a coin. Win 2x. Usage: coinflip (amount)", true)
               .addField("slots", "Slot machine. Win 50x. Usage: slots (amount)", true)
               .addField("roulette", "NOT WORKING. Basic roulette. Use with 'hey roulette [Number Guess] [color] [Betting cash]");
@@ -1957,7 +2016,7 @@ bot.on("message", async message => {
         let messagecount = newamount.toString();
         message.channel.messages
           .fetch({
-            limit: parseInt(messagecount)+1
+            limit: parseInt(messagecount) + 1
           })
           .then(messages => {
             message.channel.bulkDelete(messages, true);
@@ -1967,7 +2026,9 @@ bot.on("message", async message => {
                 "Deletion of messages successful. \n Total messages deleted including command: " +
                 newamount
               )
-              .then(message => message.delete({ timeout: 5000 }));
+              .then(message => message.delete({
+                timeout: 5000
+              }));
             log(
               "Deletion of messages successful. \n Total messages deleted including command: " +
               newamount
@@ -2230,7 +2291,7 @@ bot.on("message", async message => {
       var embedlog = new MessageEmbed();
       var CHANGELOG = config.changelog
       embedlog.setTitle("Change Log of Kelvin v2")
-              .addField(config.version, CHANGELOG);
+        .addField(config.version, CHANGELOG);
       message.channel.send(embedlog);
       break;
     case "skip":
