@@ -841,10 +841,10 @@ bot.on("message", async message => {
           aisend = JSON.stringify(response.data.choices[0].text);
           aisend = aisend.substring(1,aisend.length-1);
           aisend = aisend.replaceAll('\\n', '\n');
-          if(aisend.length < 4000)
+          if(aisend.length < 2000)
             message.channel.send(aisend);
           else {
-            message.channel.send("Message was over 4000 characters");
+            message.channel.send("Message was over 2000 characters");
           }
         } else {
           message.channel.send("Response was null/empty");
@@ -864,10 +864,10 @@ bot.on("message", async message => {
           aisend = JSON.stringify(responses.data.choices[0].message.content);
           aisend = aisend.substring(1, aisend.length - 1);
           aisend = aisend.replaceAll('\\n', '\n');
-          if (aisend.length < 4000)
+          if (aisend.length < 2000)
             message.channel.send(aisend);
           else {
-            message.channel.send("Message was over 4000 characters");
+            message.channel.send("Message was over 2000 characters");
           }
         } else {
           message.channel.send("Response was null/empty");
@@ -894,10 +894,10 @@ bot.on("message", async message => {
               aisend = JSON.stringify(responsed.data.choices[0].text);
               aisend = aisend.substring(1,aisend.length-1);
               aisend = aisend.replaceAll('\\n', '\n');
-              if(aisend.length < 4000)
+              if(aisend.length < 2000)
                 message.channel.send(aisend);
               else {
-                message.channel.send("Message was over 4000 characters");
+                message.channel.send("Message was over 2000 characters");
               }
             } else {
               message.channel.send("Response was null/empty");
