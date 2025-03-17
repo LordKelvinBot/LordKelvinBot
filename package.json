@@ -25,7 +25,7 @@
     "snoowrap": "^1.15.2",
     "superagent": "^4.0.0-beta.5",
     "urban": "^0.3.2",
-    "yargs": "^7.1.1",
+    "yargs": "^17.6.0",
     "yargs-parser": "^21.1.1",
     "ytdl-core": "^0.18.7"
   }
