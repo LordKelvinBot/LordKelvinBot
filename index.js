@@ -43,8 +43,8 @@ global.servers = {};
 
 //requires
 'use strict';
-const { Configuration, OpenAIApi } = require("openai");
-const { Discord , Intents , Client , MessageEmbed} = require("discord.js");
+const { OpenAI } = require("openai");
+const { Client, GatewayIntentBits, EmbedBuilder, PermissionsBitField, ActivityType, Collection } = require("discord.js");
 const superagent = require("superagent");
 const fetch = require('node-fetch');
 const randomPuppy = require('random-puppy');
@@ -52,9 +52,16 @@ const {fetchSubreddit} = require('fetch-subreddit');
 const api = "https://jsonplaceholder.typicode.com/posts";
 const pics = "https://www.reddit.com/r/pics.json";
 const snoowrap = require('snoowrap');
-const bot = new Client({ intents: [Intents.FLAGS.GUILDS]});
+const bot = new Client({ 
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.GuildMembers
+  ]
+});
 const Jimp = require('jimp');
-const snekfetch = require("snekfetch");
 const fs = require('fs');
 const urban = module.require("urban");
 const ytdl = require('ytdl-core');
@@ -64,16 +71,17 @@ const moment = require("moment");
 const blackjack = require("discord-blackjack");
 const https = require('https');
 require("moment-duration-format");
-
+require('dotenv').config();
 
 //var ytpl = require('ytpl');
 
 //other Consts
-const AITOKEN = config.aitoken;
-const configuration = new Configuration({
+
+const AITOKEN = process.env.OPENAI_API_KEY;
+const configuration = {
   apiKey: AITOKEN,
-});
-const openai = new OpenAIApi(configuration);
+};
+const openai = new OpenAI(configuration);
 const deeplt = config.deepltoken;
 const TOKEN = config.token;
 const PREFIX = config.prefix;
@@ -113,6 +121,7 @@ function russianActive(input) {
     }
   });
 }
+
 async function deeplusage(message) {
   const deeplapid = "https://api-free.deepl.com/v2/usage?auth_key=" + deeplt
   https.get(deeplapid, (resp) => {
@@ -2187,8 +2196,8 @@ bot.on("message", async message => {
       message.channel.send("Didn't work");
       break;
     case "roulette":
-
       break;
+    
     case "largeembed":
       var i = 1;
       var embed0 = new MessageEmbed();
@@ -2202,9 +2211,11 @@ bot.on("message", async message => {
       }
       message.channel.send(embed0);
       break;
+    
     case "randomhex":
       message.channel.send('#' + Math.floor(Math.random() * 16777215).toString(16));
       break;
+    
     case "version":
       var VERSION = config.version;
       message.channel.send(VERSION);
