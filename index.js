@@ -364,7 +364,7 @@ bot.on("messageCreate", async message => {
 
         const render = post => {
 
-            image1 = new MessageEmbed()
+            image1 = new EmbedBuilder()
                 .setTitle(post.title)
                 .addField(post.img);
             message.channel.send(image1);
@@ -378,7 +378,7 @@ bot.on("messageCreate", async message => {
             body
         } = await superagent
             .get('https://random.dog/woof.json');
-        let dogEmbed = new MessageEmbed()
+        let dogEmbed = new EmbedBuilder()
             .setColor("#ff9900")
             .setTitle("Dog")
             .setImage(body.url);
@@ -547,7 +547,7 @@ bot.on("messageCreate", async message => {
         let raw = fs.readFileSync(mAuthor);
         let per = JSON.parse(raw);
         if (slot1 == slot2 && slot2 == slot3 && slot1 == slot3) {
-            var moneyEmbed = new MessageEmbed()
+            var moneyEmbed = new EmbedBuilder()
                 .setColor(generateHex())
                 .setTitle("Result")
                 .setDescription(slot1 + " " + slot2 + " " + slot3)
@@ -560,7 +560,7 @@ bot.on("messageCreate", async message => {
             let writedata = JSON.stringify(newdata);
             fs.writeFileSync(mAuthor, writedata);
         } else {
-            var moneyEmbed = new MessageEmbed()
+            var moneyEmbed = new EmbedBuilder()
                 .setColor(generateHex())
                 .setTitle("Result")
                 .setDescription(slot1 + " " + slot2 + " " + slot3)
@@ -783,7 +783,7 @@ bot.on("messageCreate", async message => {
                     console.log("gold = " + gold + "\nplatinum = " + platinum);
                 }
                 log('Converted Currency values');
-                var moneyEmbed = new MessageEmbed()
+                var moneyEmbed = new EmbedBuilder()
                     .setColor(generateHex())
                     .setTitle("Stat Board of " + message.author.id)
                     .setDescription("A collection of your stats.")
@@ -829,7 +829,7 @@ bot.on("messageCreate", async message => {
             break;
         case "time":
             var myDate = new Date(Date.now());
-            let timeembed = new MessageEmbed()
+            let timeembed = new EmbedBuilder()
                 .setTitle("Times around the World")
                 .setDescription("World Times")
                 .addField("PST Time: ", myDate.toLocaleString("en-US", {
@@ -897,7 +897,7 @@ bot.on("messageCreate", async message => {
             }
             break;
         case "weather":
-            if (args) {
+            if (args[1]) {
                 args.shift();
                 wt.find({
                     search: args.join(' '),
@@ -907,14 +907,16 @@ bot.on("messageCreate", async message => {
                     console.log(JSON.stringify(parsed, null, 2));
                     parsed = parsed[0];
                     let raindate = compareWeatherDates(parsed.current.day, parsed);
-                    let wsend = new MessageEmbed()
+                    let wsend = new EmbedBuilder()
                         .setTitle(parsed.location.name)
                         .setDescription(parsed.current.date)
-                        .addField("Current Temperature: ", parsed.current.temperature + " F", true)
-                        .addField("Sky: ", parsed.current.skytext, true)
-                        .addField("Humidity: ", parsed.current.humidity + "%")
-                        .addField("Wind: ", parsed.current.winddisplay + " | Chance of Rain: " + parsed.forecast[raindate].precip + "%")
-                    message.channel.send(wsend);
+                        .addFields(
+                          {name: "Current Temperature: ", value: parsed.current.temperature + " F", inline: true},
+                          {name: "Sky: ", value: parsed.current.skytext, inline: true},
+                          {name: "Humidity: ", value: parsed.current.humidity + "%"},
+                          {name: "Wind: ", value: parsed.current.winddisplay + " | Chance of Rain: " + parsed.forecast[raindate].precip + "%"}
+                        )
+                    message.channel.send({embeds: [wsend]});
                 });
             } else {
                 wt.find({
@@ -925,14 +927,16 @@ bot.on("messageCreate", async message => {
                     console.log(JSON.stringify(parsed, null, 2));
                     parsed = parsed[0];
                     let raindate = compareWeatherDates(parsed.current.day, parsed);
-                    let wsend = new MessageEmbed()
+                    let wsend = new EmbedBuilder()
                         .setTitle(parsed.location.name)
                         .setDescription(parsed.current.date)
-                        .addField("Current Temperature: ", parsed.current.temperature + " F", true)
-                        .addField("Sky: ", parsed.current.skytext, true)
-                        .addField("Humidity: ", parsed.current.humidity + "%")
-                        .addField("Wind: ", parsed.current.winddisplay + " | Chance of Rain: " + parsed.forecast[raindate].precip + "%")
-                    message.channel.send(wsend);
+                        .addFields(
+                          {name: "Current Temperature: ", value: parsed.current.temperature + " F", inline: true},
+                          {name: "Sky: ", value: parsed.current.skytext, inline: true},
+                          {name: "Humidity: ", value: parsed.current.humidity + "%"},
+                          {name: "Wind: ", value: parsed.current.winddisplay + " | Chance of Rain: " + parsed.forecast[raindate].precip + "%"}
+                        )
+                    message.channel.send({embeds: [wsend]});
                 });
             }
             break;
@@ -946,7 +950,7 @@ bot.on("messageCreate", async message => {
                     if (err) console.log(err);
                     console.log(JSON.stringify(parsed, null, 2));
                     parsed = parsed[0];
-                    let wsend = new MessageEmbed()
+                    let wsend = new EmbedBuilder()
                         .setTitle(parsed.location.name + " 4 Day Forecast")
                         .setDescription(parsed.current.date + " " + parsed.current.day)
                         .addField(parsed.forecast[1].day, "Low: " + parsed.forecast[1].low + " High: " + parsed.forecast[1].high)
@@ -963,7 +967,7 @@ bot.on("messageCreate", async message => {
                     if (err) console.log(err);
                     console.log(JSON.stringify(parsed, null, 2));
                     parsed = parsed[0];
-                    let wsend = new MessageEmbed()
+                    let wsend = new EmbedBuilder()
                         .setTitle(parsed.location.name + " 4 Day Forecast")
                         .setDescription(parsed.current.date + " " + parsed.current.day)
                         .addField(parsed.forecast[1].day, "Low: " + parsed.forecast[1].low + " High: " + parsed.forecast[1].high)
@@ -1167,7 +1171,7 @@ bot.on("messageCreate", async message => {
             break;
         case "img":
             if (!args[1]) {
-                var imgEmbed = new MessageEmbed()
+                var imgEmbed = new EmbedBuilder()
                     .setTitle("These are the current images in stock")
                     .setColor(generateHex())
                     .addField("the fastest spook in the west", "neutron")
@@ -1436,7 +1440,7 @@ bot.on("messageCreate", async message => {
             break;
         case "tierlist":
             if (!args[1]) {
-                let tierlists = new MessageEmbed()
+                let tierlists = new EmbedBuilder()
                     .setTitle("The current tierlists")
                     .setColor(generateHex())
                     .addField("Smash Ultimate", "ultimate")
@@ -1483,7 +1487,7 @@ bot.on("messageCreate", async message => {
             /*case "colors":
               if (colors.size < 1) return message.channel.send("No colors set up yet");
               log(colors.map(c => c.name));
-              var embed999 = new MessageEmbed()
+              var embed999 = new EmbedBuilder()
               .addField("Colors",colors.array().join(" | "))
               message.channel.send(embed999);
               break;
@@ -1535,7 +1539,7 @@ bot.on("messageCreate", async message => {
         case "vote":
             args.splice(0, 1);
             deleteLastMessage();
-            let votingEmbed = new MessageEmbed()
+            let votingEmbed = new EmbedBuilder()
                 .setTitle(args.join(" "))
                 .setColor(generateHex());
             //message.channel.send(votingEmbed);
@@ -1629,7 +1633,7 @@ bot.on("messageCreate", async message => {
             break;
         case "urbanr":
             urban.random().first(json => {
-                let urbanEm = new MessageEmbed()
+                let urbanEm = new EmbedBuilder()
                     .setTitle(json.word)
                     .setDescription(json.definition)
                     .addField("Upvotes", json.thumbs_up, true)
@@ -1644,7 +1648,7 @@ bot.on("messageCreate", async message => {
             urban(args).first(json => {
                 if (!json) return message.channel.send("No definition found.");
                 console.log(json);
-                let urbanEm = new MessageEmbed()
+                let urbanEm = new EmbedBuilder()
                     .setTitle(json.word)
                     .setDescription(json.definition)
                     .addField("Upvotes", json.thumbs_up, true)
@@ -1654,16 +1658,16 @@ bot.on("messageCreate", async message => {
             });
             break;
         case "dev":
-            var embed9 = new MessageEmbed()
+            var embed9 = new EmbedBuilder()
                 .setTitle("Developers")
                 .setDescription("These are the Developers!")
-            var embed10 = new MessageEmbed()
+            var embed10 = new EmbedBuilder()
                 .addField("Role", "Original Bot Developer")
                 .setAuthor('Eddie Vaughn', 'https://cdn.discordapp.com/attachments/684671474010947609/732567752518271016/DSC05763.png', 'https://eddiedoesntexistyet.com')
-            var embed11 = new MessageEmbed()
+            var embed11 = new EmbedBuilder()
                 .addField("Role", "Hoster & Developer")
                 .setAuthor('Kyle Chau', 'https://i.imgur.com/9Qs4rex.jpg', 'https://byle.dev')
-            var embed12 = new MessageEmbed()
+            var embed12 = new EmbedBuilder()
                 .addField("Role", "Somewhat useful people")
                 .setAuthor('Zi Hao Liang & Kenneth Kwan')
             message.channel.send(embed9);
@@ -1673,7 +1677,7 @@ bot.on("messageCreate", async message => {
             break;
         case "help":
             if (!args[1]) {
-                var embed1 = new MessageEmbed()
+                var embed1 = new EmbedBuilder()
 
                     .setColor(generateHex())
                     .setDescription("These are the current commands", true)
@@ -1703,7 +1707,7 @@ bot.on("messageCreate", async message => {
                     case "sub":
                     case "subs":
                     case "subhelp":
-                        var subhelp = new MessageEmbed()
+                        var subhelp = new EmbedBuilder()
                             .setColor(generateHex())
                             .setDescription("These are the commands for getting images for reddit.")
                             .addField("sub", "Gets a random image from a specified subreddit.")
@@ -1715,7 +1719,7 @@ bot.on("messageCreate", async message => {
                         break;
                     case "mathhelp":
                     case "math":
-                        var mathembed = new MessageEmbed()
+                        var mathembed = new EmbedBuilder()
                             .setColor(generateHex())
                             .setDescription("These are the commands for doing math. Put 'math' before each command. For example, 'hey math sqrt 4' would return 2. NaN means 'Not a Number'. Supports use of pi as 'pi', but if you're using just pi by itself you need to put '1pi'.")
                             .addField("dtr", "Convert Degrees to Radians. Use with 'hey dtr num1 num2'")
@@ -1730,7 +1734,7 @@ bot.on("messageCreate", async message => {
                         break;
                     case "testhelp":
                     case "test":
-                        var embed2 = new MessageEmbed()
+                        var embed2 = new EmbedBuilder()
                             .setColor(generateHex())
                             .setDescription("Test Commands")
                             .setFooter("Buncha test stuff that doesn't do anything")
@@ -1743,7 +1747,7 @@ bot.on("messageCreate", async message => {
                         break;
                     case "fun":
                     case "funhelp":
-                        var embed3 = new MessageEmbed()
+                        var embed3 = new EmbedBuilder()
                             .setTitle("Fun Commands")
                             .setColor(generateHex())
                             .addField("urban", "Gives an entry from urban dictionary", true)
@@ -1762,7 +1766,7 @@ bot.on("messageCreate", async message => {
                         break;
                     case "gamble":
                     case "gambling":
-                        var embed4 = new MessageEmbed()
+                        var embed4 = new EmbedBuilder()
                             .setTitle("Gambling Commands.")
                             .addField("balance", "Shows your current balance", true)
                             .addField("exchange", "Kyle will send you $1 for every 1 million redeemed.")
@@ -1872,7 +1876,7 @@ bot.on("messageCreate", async message => {
                     message.channel.send("X = " + logged);
                     break;
                 case "test":
-                    var mathtestingembed = new MessageEmbed();
+                    var mathtestingembed = new EmbedBuilder();
                     for (var i = 0; i < args.length; i++) {
                         mathtestingembed.addField(args[i]);
                     }
@@ -1964,7 +1968,7 @@ bot.on("messageCreate", async message => {
         case "pusharray":
             goodArray.push(args[1]);
             message.channel.send("The current array is: ");
-            var list = new MessageEmbed()
+            var list = new EmbedBuilder()
                 .setDescription("Current List of Subs:")
                 .setColor(generateHex());
             for (var i = 0; i < goodArray.length; i++) {
@@ -2047,7 +2051,7 @@ bot.on("messageCreate", async message => {
             plaympeg("Sands.mp3")
             break;
         case "test10":
-            let test10 = new MessageEmbed()
+            let test10 = new EmbedBuilder()
                 .addField("test one", "test two", true)
                 .addField("test three", "test four", true);
             message.channel.send(test10);
@@ -2096,7 +2100,7 @@ bot.on("messageCreate", async message => {
 
             break;
         case "botprefixes":
-            var embed = new MessageEmbed()
+            var embed = new EmbedBuilder()
                 .setColor(0x00FFFF)
                 .setDescription("These are the current bot prefixes")
                 .addField("Gnarbot", "_")
@@ -2156,7 +2160,7 @@ bot.on("messageCreate", async message => {
             //message.guild.channels.find("name", "super-secret-admin-channel").send("test sucessful my guy did i spell that right");
             break;
         case "embedtest":
-            var embed = new MessageEmbed();
+            var embed = new EmbedBuilder();
             embed.setDescription("Test embed my guy this is the description i think");
             embed.addField("What is a field what is life what", "HELP ME");
             embed.addField("What is a field what is life what", "HELP ME");
@@ -2188,7 +2192,7 @@ bot.on("messageCreate", async message => {
 
         case "largeembed":
             var i = 1;
-            var embed0 = new MessageEmbed();
+            var embed0 = new EmbedBuilder();
             embed0.setDescription("Numbers My Guy");
             while (i <= args[1]) {
                 if (i > 24) {
@@ -2209,7 +2213,7 @@ bot.on("messageCreate", async message => {
             message.channel.send(VERSION);
             break;
         case "changelog":
-            var embedlog = new MessageEmbed();
+            var embedlog = new EmbedBuilder();
             var CHANGELOG = config.changelog
             embedlog.setTitle("Change Log of Kelvin v2")
                 .addField(config.version, CHANGELOG);
