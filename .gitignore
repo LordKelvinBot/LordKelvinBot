@@ -6,3 +6,5 @@ config.json
 .env
 /playerdata/
 /chat-history/
+git-auto-pull.js
+ecosystem.config.js
