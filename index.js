@@ -92,7 +92,6 @@ const AITOKEN = process.env.OPENAI_API_KEY;
 const configuration = {
   apiKey: AITOKEN,
 };
-const chatHistory = new Map();
 const openai = new OpenAI(configuration);
 const deeplt = config.deepltoken;
 const TOKEN = config.token;
@@ -410,6 +409,110 @@ bot.on("messageCreate", async (message) => {
     if (!matches) return;
     const id = matches[1];
     return id;
+  }
+
+  function saveChatHistory(userId, messages) {
+    try {
+      const chatDir = "./chat-history";
+
+      if (!fs.existsSync(chatDir)) {
+        fs.mkdirSync(chatDir, { recursive: true });
+      }
+
+      const filePath = `${chatDir}/${userId}.json`;
+      fs.writeFileSync(filePath, JSON.stringify(messages, null, 2));
+      console.log(`Chat history saved for user ${userId}`);
+    } catch (error) {
+      console.error(`Error saving chat history for user ${userId}:`, error);
+    }
+  }
+
+  function loadChatHistory(userId) {
+    try {
+      const filePath = `./chat-history/${userId}.json`;
+
+      if (fs.existsSync(filePath)) {
+        const data = fs.readFileSync(filePath, "utf8");
+        return JSON.parse(data);
+      } else {
+        return [
+          {
+            role: "system",
+            content:
+              "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters.",
+          },
+        ];
+      }
+    } catch (error) {
+      console.error(`Error loading chat history for user ${userId}:`, error);
+      return [
+        {
+          role: "system",
+          content:
+            "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters.",
+        },
+      ];
+    }
+  }
+
+  function deleteChatHistory(userId) {
+    try {
+      const filePath = `./chat-history/${userId}.json`;
+
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        console.log(`Chat history deleted for user ${userId}`);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error(`Error deleting chat history for user ${userId}:`, error);
+      return false;
+    }
+  }
+
+  function getChatHistoryInfo(userId) {
+    try {
+      const filePath = `./chat-history/${userId}.json`;
+
+      if (fs.existsSync(filePath)) {
+        const data = fs.readFileSync(filePath, "utf8");
+        const messages = JSON.parse(data);
+
+        const messageCount = messages.length;
+        const userMsgCount = messages.filter(
+          (msg) => msg.role === "user"
+        ).length;
+        const assistantMsgCount = messages.filter(
+          (msg) => msg.role === "assistant"
+        ).length;
+
+        let totalChars = 0;
+        messages.forEach((msg) => {
+          totalChars += msg.content ? msg.content.length : 0;
+        });
+
+        return {
+          exists: true,
+          messageCount,
+          userMsgCount,
+          assistantMsgCount,
+          totalChars,
+        };
+      }
+      return { exists: false };
+    } catch (error) {
+      console.error(
+        `Error getting chat history info for user ${userId}:`,
+        error
+      );
+      return { exists: false, error: true };
+    }
+  }
+
+  function isChatHistoryTooLong(userId, limit = 20000) {
+    const info = getChatHistoryInfo(userId);
+    return info.exists && info.totalChars > limit;
   }
 
   function sendMoney(olduser, newuser, amount) {
@@ -1114,17 +1217,14 @@ bot.on("messageCreate", async (message) => {
 
       let userId = message.author.id.toString();
 
-      if (!chatHistory.has(userId)) {
-        chatHistory.set(userId, [
-          {
-            role: "system",
-            content:
-              "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters.",
-          },
-        ]);
+      if (isChatHistoryTooLong(userId)) {
+        message.channel.send(
+          "Your chat history is too long (over 20,000 characters). Please use 'clearchat' command to reset before continuing."
+        );
+        break;
       }
 
-      const userMessages = chatHistory.get(userId);
+      let userMessages = loadChatHistory(userId);
 
       userMessages.push({
         role: "user",
@@ -1144,6 +1244,8 @@ bot.on("messageCreate", async (message) => {
           content: responses.choices[0].message.content,
         });
 
+        saveChatHistory(userId, userMessages);
+
         aisend = JSON.stringify(responses.choices[0].message.content);
         aisend = aisend.substring(1, aisend.length - 1);
         aisend = aisend.replaceAll("\\n", "\n");
@@ -1162,17 +1264,15 @@ bot.on("messageCreate", async (message) => {
       const betterMessageArgs = args.join(" ");
       const betterUserId = message.author.id.toString();
 
-      if (!chatHistory.has(betterUserId)) {
-        chatHistory.set(betterUserId, [
-          {
-            role: "system",
-            content:
-              "You are a helpful assistant for a Discord bot called Kelvin.",
-          },
-        ]);
+      if (isChatHistoryTooLong(betterUserId)) {
+        message.channel.send(
+          "Your chat history is too long (over 20,000 characters). Please use 'clearchat' command to reset before continuing."
+        );
+        break;
       }
 
-      const betterUserMessages = chatHistory.get(betterUserId);
+      const betterUserMessages = loadChatHistory(betterUserId);
+
       betterUserMessages.push({
         role: "user",
         content: betterMessageArgs,
@@ -1191,6 +1291,8 @@ bot.on("messageCreate", async (message) => {
           content: betterResponses.choices[0].message.content,
         });
 
+        saveChatHistory(betterUserId, betterUserMessages);
+
         let betterAiSend = JSON.stringify(
           betterResponses.choices[0].message.content
         );
@@ -1207,8 +1309,8 @@ bot.on("messageCreate", async (message) => {
       break;
 
     case "clearchat":
-      if (chatHistory.has(message.author.id.toString())) {
-        chatHistory.delete(message.author.id.toString());
+      const deleted = deleteChatHistory(message.author.id.toString());
+      if (deleted) {
         message.channel.send("Your chat history has been cleared!");
       } else {
         message.channel.send("You don't have any chat history.");
@@ -1216,20 +1318,22 @@ bot.on("messageCreate", async (message) => {
       break;
 
     case "chatinfo":
-      const userConversation = chatHistory.get(message.author.id.toString());
-      if (userConversation) {
-        const messageCount = userConversation.length;
-        const userMsgCount = userConversation.filter(
-          (msg) => msg.role === "user"
-        ).length;
-        const assistantMsgCount = userConversation.filter(
-          (msg) => msg.role === "assistant"
-        ).length;
-        message.channel.send(
-          `Your conversation has ${
-            messageCount - 1
-          } messages (${userMsgCount} from you, ${assistantMsgCount} from the assistant)`
-        );
+      const historyInfo = getChatHistoryInfo(message.author.id.toString());
+      if (historyInfo.exists) {
+        let infoMsg = `Your conversation has ${
+          historyInfo.messageCount - 1
+        } messages (${historyInfo.userMsgCount} from you, ${
+          historyInfo.assistantMsgCount
+        } from the assistant)`;
+
+        infoMsg += `\nTotal character count: ${historyInfo.totalChars}/20000`;
+
+        if (historyInfo.totalChars > 8000) {
+          infoMsg +=
+            "\n⚠️ Your chat history is approaching the 20,000 character limit. Consider using 'clearchat' soon.";
+        }
+
+        message.channel.send(infoMsg);
       } else {
         message.channel.send("You don't have an active conversation.");
       }
@@ -2229,8 +2333,16 @@ bot.on("messageCreate", async (message) => {
               value: "Returns a random number. Use with ' hey random num'",
             },
             { name: "translate", value: "Translates text", inline: true },
-            { name: "chat", value: "Chat with the bot (4o-mini)", inline: true },
-            { name: "bchat", value: "Chat with the bot (o3-mini)", inline: true },
+            {
+              name: "chat",
+              value: "Chat with the bot (4o-mini)",
+              inline: true,
+            },
+            {
+              name: "bchat",
+              value: "Chat with the bot (o3-mini)",
+              inline: true,
+            },
             { name: "Subreddit Help", value: "help sub", inline: true },
             { name: "Math Help", value: "help math", inline: true },
             { name: "Fun Help", value: "help fun", inline: true },
