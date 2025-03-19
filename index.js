@@ -301,10 +301,10 @@ async function deeplusage(message) {
         fulljson = JSON.parse(data);
         message.channel.send(
           "Characters Used: " +
-            fulljson.character_count +
-            "\n" +
-            "Max Characters: " +
-            fulljson.character_limit
+          fulljson.character_count +
+          "\n" +
+          "Max Characters: " +
+          fulljson.character_limit
         );
       });
     })
@@ -581,10 +581,10 @@ bot.on("messageCreate", async (message) => {
         return message.channel.send("You've already entered.");
       console.log(
         user +
-          ": " +
-          parsedjackpot["entries"][user]["user"] +
-          ": " +
-          parsedjackpot["entries"][user]["amount"]
+        ": " +
+        parsedjackpot["entries"][user]["user"] +
+        ": " +
+        parsedjackpot["entries"][user]["amount"]
       );
     }
     person.money = parseInt(person.money) - parseInt(amount);
@@ -629,10 +629,10 @@ bot.on("messageCreate", async (message) => {
     for (var user in parsedjackpot["entries"]) {
       console.log(
         user +
-          ": " +
-          parsedjackpot["entries"][user]["user"] +
-          ": " +
-          parsedjackpot["entries"][user]["amount"]
+        ": " +
+        parsedjackpot["entries"][user]["user"] +
+        ": " +
+        parsedjackpot["entries"][user]["amount"]
       );
     }
   }
@@ -850,8 +850,8 @@ bot.on("messageCreate", async (message) => {
         .setColor(generateHex())
         .setTitle("Result")
         .setDescription(slot1 + " " + slot2 + " " + slot3)
-        .addFields({name: "You won", value: "$" + parseInt(investment) * 25});
-      message.channel.send({embeds: [moneyEmbed]});
+        .addFields({ name: "You won", value: "$" + parseInt(investment) * 25 });
+      message.channel.send({ embeds: [moneyEmbed] });
       let newdata = {
         money: parseInt(read(messageAuthor).money) + parseInt(investment) * 25,
         lastreset: parseInt(per.lastreset),
@@ -863,8 +863,8 @@ bot.on("messageCreate", async (message) => {
         .setColor(generateHex())
         .setTitle("Result")
         .setDescription(slot1 + " " + slot2 + " " + slot3)
-        .addFields({name: "You lost ", value: "$" + investment});
-      message.channel.send({embeds: [moneyEmbed]});
+        .addFields({ name: "You lost ", value: "$" + investment });
+      message.channel.send({ embeds: [moneyEmbed] });
       let newdata = {
         money: parseInt(read(messageAuthor).money) - parseInt(investment),
         lastreset: parseInt(per.lastreset),
@@ -946,9 +946,9 @@ bot.on("messageCreate", async (message) => {
         log("Inside .stat Data (File exists): " + reputation + copper);
         log(
           "Updating existing player JSON file of " +
-            author +
-            " With the values copper:" +
-            copper
+          author +
+          " With the values copper:" +
+          copper
         );
         if (copper == null) copper = read(author).copper;
         if (reputation == null) reputation = read(author).reputation;
@@ -965,9 +965,9 @@ bot.on("messageCreate", async (message) => {
         log("Inside .stat Data (File does not exist): " + reputation + copper);
         log(
           "Creating new player JSON file of " +
-            author +
-            " With the values copper:" +
-            copper
+          author +
+          " With the values copper:" +
+          copper
         );
         let newdata = {
           reputation: reputation,
@@ -1095,23 +1095,25 @@ bot.on("messageCreate", async (message) => {
           .setColor(generateHex())
           .setTitle("Stat Board of " + message.author.id)
           .setDescription("A collection of your stats.")
-          .setThumbnail(message.author.avatarURL)
-          .addField(
-            "Reputation",
-            read(author).reputation +
-              "\nReputation Level: " +
-              repCheck(messageAuthor)
-          )
-          .addField(
-            "Money",
-            "Copper: " +
-              copper +
-              "\nSilver: " +
-              silver +
-              "\nGold: " +
-              gold +
-              "\nPlatinum: " +
-              platinum
+          .setThumbnail(message.author.displayAvatarURL())
+          .addFields(
+            {
+              name: "Reputation",
+              value: read(author).reputation +
+                "\nReputation Level: " +
+                repCheck(messageAuthor)
+            },
+            {
+              name: "Money",
+              value: "Copper: " +
+                copper +
+                "\nSilver: " +
+                silver +
+                "\nGold: " +
+                gold +
+                "\nPlatinum: " +
+                platinum
+            }
           );
         message.channel.send(moneyEmbed);
       } else if (err.code === "ENOENT") {
@@ -1323,11 +1325,9 @@ bot.on("messageCreate", async (message) => {
     case "chatinfo":
       const historyInfo = getChatHistoryInfo(message.author.id.toString());
       if (historyInfo.exists) {
-        let infoMsg = `Your conversation has ${
-          historyInfo.messageCount - 1
-        } messages (${historyInfo.userMsgCount} from you, ${
-          historyInfo.assistantMsgCount
-        } from the assistant)`;
+        let infoMsg = `Your conversation has ${historyInfo.messageCount - 1
+          } messages (${historyInfo.userMsgCount} from you, ${historyInfo.assistantMsgCount
+          } from the assistant)`;
 
         infoMsg += `\nTotal character count: ${historyInfo.totalChars}/20000`;
 
@@ -1536,8 +1536,7 @@ bot.on("messageCreate", async (message) => {
     case "ping":
       const m = await message.channel.send("Ping?");
       m.edit(
-        `Pong! Latency is ${
-          m.createdTimestamp - message.createdTimestamp
+        `Pong! Latency is ${m.createdTimestamp - message.createdTimestamp
         }ms. API Latency is ${Math.round(bot.ws.ping)}ms`
       );
       break;
@@ -1586,8 +1585,8 @@ bot.on("messageCreate", async (message) => {
           let resetdata = JSON.parse(rawdata);
           message.channel.send(
             "Cooldown of " +
-              (resetdata.lastreset + 300000 - Date.now()) / 1000 / 60 +
-              " minutes."
+            (resetdata.lastreset + 300000 - Date.now()) / 1000 / 60 +
+            " minutes."
           );
         }
       }
@@ -2100,10 +2099,10 @@ bot.on("messageCreate", async (message) => {
       var rated = args.join(" ");
       message.channel.send(
         "I rate " +
-          rated +
-          " a good " +
-          Math.floor(Math.random() * 101) +
-          "/100"
+        rated +
+        " a good " +
+        Math.floor(Math.random() * 101) +
+        "/100"
       );
       break;
     /*
@@ -2683,7 +2682,7 @@ bot.on("messageCreate", async (message) => {
     case "say":
       var sayMessage = args.join(" ");
       sayMessage = sayMessage.replace("say ", "");
-      message.delete().catch((O_o) => {});
+      message.delete().catch((O_o) => { });
       message.channel.send(sayMessage);
       break;
     case "xkcd":
@@ -2719,7 +2718,7 @@ bot.on("messageCreate", async (message) => {
             message.channel
               .send(
                 "Deletion of messages successful. \n Total messages deleted including command: " +
-                  newamount
+                newamount
               )
               .then((message) => {
                 setTimeout(() => {
@@ -2728,7 +2727,7 @@ bot.on("messageCreate", async (message) => {
               });
             console.log(
               "Deletion of messages successful. \n Total messages deleted including command: " +
-                newamount
+              newamount
             );
           })
           .catch((err) => {
@@ -2911,9 +2910,9 @@ bot.on("messageCreate", async (message) => {
       if (Math.floor(Math.random() * 100) <= 45) {
         return message.channel.send(
           "In " +
-            Math.floor(Math.random() * 100) +
-            " " +
-            timeTypes[Math.floor(Math.random() * timeTypes.length)]
+          Math.floor(Math.random() * 100) +
+          " " +
+          timeTypes[Math.floor(Math.random() * timeTypes.length)]
         );
       } else {
         message.channel.send(
