@@ -272,7 +272,8 @@ var wsettings = {
 };
 
 function generateHex() {
-  return "#" + Math.floor(Math.random() * 16777215).toString(16);
+  const hex = Math.floor(Math.random() * 16777215).toString(16);
+  return "#" + hex.padStart(6, "0");
 }
 
 function russianActive(input) {
@@ -849,7 +850,7 @@ bot.on("messageCreate", async (message) => {
         .setTitle("Result")
         .setDescription(slot1 + " " + slot2 + " " + slot3)
         .addFields({name: "You won", value: "$" + parseInt(investment) * 25});
-      message.channel.send(moneyEmbed);
+      message.channel.send({embeds: [moneyEmbed]});
       let newdata = {
         money: parseInt(read(messageAuthor).money) + parseInt(investment) * 25,
         lastreset: parseInt(per.lastreset),
@@ -862,7 +863,7 @@ bot.on("messageCreate", async (message) => {
         .setTitle("Result")
         .setDescription(slot1 + " " + slot2 + " " + slot3)
         .addFields({name: "You lost ", value: "$" + investment});
-      message.channel.send(moneyEmbed);
+      message.channel.send({embeds: [moneyEmbed]});
       let newdata = {
         money: parseInt(read(messageAuthor).money) - parseInt(investment),
         lastreset: parseInt(per.lastreset),
@@ -871,7 +872,7 @@ bot.on("messageCreate", async (message) => {
       fs.writeFileSync(mAuthor, writedata);
     }
   }
-  
+
   async function coinflip(amount, id) {
     let path = "./playerdata/" + id + ".json";
     var investment = parseInt(amount);
