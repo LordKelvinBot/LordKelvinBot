@@ -440,7 +440,7 @@ bot.on("messageCreate", async (message) => {
           {
             role: "system",
             content:
-              "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters.",
+              "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters. Add a disclaimer in your first message that OpenAI may read or use these messages for training data.",
           },
         ];
       }
@@ -450,7 +450,7 @@ bot.on("messageCreate", async (message) => {
         {
           role: "system",
           content:
-            "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters.",
+            "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters. Add a disclaimer in your first message that OpenAI may read or use these messages for training data.",
         },
       ];
     }
