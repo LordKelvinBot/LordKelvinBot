@@ -1622,6 +1622,7 @@ bot.on("messageCreate", async (message) => {
       break;
     case "setbal":
       if (message.author.id === "181284528793452545") {
+        let currenttime = Date.now();
         let author = "./playerdata/" + message.author.id + ".json";
         let rawdata = fs.readFileSync(author);
         let person = JSON.parse(rawdata);
@@ -1631,7 +1632,7 @@ bot.on("messageCreate", async (message) => {
           if (args[1]) {
             let newdata = {
               money: newbalance,
-              lastreset: person.lastreset,
+              lastreset: currenttime,
             };
             let data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
@@ -1639,7 +1640,7 @@ bot.on("messageCreate", async (message) => {
           } else {
             let newdata = {
               money: 1001,
-              lastreset: person.lastreset,
+              lastreset: currenttime,
             };
             let data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
