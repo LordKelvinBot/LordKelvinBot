@@ -1239,6 +1239,7 @@ bot.on("messageCreate", async (message) => {
       const responses = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         messages: userMessages,
+
       });
 
       console.log(responses.choices[0].message.content);
@@ -1255,12 +1256,83 @@ bot.on("messageCreate", async (message) => {
         aisend = aisend.substring(1, aisend.length - 1);
         aisend = aisend.replaceAll("\\n", "\n");
 
-        if (aisend.length < 2000) message.channel.send(aisend);
-        else {
-          message.channel.send("Message was over 2000 characters");
+        if (aisend.length < 2000) {
+          message.channel.send(aisend);
+        } else {
+          const sendMessageChunks = async (text, maxLength = 2000, maxChunks = 4) => {
+            let chunks = [];
+            let currentChunk = "";
+            let totalChunks = 0;
+
+            const lines = text.split("\n");
+
+            for (const line of lines) {
+              if (currentChunk.length + line.length + 1 > maxLength) {
+                if (line.length > maxLength) {
+                  if (currentChunk.length > 0) {
+                    chunks.push(currentChunk);
+                    totalChunks++;
+                    currentChunk = "";
+                  }
+
+                  let remainingLine = line;
+                  while (remainingLine.length > 0) {
+                    let splitPoint = maxLength;
+                    if (remainingLine.length > maxLength) {
+                      const lastSpaceIndex = remainingLine.substring(0, maxLength).lastIndexOf(" ");
+                      if (lastSpaceIndex > 0) {
+                        splitPoint = lastSpaceIndex + 1;
+                      }
+                    }
+
+                    chunks.push(remainingLine.substring(0, splitPoint));
+                    totalChunks++;
+                    remainingLine = remainingLine.substring(splitPoint);
+
+                    if (totalChunks >= maxChunks) {
+                      chunks[chunks.length - 1] += "\n\n[Message truncated due to length...]";
+                      return chunks;
+                    }
+                  }
+                } else {
+                  chunks.push(currentChunk);
+                  totalChunks++;
+                  currentChunk = line + "\n";
+                  if (totalChunks >= maxChunks) {
+                    return chunks;
+                  }
+                }
+              } else {
+                currentChunk += line + "\n";
+              }
+            }
+
+            if (currentChunk.length > 0) {
+              chunks.push(currentChunk);
+            }
+
+            return chunks;
+          };
+
+          const messageChunks = await sendMessageChunks(aisend, 2000, 4);
+
+
+          for (let i = 0; i < messageChunks.length; i++) {
+            await message.channel.send({
+              content: messageChunks[i],
+              allowedMentions: { parse: [] }
+            });
+          }
+
+
+          if (aisend.length > 8000) {
+            await message.channel.send({
+              content: "The complete message was over 8000 characters and has been truncated."
+            });
+          }
         }
       } else {
-        message.channel.send("Response was null/empty");
+        message.channel.send({ content: "Response was null/empty" });
       }
       break;
     case "bchat":
