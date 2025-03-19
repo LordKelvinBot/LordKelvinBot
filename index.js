@@ -1236,11 +1236,18 @@ bot.on("messageCreate", async (message) => {
         content: messageargs,
       });
 
-      const responses = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: userMessages,
-
-      });
+      if (args[1] === "+web") {
+        const responses = await openai.chat.completions.create({
+          model: "gpt-4o-search-preview",
+          messages: userMessages,
+          web_search_options: {}
+        });
+      } else {
+        const responses = await openai.chat.completions.create({
+          model: "gpt-4o",
+          messages: userMessages,
+        });
+      }
 
       console.log(responses.choices[0].message.content);
 
