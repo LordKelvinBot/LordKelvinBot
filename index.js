@@ -1768,6 +1768,7 @@ bot.on("messageCreate", async (message) => {
         var image = args.join(" ");
         switch (image) {
           case "the fastest spook in the west":
+          case "fast spook":
           case "fastest spook":
           case "the fastest spook":
             message.channel.send({
