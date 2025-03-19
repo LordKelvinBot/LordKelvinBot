@@ -1779,6 +1779,7 @@ bot.on("messageCreate", async (message) => {
           case "the slowest spook in the west":
           case "slowest spook":
           case "the slowest spook":
+          case "slow spook":
             message.channel.send({
               files: ["./images/m/slowest_spook.jpg"],
             });
