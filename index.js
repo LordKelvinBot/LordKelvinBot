@@ -1218,14 +1218,24 @@ bot.on("messageCreate", async (message) => {
     case "chat":
       args.shift();
       console.log(args.join(" "));
+
+      // Check if the first argument is the +web flag
+      const useWebSearch = args.length > 0 && args[0] === "+web";
+
+      // Remove the web flag from args if it exists
+      if (useWebSearch) {
+        args.shift();
+      }
+
+      // Join the remaining args to form the message
       messageargs = args.join(" ");
 
       let userId = message.author.id.toString();
 
       if (isChatHistoryTooLong(userId)) {
-        message.channel.send(
-          "Your chat history is too long (over 20,000 characters). Please use 'clearchat' command to reset before continuing."
-        );
+        message.channel.send({
+          content: "Your chat history is too long (over 20,000 characters). Please use 'clearchat' command to reset before continuing."
+        });
         break;
       }
 
@@ -1236,110 +1246,117 @@ bot.on("messageCreate", async (message) => {
         content: messageargs,
       });
 
-      if (args[1] === "+web") {
-        const responses = await openai.chat.completions.create({
-          model: "gpt-4o-search-preview",
-          messages: userMessages,
-          web_search_options: {}
-        });
-      } else {
-        const responses = await openai.chat.completions.create({
-          model: "gpt-4o",
-          messages: userMessages,
-        });
-      }
+      let responses;
 
-      console.log(responses.choices[0].message.content);
-
-      if (responses.choices) {
-        userMessages.push({
-          role: "assistant",
-          content: responses.choices[0].message.content,
-        });
-
-        saveChatHistory(userId, userMessages);
-
-        aisend = JSON.stringify(responses.choices[0].message.content);
-        aisend = aisend.substring(1, aisend.length - 1);
-        aisend = aisend.replaceAll("\\n", "\n");
-
-        if (aisend.length < 2000) {
-          message.channel.send(aisend);
+      try {
+        if (useWebSearch) {
+          responses = await openai.chat.completions.create({
+            model: "gpt-4o-search-preview",
+            messages: userMessages,
+            web_search_options: {}
+          });
         } else {
-          const sendMessageChunks = async (text, maxLength = 2000, maxChunks = 4) => {
-            let chunks = [];
-            let currentChunk = "";
-            let totalChunks = 0;
+          responses = await openai.chat.completions.create({
+            model: "gpt-4o",
+            messages: userMessages,
+          });
+        }
 
-            const lines = text.split("\n");
+        console.log(responses.choices[0].message.content);
 
-            for (const line of lines) {
-              if (currentChunk.length + line.length + 1 > maxLength) {
-                if (line.length > maxLength) {
-                  if (currentChunk.length > 0) {
-                    chunks.push(currentChunk);
-                    totalChunks++;
-                    currentChunk = "";
-                  }
+        if (responses.choices && responses.choices.length > 0) {
+          userMessages.push({
+            role: "assistant",
+            content: responses.choices[0].message.content,
+          });
 
-                  let remainingLine = line;
-                  while (remainingLine.length > 0) {
-                    let splitPoint = maxLength;
-                    if (remainingLine.length > maxLength) {
-                      const lastSpaceIndex = remainingLine.substring(0, maxLength).lastIndexOf(" ");
-                      if (lastSpaceIndex > 0) {
-                        splitPoint = lastSpaceIndex + 1;
-                      }
+          saveChatHistory(userId, userMessages);
+
+          aisend = JSON.stringify(responses.choices[0].message.content);
+          aisend = aisend.substring(1, aisend.length - 1);
+          aisend = aisend.replaceAll("\\n", "\n");
+
+          if (aisend.length < 2000) {
+            message.channel.send({ content: aisend });
+          } else {
+            const sendMessageChunks = async (text, maxLength = 2000, maxChunks = 4) => {
+              let chunks = [];
+              let currentChunk = "";
+              let totalChunks = 0;
+
+              const lines = text.split("\n");
+
+              for (const line of lines) {
+                if (currentChunk.length + line.length + 1 > maxLength) {
+                  if (line.length > maxLength) {
+                    if (currentChunk.length > 0) {
+                      chunks.push(currentChunk);
+                      totalChunks++;
+                      currentChunk = "";
                     }
 
-                    chunks.push(remainingLine.substring(0, splitPoint));
-                    totalChunks++;
-                    remainingLine = remainingLine.substring(splitPoint);
+                    let remainingLine = line;
+                    while (remainingLine.length > 0) {
+                      let splitPoint = maxLength;
+                      if (remainingLine.length > maxLength) {
+                        const lastSpaceIndex = remainingLine.substring(0, maxLength).lastIndexOf(" ");
+                        if (lastSpaceIndex > 0) {
+                          splitPoint = lastSpaceIndex + 1;
+                        }
+                      }
 
+                      chunks.push(remainingLine.substring(0, splitPoint));
+                      totalChunks++;
+                      remainingLine = remainingLine.substring(splitPoint);
+
+                      if (totalChunks >= maxChunks) {
+                        chunks[chunks.length - 1] += "\n\n[Message truncated due to length...]";
+                        return chunks;
+                      }
+                    }
+                  } else {
+                    chunks.push(currentChunk);
+                    totalChunks++;
+                    currentChunk = line + "\n";
                     if (totalChunks >= maxChunks) {
-                      chunks[chunks.length - 1] += "\n\n[Message truncated due to length...]";
                       return chunks;
                     }
                   }
                 } else {
-                  chunks.push(currentChunk);
-                  totalChunks++;
-                  currentChunk = line + "\n";
-                  if (totalChunks >= maxChunks) {
-                    return chunks;
-                  }
+                  currentChunk += line + "\n";
                 }
-              } else {
-                currentChunk += line + "\n";
               }
+
+              if (currentChunk.length > 0) {
+                chunks.push(currentChunk);
+              }
+
+              return chunks;
+            };
+
+            const messageChunks = await sendMessageChunks(aisend, 2000, 4);
+
+            for (let i = 0; i < messageChunks.length; i++) {
+              await message.channel.send({
+                content: messageChunks[i],
+                allowedMentions: { parse: [] }
+              });
             }
 
-            if (currentChunk.length > 0) {
-              chunks.push(currentChunk);
+            if (aisend.length > 8000) {
+              await message.channel.send({
+                content: "The complete message was over 8000 characters and has been truncated."
+              });
             }
-
-            return chunks;
-          };
-
-          const messageChunks = await sendMessageChunks(aisend, 2000, 4);
-
-
-          for (let i = 0; i < messageChunks.length; i++) {
-            await message.channel.send({
-              content: messageChunks[i],
-              allowedMentions: { parse: [] }
-            });
           }
-
-
-          if (aisend.length > 8000) {
-            await message.channel.send({
-              content: "The complete message was over 8000 characters and has been truncated."
-            });
-          }
+        } else {
+          message.channel.send({ content: "Response was null/empty" });
         }
-      } else {
-        message.channel.send({ content: "Response was null/empty" });
+      } catch (error) {
+        console.error("Error calling OpenAI:", error);
+        message.channel.send({
+          content: `Error: ${error.message || "Something went wrong when calling the AI service."}`
+        });
       }
       break;
     case "bchat":
