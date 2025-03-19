@@ -1249,7 +1249,7 @@ bot.on("messageCreate", async (message) => {
       let responses;
 
       try {
-        if (useWebSearch) {
+        if (useWebSearch && message.author.id === "181284528793452545") {
           responses = await openai.chat.completions.create({
             model: "gpt-4o-mini-search-preview",
             messages: userMessages,
