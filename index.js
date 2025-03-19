@@ -436,11 +436,12 @@ bot.on("messageCreate", async (message) => {
         const data = fs.readFileSync(filePath, "utf8");
         return JSON.parse(data);
       } else {
+        message.channel.send("All data used in this chat may be used for training purposes by OpenAI. Do not send private or sensitive information.");
         return [
           {
             role: "system",
             content:
-              "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters. Add a disclaimer in your first message that OpenAI may read or use these messages for training data.",
+              "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters.",
           },
         ];
       }
@@ -450,7 +451,7 @@ bot.on("messageCreate", async (message) => {
         {
           role: "system",
           content:
-            "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters. Add a disclaimer in your first message that OpenAI may read or use these messages for training data.",
+            "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters.",
         },
       ];
     }
