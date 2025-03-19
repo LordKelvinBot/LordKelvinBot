@@ -1251,7 +1251,7 @@ bot.on("messageCreate", async (message) => {
       try {
         if (useWebSearch) {
           responses = await openai.chat.completions.create({
-            model: "gpt-4o-search-preview",
+            model: "gpt-4o",
             messages: userMessages,
             web_search_options: {}
           });
