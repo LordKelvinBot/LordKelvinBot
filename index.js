@@ -1119,7 +1119,7 @@ bot.on("messageCreate", async (message) => {
           {
             role: "system",
             content:
-              "You are a helpful assistant for a Discord bot called Kelvin.",
+              "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters.",
           },
         ]);
       }
@@ -2228,6 +2228,9 @@ bot.on("messageCreate", async (message) => {
               name: "random",
               value: "Returns a random number. Use with ' hey random num'",
             },
+            { name: "translate", value: "Translates text", inline: true },
+            { name: "chat", value: "Chat with the bot (4o-mini)", inline: true },
+            { name: "bchat", value: "Chat with the bot (o3-mini)", inline: true },
             { name: "Subreddit Help", value: "help sub", inline: true },
             { name: "Math Help", value: "help math", inline: true },
             { name: "Fun Help", value: "help fun", inline: true },
