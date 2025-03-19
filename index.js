@@ -848,7 +848,7 @@ bot.on("messageCreate", async (message) => {
         .setColor(generateHex())
         .setTitle("Result")
         .setDescription(slot1 + " " + slot2 + " " + slot3)
-        .addField("You won", "$" + parseInt(investment) * 25);
+        .addFields({name: "You won", value: "$" + parseInt(investment) * 25});
       message.channel.send(moneyEmbed);
       let newdata = {
         money: parseInt(read(messageAuthor).money) + parseInt(investment) * 25,
@@ -861,7 +861,7 @@ bot.on("messageCreate", async (message) => {
         .setColor(generateHex())
         .setTitle("Result")
         .setDescription(slot1 + " " + slot2 + " " + slot3)
-        .addField("You lost ", "$" + investment);
+        .addFields({name: "You lost ", value: "$" + investment});
       message.channel.send(moneyEmbed);
       let newdata = {
         money: parseInt(read(messageAuthor).money) - parseInt(investment),
@@ -871,6 +871,7 @@ bot.on("messageCreate", async (message) => {
       fs.writeFileSync(mAuthor, writedata);
     }
   }
+  
   async function coinflip(amount, id) {
     let path = "./playerdata/" + id + ".json";
     var investment = parseInt(amount);
