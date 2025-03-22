@@ -24,7 +24,7 @@
     "moment-duration-format": "^2.3.2",
     "node-fetch": "^3.3.2",
     "openai": "^4.87.3",
-    "opusscript": "^0.0.4",
+    "opusscript": "^0.1.1",
     "package.json": "^0.0.0",
     "random-puppy": "^1.1.0",
     "snekfetch": "^4.0.4",
