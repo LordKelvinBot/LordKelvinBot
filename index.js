@@ -441,7 +441,7 @@ bot.on("messageCreate", async (message) => {
           {
             role: "system",
             content:
-              "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters. Write your messages in discord chat format.",
+              "You are a helpful assistant for a Discord bot called Kelvin. You should keep messages under 2000 characters if possible. Write your messages in discord chat format.",
           },
         ];
       }
@@ -451,7 +451,7 @@ bot.on("messageCreate", async (message) => {
         {
           role: "system",
           content:
-            "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters. Write your messages in discord chat format.",
+            "You are a helpful assistant for a Discord bot called Kelvin. You should keep messages under 2000 characters if possible. Write your messages in discord chat format.",
         },
       ];
     }
@@ -1266,8 +1266,7 @@ bot.on("messageCreate", async (message) => {
         } else if (usePreview && message.author.id === "181284528793452545") {
           responses = await openai.chat.completions.create({
             model: "gpt-4.5-preview",
-            messages: userMessages,
-            web_search_options: {}
+            messages: userMessages
           });
         } else {
           responses = await openai.chat.completions.create({
