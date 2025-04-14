@@ -89,6 +89,7 @@ require("dotenv").config();
 //other Consts
 
 const AITOKEN = process.env.OPENAI_API_KEY;
+const OPENROUTER_AITOKEN = process.env.OPENROUTER_AITOKEN;
 const configuration = {
   apiKey: AITOKEN,
 };
@@ -101,7 +102,7 @@ const ORConfig = {
 }
 
 const openai = new OpenAI(configuration);
-const openrouter = new OpenAI();
+const openrouter = new OpenAI(ORConfig);
 const deeplt = config.deepltoken;
 const TOKEN = config.token;
 const PREFIX = config.prefix;
