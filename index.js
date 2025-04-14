@@ -441,7 +441,7 @@ bot.on("messageCreate", async (message) => {
           {
             role: "system",
             content:
-              "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters.",
+              "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters. Write your messages in discord chat format.",
           },
         ];
       }
@@ -451,7 +451,7 @@ bot.on("messageCreate", async (message) => {
         {
           role: "system",
           content:
-            "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters.",
+            "You are a helpful assistant for a Discord bot called Kelvin. You must also keep messages under 2000 characters. Write your messages in discord chat format.",
         },
       ];
     }
@@ -1226,6 +1226,14 @@ bot.on("messageCreate", async (message) => {
       if (useWebSearch) {
         args.shift();
       }
+      
+      // Check if the first argument is the +web flag
+      const usePreview = args.length > 0 && args[0] === "+preview";
+
+      // Remove the web flag from args if it exists
+      if (usePreview) {
+        args.shift();
+      }
 
       // Join the remaining args to form the message
       messageargs = args.join(" ");
@@ -1252,6 +1260,12 @@ bot.on("messageCreate", async (message) => {
         if (useWebSearch && message.author.id === "181284528793452545") {
           responses = await openai.chat.completions.create({
             model: "gpt-4o-mini-search-preview",
+            messages: userMessages,
+            web_search_options: {}
+          });
+        } else if (usePreview && message.author.id === "181284528793452545") {
+          responses = await openai.chat.completions.create({
+            model: "gpt-4.5-preview",
             messages: userMessages,
             web_search_options: {}
           });
@@ -1427,7 +1441,7 @@ bot.on("messageCreate", async (message) => {
 
         infoMsg += `\nTotal character count: ${historyInfo.totalChars}/20000`;
 
-        if (historyInfo.totalChars > 8000) {
+        if (historyInfo.totalChars > 15000) {
           infoMsg +=
             "\n⚠️ Your chat history is approaching the 20,000 character limit. Consider using 'clearchat' soon.";
         }
