@@ -1235,30 +1235,35 @@ bot.on("messageCreate", async (message) => {
       // Remove the web flag from args if it exists
       if (useWebSearch) {
         args.shift();
+        console.log("Used Web Search");
       }
-      
+
       const usePreview = args.length > 0 && args[0] === "+preview";
 
       if (usePreview) {
         args.shift();
+        console.log("Used 4.5 Preview");
       }
 
       const useGemini = args.length > 0 && args[0] === "+gem";
 
       if (useGemini) {
         args.shift();
+        console.log("Used Gemini 2.5 Pro");
       }
 
       const useSeek = args.length > 0 && args[0] === "+deep";
 
       if (useSeek) {
         args.shift();
+        console.log("Used Deepseek R1");
       }
 
       const useFast = args.length > 0 && args[0] === "+fast";
 
       if (useFast) {
         args.shift();
+        console.log("Used Gemini Flash 2.0 Exp");
       }
 
       // Join the remaining args to form the message
