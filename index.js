@@ -1238,7 +1238,7 @@ bot.on("messageCreate", async (message) => {
         console.log("Used Web Search");
       }
 
-      const usePreview = args.length > 0 && args[0] === "+preview";
+      const usePreview = args.length > 0 && args[0] === "+pre";
 
       if (usePreview) {
         args.shift();
@@ -1299,18 +1299,17 @@ bot.on("messageCreate", async (message) => {
             model: "gpt-4.5-preview",
             messages: userMessages
           });
-        } else if (useGemini && message.author.id === "181284528793452545") {
+        } else if (useGemini) {
           responses = await openrouter.chat.completions.create({
             model: "google/gemini-2.5-pro-exp-03-25:free",
             messages: userMessages
           });
-        } 
-        else if (useSeek && message.author.id === "181284528793452545") {
+        } else if (useSeek) {
           responses = await openrouter.chat.completions.create({
             model: "deepseek/deepseek-r1:free",
             messages: userMessages
           });
-        } else if (useFast && message.author.id === "181284528793452545") {
+        } else if (useFast) {
           responses = await openrouter.chat.completions.create({
             model: "google/gemini-2.0-flash-exp:free",
             messages: userMessages
