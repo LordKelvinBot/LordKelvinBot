@@ -1315,9 +1315,9 @@ bot.on("messageCreate", async (message) => {
             messages: userMessages
           });
         } else {
-          responses = await openai.chat.completions.create({
-            model: "gpt-4o",
-            messages: userMessages,
+          responses = await openrouter.chat.completions.create({
+            model: "google/gemini-2.5-pro-exp-03-25:free",
+            messages: userMessages
           });
         }
 
