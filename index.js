@@ -92,7 +92,16 @@ const AITOKEN = process.env.OPENAI_API_KEY;
 const configuration = {
   apiKey: AITOKEN,
 };
+const ORConfig = {
+  apiKey: OPENROUTER_AITOKEN,
+  baseURL: "https://openrouter.ai/api/v1",
+  defaultHeaders: {
+    "HTTP-Referer": "https://github.com/OpenRouterTeam/openrouter-examples",
+  }
+}
+
 const openai = new OpenAI(configuration);
+const openrouter = new OpenAI();
 const deeplt = config.deepltoken;
 const TOKEN = config.token;
 const PREFIX = config.prefix;
@@ -1227,11 +1236,27 @@ bot.on("messageCreate", async (message) => {
         args.shift();
       }
       
-      // Check if the first argument is the +web flag
       const usePreview = args.length > 0 && args[0] === "+preview";
 
-      // Remove the web flag from args if it exists
       if (usePreview) {
+        args.shift();
+      }
+
+      const useGemini = args.length > 0 && args[0] === "+gem";
+
+      if (useGemini) {
+        args.shift();
+      }
+
+      const useSeek = args.length > 0 && args[0] === "+deep";
+
+      if (useSeek) {
+        args.shift();
+      }
+
+      const useFast = args.length > 0 && args[0] === "+fast";
+
+      if (useFast) {
         args.shift();
       }
 
@@ -1266,6 +1291,22 @@ bot.on("messageCreate", async (message) => {
         } else if (usePreview && message.author.id === "181284528793452545") {
           responses = await openai.chat.completions.create({
             model: "gpt-4.5-preview",
+            messages: userMessages
+          });
+        } else if (useGemini && message.author.id === "181284528793452545") {
+          responses = await openrouter.chat.completions.create({
+            model: "google/gemini-2.5-pro-exp-03-25:free",
+            messages: userMessages
+          });
+        } 
+        else if (useSeek && message.author.id === "181284528793452545") {
+          responses = await openrouter.chat.completions.create({
+            model: "deepseek/deepseek-r1:free",
+            messages: userMessages
+          });
+        } else if (useFast && message.author.id === "181284528793452545") {
+          responses = await openrouter.chat.completions.create({
+            model: "google/gemini-2.0-flash-exp:free",
             messages: userMessages
           });
         } else {
