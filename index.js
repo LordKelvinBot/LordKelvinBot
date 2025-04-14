@@ -1317,6 +1317,10 @@ bot.on("messageCreate", async (message) => {
         } else {
           responses = await openrouter.chat.completions.create({
             model: "google/gemini-2.5-pro-exp-03-25:free",
+            provider: {
+              order: ["Google", "Google AI Studio", "Google Vertex"],
+              sort: "price"
+            },
             messages: userMessages
           });
         }
