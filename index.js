@@ -522,7 +522,7 @@ bot.on("messageCreate", async (message) => {
     }
   }
 
-  function isChatHistoryTooLong(userId, limit = 20000) {
+  function isChatHistoryTooLong(userId, limit = 30000) {
     const info = getChatHistoryInfo(userId);
     return info.exists && info.totalChars > limit;
   }
@@ -1273,7 +1273,7 @@ bot.on("messageCreate", async (message) => {
 
       if (isChatHistoryTooLong(userId)) {
         message.channel.send({
-          content: "Your chat history is too long (over 20,000 characters). Please use 'clearchat' command to reset before continuing."
+          content: "Your chat history is too long (over 30,000 characters). Please use 'clearchat' command to reset before continuing."
         });
         break;
       }
@@ -1318,8 +1318,7 @@ bot.on("messageCreate", async (message) => {
           responses = await openrouter.chat.completions.create({
             model: "google/gemini-2.5-pro-exp-03-25:free",
             provider: {
-              order: ["Google", "Google AI Studio", "Google Vertex"],
-              sort: "price"
+              order: ["Google", "Google AI Studio"]
             },
             messages: userMessages
           });
@@ -1342,7 +1341,7 @@ bot.on("messageCreate", async (message) => {
           if (aisend.length < 2000) {
             message.channel.send({ content: aisend });
           } else {
-            const sendMessageChunks = async (text, maxLength = 2000, maxChunks = 4) => {
+            const sendMessageChunks = async (text, maxLength = 2000, maxChunks = 6) => {
               let chunks = [];
               let currentChunk = "";
               let totalChunks = 0;
@@ -1397,7 +1396,7 @@ bot.on("messageCreate", async (message) => {
               return chunks;
             };
 
-            const messageChunks = await sendMessageChunks(aisend, 2000, 4);
+            const messageChunks = await sendMessageChunks(aisend, 2000, 6);
 
             for (let i = 0; i < messageChunks.length; i++) {
               await message.channel.send({
@@ -1406,7 +1405,7 @@ bot.on("messageCreate", async (message) => {
               });
             }
 
-            if (aisend.length > 8000) {
+            if (aisend.length > 12000) {
               await message.channel.send({
                 content: "The complete message was over 8000 characters and has been truncated."
               });
@@ -1488,11 +1487,11 @@ bot.on("messageCreate", async (message) => {
           } messages (${historyInfo.userMsgCount} from you, ${historyInfo.assistantMsgCount
           } from the assistant)`;
 
-        infoMsg += `\nTotal character count: ${historyInfo.totalChars}/20000`;
+        infoMsg += `\nTotal character count: ${historyInfo.totalChars}/30000`;
 
-        if (historyInfo.totalChars > 15000) {
+        if (historyInfo.totalChars > 25000) {
           infoMsg +=
-            "\n⚠️ Your chat history is approaching the 20,000 character limit. Consider using 'clearchat' soon.";
+            "\n⚠️ Your chat history is approaching the 30,000 character limit. Consider using 'clearchat' soon.";
         }
 
         message.channel.send(infoMsg);
