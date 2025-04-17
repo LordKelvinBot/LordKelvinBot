@@ -333,6 +333,15 @@ async function translater(message, textinput, lang) {
     });
 }
 
+process
+  .on("unhandledRejection", (reason, p) => {
+    console.error("→ Unhandled Rejection at:", p, "reason:", reason);
+  })
+  .on("uncaughtException", (err) => {
+    console.error("→ Uncaught Exception:", err);
+    // optionally: process.exit(1);
+  });
+
 bot.on("messageCreate", async (message) => {
   if (message.author.id === bot.user.id) return;
   if (!message.content.startsWith(PREFIX)) return;
@@ -1289,9 +1298,15 @@ bot.on("messageCreate", async (message) => {
             break;
           }
         }
-      } catch (error) {
-        await message.channel.send(`Error: ${error.message}`);
+      } catch (err) {
+        console.error("❗ Uncaught in chat handler:", err);
+        try {
+          await message.channel.send(`Error: ${err.message}`);
+        } catch (_) {
+          console.error("❗ Could not send outer error message, giving up.");
+        }
       }
+      
       break;
 
     case "clearchat":
