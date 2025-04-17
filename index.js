@@ -1244,51 +1244,13 @@ bot.on("messageCreate", async (message) => {
           if (aiContent.length < 2000) {
             await message.channel.send(aiContent);
           } else {
-            const sendMessageChunks = async (text, maxLength = 2000, maxChunks = 6) => {
-              const lines = text.split("\n");
-              let chunks = [];
-              let currentChunk = "";
-              let totalChunks = 0;
-
-              for (const line of lines) {
-                if (currentChunk.length + line.length + 1 > maxLength) {
-                  if (line.length > maxLength) {
-                    if (currentChunk.length) {
-                      chunks.push(currentChunk);
-                      totalChunks++;
-                      currentChunk = "";
-                    }
-                    let remaining = line;
-                    while (remaining.length) {
-                      const splitIdx = remaining.substring(0, maxLength).lastIndexOf(" ") + 1 || maxLength;
-                      chunks.push(remaining.substring(0, splitIdx));
-                      totalChunks++;
-                      remaining = remaining.substring(splitIdx);
-                      if (totalChunks >= maxChunks) {
-                        chunks[chunks.length - 1] += "\n\n[Message truncated due to length...]";
-                        return chunks;
-                      }
-                    }
-                  } else {
-                    chunks.push(currentChunk);
-                    totalChunks++;
-                    currentChunk = line + "\n";
-                    if (totalChunks >= maxChunks) return chunks;
-                  }
-                } else {
-                  currentChunk += line + "\n";
-                }
-              }
-              if (currentChunk) chunks.push(currentChunk);
-              return chunks;
-            };
-
-            const messageChunks = await sendMessageChunks(aiContent);
-            for (const chunk of messageChunks) {
-              await message.channel.send({ content: chunk, allowedMentions: { parse: [] } });
-            }
-            if (aiContent.length > 12000) {
-              await message.channel.send({ content: "The complete message was over 12000 characters and has been truncated." });
+            const CHUNK_SIZE = 2000;
+            for (let i = 0; i < aiContent.length; i += CHUNK_SIZE) {
+              const chunk = aiContent.substring(i, i + CHUNK_SIZE);
+              await message.channel.send({
+                content: chunk,
+                allowedMentions: { parse: [] }
+              });
             }
           }
         } else {
