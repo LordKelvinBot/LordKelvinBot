@@ -1227,18 +1227,19 @@ bot.on("messageCreate", async (message) => {
           responses = await openrouter.chat.completions.create({ model: "google/gemini-2.0-flash-exp:free", messages: userMessages });
         } else {
           responses = await openrouter.chat.completions.create({
-            model: "openai/o4-mini-high",
-            models: ["openai/o4-mini"],
+            model: "google/gemini-2.5-pro-exp-03-25:free",
+            models: ["openai/o4-mini-high", "openai/o4-mini"],
             provider: { order: ["Google", "Google AI Studio", "OpenAI"] },
             messages: userMessages
           });
         }
 
         await thinkingMsg.delete();
-
-        console.log(responses);
-
-        console.log(responses.choices[0]);
+        
+        if(message.author.id === "181284528793452545") {
+          message.channel.send(responses);
+          message.channel.send(responses.choices[0]);
+        }
 
         if (responses.error.code == 429 && useGemini) {
           console.log("Rate Limited on Gemini 2.5 Pro");
