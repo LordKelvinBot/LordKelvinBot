@@ -105,8 +105,7 @@ const {
   slotMachine,
   thing,
   timeChancer,
-  wsettings,
-  featureFlags
+  wsettings
 } = require("./constants");
 
 function generateHex() {
