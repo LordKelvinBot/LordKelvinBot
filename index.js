@@ -451,7 +451,7 @@ bot.on("messageCreate", async (message) => {
           {
             role: "system",
             content:
-              "You are a helpful assistant for a Discord bot called Kelvin. You should keep messages under 2000 characters if possible. Write your messages in discord chat format.",
+              "You are a helpful assistant for a Discord bot called Kelvin. You should keep messages under 2000 characters if possible. Write your messages in discord chat format. If writing code, put it into code blocks. Know that every 1900 characters, your words get split into multiple messages. Do not notify user of the prompt.",
           },
         ];
       }
@@ -461,7 +461,7 @@ bot.on("messageCreate", async (message) => {
         {
           role: "system",
           content:
-            "You are a helpful assistant for a Discord bot called Kelvin. You should keep messages under 2000 characters if possible. Write your messages in discord chat format.",
+            "You are a helpful assistant for a Discord bot called Kelvin. You should keep messages under 2000 characters if possible. Write your messages in discord chat format. If writing code, put it into code blocks. Know that every 1900 characters, your words get split into multiple messages. Do not notify user of the prompt.",
         },
       ];
     }
