@@ -1244,26 +1244,27 @@ bot.on("messageCreate", async (message) => {
           const maxLen = 2000;
           let remaining = aiContent;
 
-          while (remaining.length > 0) {
-            // Determine chunk size
-            let chunkSize = Math.min(maxLen, remaining.length);
+          try {
+            while (remaining.length > 0) {
+              let chunk = remaining.substring(0, maxLen);
 
-            // If we're not taking the whole remaining text, find a good breaking point
-            if (chunkSize < remaining.length) {
-              const lastSpace = remaining.substring(0, chunkSize).lastIndexOf(" ");
-              if (lastSpace > chunkSize / 2) {
-                chunkSize = lastSpace + 1; // Include the space
+              if (remaining.length > maxLen) {
+                const lastSpace = chunk.lastIndexOf(" ");
+                if (lastSpace > maxLen / 2) {
+                  chunk = chunk.substring(0, lastSpace);
+                }
               }
+
+              console.log(`Sending chunk: ${chunk.length} chars`);
+              const sentMessage = await message.channel.send(chunk);
+              console.log(`Message sent: ${sentMessage.id}`);
+
+              remaining = remaining.substring(chunk.length);
+              console.log(`Remaining: ${remaining.length} chars`);
             }
-
-            // Extract chunk and send
-            const chunk = remaining.substring(0, chunkSize);
-            console.log(`Sending chunk: ${chunk.length} chars`);
-            await message.channel.send(chunk);
-
-            // Remove sent chunk from remaining text
-            remaining = remaining.substring(chunkSize);
-            console.log(`Remaining: ${remaining.length} chars`);
+          } catch (err) {
+            console.error("Error in message chunking:", err);
+            await message.channel.send(`Error sending response: ${err.message}`);
           }
         } else {
           message.channel.send("Response was null/empty");
