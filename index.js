@@ -1213,12 +1213,10 @@ bot.on("messageCreate", async (message) => {
       args.shift();
       console.log(args.join(" "));
 
-      // initial thinking indicator
       let thinkingMsg;
       try {
         thinkingMsg = await message.channel.send("Thinking...");
 
-        // Check for flags
         const useWebSearch = args.length > 0 && args[0] === "+web";
         if (useWebSearch) args.shift();
         const usePreview = args.length > 0 && args[0] === "+pre";
@@ -1277,7 +1275,7 @@ bot.on("messageCreate", async (message) => {
           const chunk = chunks[i];
           try {
             await message.channel.send(chunk);
-            await new Promise(r => setTimeout(r, 200));
+            await new Promise(r => setTimeout(r, 1000));
           } catch (err) {
             console.error(`Failed to send chunk ${i + 1}/${chunks.length}:`, err);
             await message.channel.send(
