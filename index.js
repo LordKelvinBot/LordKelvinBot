@@ -1235,15 +1235,10 @@ bot.on("messageCreate", async (message) => {
         }
 
         await thinkingMsg.delete();
-        
-        if(message.author.id === "181284528793452545") {
+
+        if (message.author.id === "181284528793452545") {
           message.channel.send(responses);
           message.channel.send(responses.choices[0]);
-        }
-
-        if (responses.error.code == 429 && useGemini) {
-          console.log("Rate Limited on Gemini 2.5 Pro");
-          message.channel.send("Rate Limited. Please try again later.");
         }
 
         if (responses.choices && responses.choices.length > 0) {
@@ -1306,7 +1301,13 @@ bot.on("messageCreate", async (message) => {
           await message.channel.send("Response was null/empty");
         }
       } catch (error) {
-        if (thinkingMsg) {
+        if (useGemini && error.response?.status === 429) {
+          if (thinkingMsg) {
+            await thinkingMsg.edit("Rate Limited by Gemini 2.5 Pro, please try again later.");
+          } else {
+            message.channel.send("Rate Limited by Gemini 2.5 Pro, please try again later.");
+          }
+        } else if (thinkingMsg) {
           await thinkingMsg.edit(`Error: ${error.message}`);
         } else {
           message.channel.send(`Error: ${error.message}`);
