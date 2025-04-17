@@ -1251,10 +1251,10 @@ bot.on("messageCreate", async (message) => {
                 chunk = chunk.slice(0, lastSpace);
               }
             }
-            console.log(chunk.length);
+            console.log("Chunk: " + chunk.length);
             await message.channel.send(chunk);
             remaining = remaining.slice(chunk.length);
-            console.log(remaining.length);
+            console.log("Remain: " + remaining.length);
           }
         } else {
           message.channel.send("Response was null/empty");
