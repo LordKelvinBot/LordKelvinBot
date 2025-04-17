@@ -392,9 +392,9 @@ bot.on("messageCreate", async (message) => {
       const lastSpace = head.lastIndexOf(' ');
 
       if (lastNewline > maxLength * 0.7) {
-        chunkEnd = lastNewline + 1;  // include the newline
+        chunkEnd = lastNewline + 1;
       } else if (lastSpace > maxLength * 0.7) {
-        chunkEnd = lastSpace + 1;    // include the space
+        chunkEnd = lastSpace + 1;
       }
 
       chunks.push(remaining.slice(0, chunkEnd));
@@ -1269,22 +1269,26 @@ bot.on("messageCreate", async (message) => {
         const aiContent = responses.choices[0].message.content;
         userMessages.push({ role: "assistant", content: aiContent });
         saveChatHistory(userId, userMessages);
-        const chunks = splitMessage(aiContent, 2000);
+        const chunks = splitMessage(aiContent, 200);
 
         for (let i = 0; i < chunks.length; i++) {
           const chunk = chunks[i];
           try {
             await message.channel.send(chunk);
             await new Promise(r => setTimeout(r, 1000));
-          } catch (err) {
-            console.error(`Failed to send chunk ${i + 1}/${chunks.length}:`, err);
-            await message.channel.send(
-              `⚠️ Sorry, I couldn’t send part ${i + 1} of ${chunks.length}.`
-            );
-            break; // stop trying further chunks
+          } catch (sendErr) {
+            console.error(`❗ chunk #${i + 1} failed:`, sendErr);
+            // _catch_ the error‑reply itself, so it can’t bubble out
+            try {
+              await message.channel.send(
+                `⚠️ Sorry, I couldn’t send part ${i + 1}/${chunks.length}.`
+              );
+            } catch (replyErr) {
+              console.error("❗ Failed to notify user of chunk error:", replyErr);
+            }
+            break;
           }
         }
-
       } catch (error) {
         await message.channel.send(`Error: ${error.message}`);
       }
