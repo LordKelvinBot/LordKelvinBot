@@ -410,8 +410,6 @@ bot.on("messageCreate", async (message) => {
       remaining = remaining.slice(chunkEnd);
     }
 
-    // print out the entire list of chunks in one go
-    console.log(">> split into", chunks.length, "chunks:", chunks);
     return chunks;
   }
 
