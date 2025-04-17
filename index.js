@@ -377,35 +377,35 @@ bot.on("messageCreate", async (message) => {
   function splitMessage(text, maxLength) {
     const chunks = [];
     let remaining = text;
-    
+
     while (remaining.length > 0) {
       // If it all fits, push and break
       if (remaining.length <= maxLength) {
         chunks.push(remaining);
         break;
       }
-      
+
       // otherwise find a good break point
       let chunkEnd = maxLength;
       const head = remaining.slice(0, maxLength);
       const lastNewline = head.lastIndexOf('\n');
-      const lastSpace   = head.lastIndexOf(' ');
-      
+      const lastSpace = head.lastIndexOf(' ');
+
       if (lastNewline > maxLength * 0.7) {
         chunkEnd = lastNewline + 1;  // include the newline
       } else if (lastSpace > maxLength * 0.7) {
         chunkEnd = lastSpace + 1;    // include the space
       }
-      
+
       chunks.push(remaining.slice(0, chunkEnd));
       remaining = remaining.slice(chunkEnd);
     }
-    
+
     // print out the entire list of chunks in one go
     console.log(">> split into", chunks.length, "chunks:", chunks);
     return chunks;
   }
-  
+
   function TimeCheck(user) {
     let author = "./playerdata/" + user + ".json";
     let deta = fs.readFileSync(author);
@@ -1268,20 +1268,23 @@ bot.on("messageCreate", async (message) => {
 
         await thinkingMsg.delete();
 
-        if (responses.choices && responses.choices.length > 0) {
-          const aiContent = responses.choices[0].message.content;
-          userMessages.push({ role: "assistant", content: aiContent });
-          saveChatHistory(userId, userMessages);
+        const chunks = splitMessage(aiContent, 1900);
+        console.log("🥁 chunks:", chunks);
+
+        for (let i = 0; i < chunks.length; i++) {
+          const chunk = chunks[i];
           try {
-            const chunks = splitMessage(aiContent, 1000);
-            for (const chunk of chunks) {
-              await message.channel.send(chunk);
-            }
+            await message.channel.send(chunk);
+            await new Promise(r => setTimeout(r, 200));
           } catch (err) {
-            console.error("Failed to send a chunk:", err);
-            message.channel.send("Oops — I hit a send error. Try again in a bit!");
+            console.error(`Failed to send chunk ${i + 1}/${chunks.length}:`, err);
+            await message.channel.send(
+              `⚠️ Sorry, I couldn’t send part ${i + 1} of ${chunks.length}.`
+            );
+            break; // stop trying further chunks
           }
         }
+
       } catch (error) {
         message.channel.send(`Error: ${error.message}`);
       }
