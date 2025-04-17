@@ -39,6 +39,7 @@ global.servers = {};
 //requires
 ("use strict");
 const { OpenAI } = require("openai");
+const { splitMessage } = require('@discordjs/formatters');
 const {
   Client,
   GatewayIntentBits,
@@ -336,60 +337,30 @@ async function translater(message, textinput, lang) {
 bot.on("messageCreate", async (message) => {
   if (message.author.id === bot.user.id) return;
   if (!message.content.startsWith(PREFIX)) return;
-  let justInCase = 0;
-  while (message.content.indexOf("@") > -1) {
-    // Reassign the result of the replace back to messageContent.
-    message = message.content.replace("@", "@ ");
-    justInCase++;
-    if (justInCase > 15) {
-      break;
-    }
+
+  // strip @’s without touching `message`
+  const raw = message.content;
+  let clean = raw;
+  let loops = 0;
+  while (clean.includes("@") && loops < 15) {
+    clean = clean.replace("@", "@ ");
+    loops++;
   }
 
-  console.log("Updated content:", message.content);
+  console.log("Cleaned content:", clean);
 
   //if (!(message.author.equals(bot.user)) && !(message.content.startsWith(PREFIX)) && !(message.content.startsWith(".")) && !(message.author.username == "Hime") && !(message.channel.id = 383829771865292801)) message.guild.channels.find("name", "console-log").send(messageContent + "\n    *Sent by " + message.author.username + "*");
   //bot.user.setActivity('Serving ${bot.users.size} people');
   //(today.getMinutes() == 0 && (today.getHours() > 8 && today.getHours() < 21))
   //message.guild.channels.find("name", "general").send("Only " + hoursLeft + " hours and " + minutesLeft + " minutes left!");
   //Can't really do a countdown timer that says something every hour, because this code only runs every time someone sends a message. At least the command works
-  var args = message.content.substring(PREFIX.length).split(" ");
-  console.log(args);
-  var argString = args.join(" ");
+  const withoutPrefix = clean.slice(PREFIX.length).trim();
+  const args = withoutPrefix.split(/\s+/);
+  const argString = args.join(" ");
   // let colors = message.guild.roles.filter(role => role.name.startsWith("#"));
 
   function send(text) {
     message.channel.send(text);
-  }
-
-  function splitMessage(text, maxLength) {
-    const chunks = [];
-    let remaining = text;
-
-    while (remaining.length > 0) {
-      // If text fits in one chunk
-      if (remaining.length <= maxLength) {
-        chunks.push(remaining);
-        break;
-      }
-
-      // Find a good breaking point
-      let chunkEnd = maxLength;
-      const lastNewline = remaining.substring(0, maxLength).lastIndexOf('\n');
-      const lastSpace = remaining.substring(0, maxLength).lastIndexOf(' ');
-
-      // Prefer breaking at newlines if available
-      if (lastNewline > maxLength * 0.7) {
-        chunkEnd = lastNewline + 1; // Include the newline
-      } else if (lastSpace > maxLength * 0.7) {
-        chunkEnd = lastSpace + 1; // Include the space
-      }
-
-      chunks.push(remaining.substring(0, chunkEnd));
-      remaining = remaining.substring(chunkEnd);
-    }
-
-    return chunks;
   }
 
   function balanceCheck(id) {
@@ -1270,26 +1241,9 @@ bot.on("messageCreate", async (message) => {
           const aiContent = responses.choices[0].message.content;
           userMessages.push({ role: "assistant", content: aiContent });
           saveChatHistory(userId, userMessages);
-          
-          const messageChunks = splitMessage(aiContent, 1900); // Buffer for safety
-          console.log(`Splitting into ${messageChunks.length} chunks`);
-          
-          try {
-            for (let i = 0; i < messageChunks.length; i++) {
-              const chunk = messageChunks[i];
-              console.log(`Sending chunk ${i+1}/${messageChunks.length}, length: ${chunk.length}`);
-              
-              // Send with a 1 second delay between chunks
-              if (i > 0) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-              }
-              
-              await message.channel.send(chunk);
-              console.log(`Successfully sent chunk ${i+1}`);
-            }
-          } catch (err) {
-            console.error("Error sending chunks:", err);
-            await message.channel.send(`Error: ${err.message}`);
+          const chunks = splitMessage(aiContent, { maxLength: 1900 });
+          for (const chunk of chunks) {
+            message.channel.send(chunk);
           }
         }
       } catch (error) {
