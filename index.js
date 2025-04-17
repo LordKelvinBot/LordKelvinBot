@@ -1255,6 +1255,7 @@ bot.on("messageCreate", async (message) => {
             await message.channel.send({ content: chunk, allowedMentions: { parse: [] } });
             remaining = remaining.slice(chunk.length);
             console.log(remaining);
+            console.log(responses.choices[0].message.content);
           }
         } else {
           await message.channel.send("Response was null/empty");
