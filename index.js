@@ -1253,20 +1253,14 @@ bot.on("messageCreate", async (message) => {
           console.log(responses);
           userMessages.push({ role: "assistant", content: aiContent });
           saveChatHistory(userId, userMessages);
-          const messageChunks = splitMessage(msg, 2000)
+          const messageChunks = splitMessage(aiContent, 2000);
 
-          for (chunk of messageChunks) {
+          for (const chunk of messageChunks) {
             await message.channel.send(chunk);
           }
-        } else {
-          await message.channel.send("Response was null/empty");
         }
       } catch (error) {
-        if (thinkingMsg) {
-          await thinkingMsg.edit(`Error: ${error.message}`);
-        } else {
-          await message.channel.send(`Error: ${error.message}`);
-        }
+        message.channel.send(`Error: ${error.message}`);
       }
       break;
 
