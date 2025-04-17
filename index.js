@@ -30,9 +30,7 @@ Consts/Libraries Installed:
     6 different libraries to fetch subreddit images:
         superagent
         fetch
-        randomPuppy
         snoowrap
-        {fetchSubreddit}
     urban dictionary (urban)
     the bot itself (bot)
     Login token that the bot uses to verify with discord or something (TOKEN)
@@ -56,10 +54,7 @@ const {
 } = require("discord.js");
 const superagent = require("superagent");
 const fetch = require("node-fetch");
-const randomPuppy = require("random-puppy");
-const { fetchSubreddit } = require("fetch-subreddit");
 const api = "https://jsonplaceholder.typicode.com/posts";
-const pics = "https://www.reddit.com/r/pics.json";
 const snoowrap = require("snoowrap");
 const bot = new Client({
   intents: [
@@ -79,7 +74,6 @@ const ytdl = require("ytdl-core");
 const dt = require("date-fns/toDate");
 const wt = require("weather-js");
 const moment = require("moment");
-const blackjack = require("discord-blackjack");
 const https = require("https");
 require("moment-duration-format");
 require("dotenv").config();
@@ -2934,14 +2928,6 @@ bot.on("messageCreate", async (message) => {
       let role22 = message.guild.roles.find("name", "console.log.perms");
       message.member.removeRole(role22).catch(console.error);
       message.channel.send("You no longer have access to the console.");
-      break;
-    case "test2":
-      break;
-    case "randomdog":
-      break;
-    case "test4":
-      break;
-    case "test5":
       break;
     case "test7":
       if (!args[2]) return message.channel.send("No args[2] present");
