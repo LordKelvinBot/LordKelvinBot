@@ -522,7 +522,7 @@ bot.on("messageCreate", async (message) => {
     }
   }
 
-  function isChatHistoryTooLong(userId, limit = 30000) {
+  function isChatHistoryTooLong(userId, limit = 50000) {
     const info = getChatHistoryInfo(userId);
     return info.exists && info.totalChars > limit;
   }
@@ -1489,11 +1489,11 @@ bot.on("messageCreate", async (message) => {
           } messages (${historyInfo.userMsgCount} from you, ${historyInfo.assistantMsgCount
           } from the assistant)`;
 
-        infoMsg += `\nTotal character count: ${historyInfo.totalChars}/30000`;
+        infoMsg += `\nTotal character count: ${historyInfo.totalChars}/50000`;
 
-        if (historyInfo.totalChars > 25000) {
+        if (historyInfo.totalChars > 40000) {
           infoMsg +=
-            "\n⚠️ Your chat history is approaching the 30,000 character limit. Consider using 'clearchat' soon.";
+            "\n⚠️ Your chat history is approaching the 50,000 character limit. Consider using 'clearchat' soon.";
         }
 
         message.channel.send(infoMsg);
