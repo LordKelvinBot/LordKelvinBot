@@ -363,6 +363,17 @@ bot.on("messageCreate", async (message) => {
     message.channel.send(text);
   }
 
+  function splitMessage(str, size) {
+    const numChunks = Math.ceil(str.length / size)
+    const chunks = new Array(numChunks)
+
+    for (let i = 0, c = 0; i < numChunks; ++i, c += size) {
+      chunks[i] = str.substr(c, size)
+    }
+
+    return chunks
+  }
+
   function balanceCheck(id) {
     let author = "./playerdata/" + id + ".json";
     fs.readFile(author, (err, data) => {
@@ -1242,7 +1253,11 @@ bot.on("messageCreate", async (message) => {
           console.log(responses);
           userMessages.push({ role: "assistant", content: aiContent });
           saveChatHistory(userId, userMessages);
-          message.channel.send(aiContent, { split: true });
+          const messageChunks = splitMessage(msg, 2000)
+
+          for (chunk of messageChunks) {
+            await message.channel.send(chunk);
+          }
         } else {
           await message.channel.send("Response was null/empty");
         }
