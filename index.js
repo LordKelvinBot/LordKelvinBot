@@ -1239,7 +1239,6 @@ bot.on("messageCreate", async (message) => {
 
         const userMessages = loadChatHistory(userId);
         userMessages.push({ role: "user", content: messageargs });
-        console.log("🟢 CHAT: history length =", userMessages.length);
         // call OpenAI
         let responses;
         if (useWebSearch && message.author.id === "181284528793452545") {
