@@ -1243,18 +1243,27 @@ bot.on("messageCreate", async (message) => {
 
           const maxLen = 2000;
           let remaining = aiContent;
+
           while (remaining.length > 0) {
-            let chunk = remaining.slice(0, maxLen);
-            if (remaining.length > maxLen) {
-              const lastSpace = chunk.lastIndexOf(" ");
-              if (lastSpace > maxLen / 2) {
-                chunk = chunk.slice(0, lastSpace);
+            // Determine chunk size
+            let chunkSize = Math.min(maxLen, remaining.length);
+
+            // If we're not taking the whole remaining text, find a good breaking point
+            if (chunkSize < remaining.length) {
+              const lastSpace = remaining.substring(0, chunkSize).lastIndexOf(" ");
+              if (lastSpace > chunkSize / 2) {
+                chunkSize = lastSpace + 1; // Include the space
               }
             }
-            console.log("Chunk: " + chunk.length);
+
+            // Extract chunk and send
+            const chunk = remaining.substring(0, chunkSize);
+            console.log(`Sending chunk: ${chunk.length} chars`);
             await message.channel.send(chunk);
-            remaining = remaining.slice(chunk.length);
-            console.log("Remain: " + remaining.length);
+
+            // Remove sent chunk from remaining text
+            remaining = remaining.substring(chunkSize);
+            console.log(`Remaining: ${remaining.length} chars`);
           }
         } else {
           message.channel.send("Response was null/empty");
