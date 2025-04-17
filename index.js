@@ -1268,6 +1268,9 @@ bot.on("messageCreate", async (message) => {
 
         await thinkingMsg.delete();
 
+        const aiContent = responses.choices[0].message.content;
+        userMessages.push({ role: "assistant", content: aiContent });
+        saveChatHistory(userId, userMessages);
         const chunks = splitMessage(aiContent, 1900);
         console.log("🥁 chunks:", chunks);
 
