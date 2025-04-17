@@ -1181,65 +1181,36 @@ bot.on("messageCreate", async (message) => {
       args.shift();
       console.log(args.join(" "));
 
-      // Check if the first argument is the +web flag
-      const useWebSearch = args.length > 0 && args[0] === "+web";
-
-      // Remove the web flag from args if it exists
-      if (useWebSearch) {
-        args.shift();
-        console.log("Used Web Search");
-      }
-
-      const usePreview = args.length > 0 && args[0] === "+pre";
-
-      if (usePreview) {
-        args.shift();
-        console.log("Used 4.5 Preview");
-      }
-
-      const useGemini = args.length > 0 && args[0] === "+gem";
-
-      if (useGemini) {
-        args.shift();
-        console.log("Used Gemini 2.5 Pro");
-      }
-
-      const useSeek = args.length > 0 && args[0] === "+deep";
-
-      if (useSeek) {
-        args.shift();
-        console.log("Used Deepseek R1");
-      }
-
-      const useFast = args.length > 0 && args[0] === "+fast";
-
-      if (useFast) {
-        args.shift();
-        console.log("Used Gemini Flash 2.0 Exp");
-      }
-
-      // Join the remaining args to form the message
-      messageargs = args.join(" ");
-
-      let userId = message.author.id.toString();
-
-      if (isChatHistoryTooLong(userId)) {
-        message.channel.send({
-          content: "Your chat history is too long (over 30,000 characters). Please use 'clearchat' command to reset before continuing."
-        });
-        break;
-      }
-
-      let userMessages = loadChatHistory(userId);
-
-      userMessages.push({
-        role: "user",
-        content: messageargs,
-      });
-
-      let responses;
-
+      // initial thinking indicator
+      let thinkingMsg;
       try {
+        thinkingMsg = await message.channel.send("Thinking...");
+
+        // Check for flags
+        const useWebSearch = args.length > 0 && args[0] === "+web";
+        if (useWebSearch) args.shift();
+        const usePreview = args.length > 0 && args[0] === "+pre";
+        if (usePreview) args.shift();
+        const useGemini = args.length > 0 && args[0] === "+gem";
+        if (useGemini) args.shift();
+        const useSeek = args.length > 0 && args[0] === "+deep";
+        if (useSeek) args.shift();
+        const useFast = args.length > 0 && args[0] === "+fast";
+        if (useFast) args.shift();
+
+        const messageargs = args.join(" ");
+        const userId = message.author.id.toString();
+
+        if (isChatHistoryTooLong(userId)) {
+          await thinkingMsg.edit("Your chat history is too long (over 50,000 characters). Please use 'clearchat' to reset.");
+          break;
+        }
+
+        const userMessages = loadChatHistory(userId);
+        userMessages.push({ role: "user", content: messageargs });
+
+        // call OpenAI
+        let responses;
         if (useWebSearch && message.author.id === "181284528793452545") {
           responses = await openai.chat.completions.create({
             model: "gpt-4o-mini-search-preview",
@@ -1247,84 +1218,53 @@ bot.on("messageCreate", async (message) => {
             web_search_options: {}
           });
         } else if (usePreview && message.author.id === "181284528793452545") {
-          responses = await openai.chat.completions.create({
-            model: "gpt-4.5-preview",
-            messages: userMessages
-          });
+          responses = await openai.chat.completions.create({ model: "gpt-4.5-preview", messages: userMessages });
         } else if (useGemini) {
-          responses = await openrouter.chat.completions.create({
-            model: "google/gemini-2.5-pro-exp-03-25:free",
-            messages: userMessages
-          });
+          responses = await openrouter.chat.completions.create({ model: "google/gemini-2.5-pro-exp-03-25:free", messages: userMessages });
         } else if (useSeek) {
-          responses = await openrouter.chat.completions.create({
-            model: "deepseek/deepseek-r1:free",
-            messages: userMessages
-          });
+          responses = await openrouter.chat.completions.create({ model: "deepseek/deepseek-r1:free", messages: userMessages });
         } else if (useFast) {
-          responses = await openrouter.chat.completions.create({
-            model: "google/gemini-2.0-flash-exp:free",
-            messages: userMessages
-          });
+          responses = await openrouter.chat.completions.create({ model: "google/gemini-2.0-flash-exp:free", messages: userMessages });
         } else {
           responses = await openrouter.chat.completions.create({
             model: "google/gemini-2.5-pro-exp-03-25:free",
-            models: ["openai/o4-mini-high","openai/o4-mini","openai/gpt-4.1"],
-            provider: {
-              order: ["Google", "Google AI Studio"],
-              data_collection: "deny"
-            },
+            models: ["openai/o4-mini-high", "openai/o4-mini", "openai/gpt-4.1"],
+            provider: { order: ["Google", "Google AI Studio"], data_collection: "deny" },
             messages: userMessages
           });
         }
 
-        console.log(responses.choices[0].message.content);
+        await thinkingMsg.delete();
 
         if (responses.choices && responses.choices.length > 0) {
-          userMessages.push({
-            role: "assistant",
-            content: responses.choices[0].message.content,
-          });
-
+          const aiContent = responses.choices[0].message.content;
+          userMessages.push({ role: "assistant", content: aiContent });
           saveChatHistory(userId, userMessages);
 
-          aisend = JSON.stringify(responses.choices[0].message.content);
-          aisend = aisend.substring(1, aisend.length - 1);
-          aisend = aisend.replaceAll("\\n", "\n");
-
-          if (aisend.length < 2000) {
-            message.channel.send({ content: aisend });
+          if (aiContent.length < 2000) {
+            await message.channel.send(aiContent);
           } else {
+            // chunk and send long responses
             const sendMessageChunks = async (text, maxLength = 2000, maxChunks = 6) => {
+              const lines = text.split("\n");
               let chunks = [];
               let currentChunk = "";
               let totalChunks = 0;
 
-              const lines = text.split("\n");
-
               for (const line of lines) {
                 if (currentChunk.length + line.length + 1 > maxLength) {
                   if (line.length > maxLength) {
-                    if (currentChunk.length > 0) {
+                    if (currentChunk.length) {
                       chunks.push(currentChunk);
                       totalChunks++;
                       currentChunk = "";
                     }
-
-                    let remainingLine = line;
-                    while (remainingLine.length > 0) {
-                      let splitPoint = maxLength;
-                      if (remainingLine.length > maxLength) {
-                        const lastSpaceIndex = remainingLine.substring(0, maxLength).lastIndexOf(" ");
-                        if (lastSpaceIndex > 0) {
-                          splitPoint = lastSpaceIndex + 1;
-                        }
-                      }
-
-                      chunks.push(remainingLine.substring(0, splitPoint));
+                    let remaining = line;
+                    while (remaining.length) {
+                      const splitIdx = remaining.substring(0, maxLength).lastIndexOf(" ") + 1 || maxLength;
+                      chunks.push(remaining.substring(0, splitIdx));
                       totalChunks++;
-                      remainingLine = remainingLine.substring(splitPoint);
-
+                      remaining = remaining.substring(splitIdx);
                       if (totalChunks >= maxChunks) {
                         chunks[chunks.length - 1] += "\n\n[Message truncated due to length...]";
                         return chunks;
@@ -1334,45 +1274,33 @@ bot.on("messageCreate", async (message) => {
                     chunks.push(currentChunk);
                     totalChunks++;
                     currentChunk = line + "\n";
-                    if (totalChunks >= maxChunks) {
-                      return chunks;
-                    }
+                    if (totalChunks >= maxChunks) return chunks;
                   }
                 } else {
                   currentChunk += line + "\n";
                 }
               }
-
-              if (currentChunk.length > 0) {
-                chunks.push(currentChunk);
-              }
-
+              if (currentChunk) chunks.push(currentChunk);
               return chunks;
             };
 
-            const messageChunks = await sendMessageChunks(aisend, 2000, 6);
-
-            for (let i = 0; i < messageChunks.length; i++) {
-              await message.channel.send({
-                content: messageChunks[i],
-                allowedMentions: { parse: [] }
-              });
+            const messageChunks = await sendMessageChunks(aiContent);
+            for (const chunk of messageChunks) {
+              await message.channel.send({ content: chunk, allowedMentions: { parse: [] } });
             }
-
-            if (aisend.length > 12000) {
-              await message.channel.send({
-                content: "The complete message was over 8000 characters and has been truncated."
-              });
+            if (aiContent.length > 12000) {
+              await message.channel.send({ content: "The complete message was over 12000 characters and has been truncated." });
             }
           }
         } else {
-          message.channel.send({ content: "Response was null/empty" });
+          await message.channel.send("Response was null/empty");
         }
       } catch (error) {
-        console.error("Error calling OpenAI:", error);
-        message.channel.send({
-          content: `Error: ${error.message || "Something went wrong when calling the AI service."}`
-        });
+        if (thinkingMsg) {
+          await thinkingMsg.edit(`Error: ${error.message}`);
+        } else {
+          message.channel.send(`Error: ${error.message}`);
+        }
       }
       break;
 
