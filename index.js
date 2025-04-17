@@ -1241,33 +1241,54 @@ bot.on("messageCreate", async (message) => {
           userMessages.push({ role: "assistant", content: aiContent });
           saveChatHistory(userId, userMessages);
 
+          // Break content into chunks
+          const chunks = [];
           const maxLen = 2000;
           let remaining = aiContent;
 
-          try {
-            while (remaining.length > 0) {
-              let chunk = remaining.substring(0, maxLen);
+          // First, create all chunks
+          while (remaining.length > 0) {
+            let chunkSize = Math.min(maxLen, remaining.length);
 
-              if (remaining.length > maxLen) {
-                const lastSpace = chunk.lastIndexOf(" ");
-                if (lastSpace > maxLen / 2) {
-                  chunk = chunk.substring(0, lastSpace);
-                }
+            if (chunkSize < remaining.length) {
+              const lastSpace = remaining.substring(0, chunkSize).lastIndexOf(" ");
+              if (lastSpace > maxLen / 2) {
+                chunkSize = lastSpace + 1;
               }
-
-              console.log(`Sending chunk: ${chunk.length} chars`);
-              const sentMessage = await message.channel.send(chunk);
-              console.log(`Message sent: ${sentMessage.id}`);
-
-              remaining = remaining.substring(chunk.length);
-              console.log(`Remaining: ${remaining.length} chars`);
             }
+
+            chunks.push(remaining.substring(0, chunkSize));
+            remaining = remaining.substring(chunkSize);
+          }
+
+          // Then send them with a delay between each
+          try {
+            console.log(`Prepared ${chunks.length} chunks to send`);
+
+            for (let i = 0; i < chunks.length; i++) {
+              console.log(`Sending chunk ${i + 1}/${chunks.length}: ${chunks[i].length} chars`);
+
+              try {
+                const sentMessage = await message.channel.send(chunks[i]);
+                console.log(`Successfully sent chunk ${i + 1}, message ID: ${sentMessage.id}`);
+
+                // Add a small delay between messages to avoid rate limiting
+                if (i < chunks.length - 1) {
+                  await new Promise(resolve => setTimeout(resolve, 500));
+                }
+              } catch (innerErr) {
+                console.error(`Failed to send chunk ${i + 1}:`, innerErr);
+                await message.channel.send(`Error sending part ${i + 1}: ${innerErr.message}`);
+              }
+            }
+
+            console.log("All chunks sent successfully");
           } catch (err) {
-            console.error("Error in message chunking:", err);
+            console.error("Error in message chunking process:", err);
             await message.channel.send(`Error sending response: ${err.message}`);
           }
         } else {
-          message.channel.send("Response was null/empty");
+          await message.channel.send("Response was null/empty");
         }
       } catch (error) {
         if (thinkingMsg) {
