@@ -1227,8 +1227,8 @@ bot.on("messageCreate", async (message) => {
           responses = await openrouter.chat.completions.create({ model: "google/gemini-2.0-flash-exp:free", messages: userMessages });
         } else {
           responses = await openrouter.chat.completions.create({
-            model: "google/gemini-2.5-pro-exp-03-25:free",
-            models: ["openai/o4-mini-high", "openai/o4-mini"],
+            model: "openai/o4-mini-high",
+            models: ["google/gemini-2.5-pro-exp-03-25:free", "openai/o4-mini", ],
             provider: { order: ["Google", "Google AI Studio", "OpenAI"] },
             messages: userMessages
           });
