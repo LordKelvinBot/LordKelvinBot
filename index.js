@@ -1229,12 +1229,17 @@ bot.on("messageCreate", async (message) => {
           responses = await openrouter.chat.completions.create({
             model: "google/gemini-2.5-pro-exp-03-25:free",
             models: ["openai/o4-mini-high", "openai/o4-mini"],
-            provider: { order: ["Google", "Google AI Studio"] },
+            provider: { order: ["Google", "Google AI Studio", "OpenAI"] },
             messages: userMessages
           });
         }
 
         await thinkingMsg.delete();
+
+        if (responses.error.code == 429) {
+          console.log("Rate Limited on Gemini 2.5 Pro");
+        }
+
         console.log(responses);
 
         console.log(responses.choices[0]);
