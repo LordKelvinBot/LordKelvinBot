@@ -1245,6 +1245,7 @@ bot.on("messageCreate", async (message) => {
 
           for (const part of splitMessage(aiContent, { maxLength: 1000 })) {
             await message.channel.send(part);
+            console.log(splitMessage);
           }
         } else {
           await message.channel.send("Response was null/empty");
