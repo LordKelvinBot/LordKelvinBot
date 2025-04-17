@@ -1272,7 +1272,7 @@ bot.on("messageCreate", async (message) => {
           saveChatHistory(userId, userMessages);
           const chunks = splitMessage(aiContent, 1900);
           for (const chunk of chunks) {
-            message.channel.send(chunk);
+            await message.channel.send(chunk);
           }
         }
       } catch (error) {
