@@ -1271,7 +1271,7 @@ bot.on("messageCreate", async (message) => {
         const aiContent = responses.choices[0].message.content;
         userMessages.push({ role: "assistant", content: aiContent });
         saveChatHistory(userId, userMessages);
-        const chunks = splitMessage(aiContent, 100);
+        const chunks = splitMessage(aiContent, 2000);
 
         for (let i = 0; i < chunks.length; i++) {
           const chunk = chunks[i];
