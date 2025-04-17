@@ -23,14 +23,11 @@ Some links to some stuff
     https://stackoverflow.com/questions/50667507/how-to-delete-specific-messages/51333614#51333614
         > How to bulkdelete certain messages
 
-
-
 Consts/Libraries Installed:
     Discord API stuff (js)
-    6 different libraries to fetch subreddit images:
+    2 different libraries to fetch subreddit images:
         superagent
         fetch
-        snoowrap
     urban dictionary (urban)
     the bot itself (bot)
     Login token that the bot uses to verify with discord or something (TOKEN)
@@ -55,7 +52,6 @@ const {
 const superagent = require("superagent");
 const fetch = require("node-fetch");
 const api = "https://jsonplaceholder.typicode.com/posts";
-const snoowrap = require("snoowrap");
 const bot = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -67,13 +63,10 @@ const bot = new Client({
   ],
   partials: [Partials.Channel, Partials.Message, Partials.User],
 });
-const Jimp = require("jimp");
 const fs = require("fs");
 const urban = module.require("urban");
 const ytdl = require("ytdl-core");
-const dt = require("date-fns/toDate");
 const wt = require("weather-js");
-const moment = require("moment");
 const https = require("https");
 require("moment-duration-format");
 require("dotenv").config();
@@ -649,41 +642,6 @@ bot.on("messageCreate", async (message) => {
       console.error(err);
     }
     runJackpot();
-  }
-
-  function getSubredditImage() {
-    //methods
-
-    fetch("https://www.reddit.com/r/cats.json")
-      .then((res) => res.json())
-      .then((res) => res.data.children)
-      .then((res) =>
-        res.map((post) => ({
-          author: post.data.author,
-          link: post.data.url,
-          img: post.data.thumbnail,
-          title: post.data.title,
-        }))
-      )
-      .then((res) => res.map(render))
-      .then((res) => console.log(res));
-
-    const app = document.querySelector("#app");
-
-    const render = (post) => {
-      image1 = new EmbedBuilder().setTitle(post.title).addField(post.img);
-      message.channel.send(image1);
-      message.channel.send(post.link);
-    };
-  }
-  async function getRandomDogImages() {
-    let { body } = await superagent.get("https://random.dog/woof.json");
-    let dogEmbed = new EmbedBuilder()
-      .setColor("#ff9900")
-      .setTitle("Dog")
-      .setImage(body.url);
-    message.channel.send(dogEmbed);
-    return;
   }
 
   function isRegistered(m) {
@@ -1417,6 +1375,7 @@ bot.on("messageCreate", async (message) => {
         });
       }
       break;
+
     case "bchat":
       args.shift();
       console.log(args.join(" "));
@@ -2940,29 +2899,6 @@ bot.on("messageCreate", async (message) => {
       plaympeg("Sands.mp3");
       break;
     case "test10":
-      break;
-    case "test11":
-      var images = [
-        "images/dab.png",
-        "images/clamdab.jpg",
-        "images/dabeet.jpg",
-      ];
-      var jimps = [];
-      for (vari = 0; i < images.length; i++) {
-        jimps.push(jimp.read(images[i]));
-      }
-      Promise.all(jimps)
-        .then(function (data) {
-          return Promise.all(jimps);
-        })
-        .then(function (data) {
-          data[0].composite(data[1], 0, 0);
-          data[0].composite(data[2], 0, 0);
-
-          data[0].write("final-images/test.png", function () {
-            log("wrote the image");
-          });
-        });
       break;
     case "test12":
       message.channel.send("A: " + message.author.toString());
