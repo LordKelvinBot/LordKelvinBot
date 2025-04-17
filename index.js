@@ -39,7 +39,6 @@ global.servers = {};
 //requires
 ("use strict");
 const { OpenAI } = require("openai");
-const { splitMessage } = require('@discordjs/formatters');
 const {
   Client,
   GatewayIntentBits,
@@ -373,6 +372,36 @@ bot.on("messageCreate", async (message) => {
     let rawdata = fs.readFileSync(author);
     let person = JSON.parse(rawdata);
     message.channel.send("Balance: $" + person.money);
+  }
+
+  function splitMessage(text, maxLength) {
+    const chunks = [];
+    let remaining = text;
+    
+    while (remaining.length > 0) {
+      // If text fits in one chunk
+      if (remaining.length <= maxLength) {
+        chunks.push(remaining);
+        break;
+      }
+      
+      // Find a good breaking point
+      let chunkEnd = maxLength;
+      const lastNewline = remaining.substring(0, maxLength).lastIndexOf('\n');
+      const lastSpace = remaining.substring(0, maxLength).lastIndexOf(' ');
+      
+      // Prefer breaking at newlines if available
+      if (lastNewline > maxLength * 0.7) {
+        chunkEnd = lastNewline + 1; // Include the newline
+      } else if (lastSpace > maxLength * 0.7) {
+        chunkEnd = lastSpace + 1; // Include the space
+      }
+      
+      chunks.push(remaining.substring(0, chunkEnd));
+      remaining = remaining.substring(chunkEnd);
+    }
+    
+    return chunks;
   }
 
   function TimeCheck(user) {
@@ -1241,7 +1270,7 @@ bot.on("messageCreate", async (message) => {
           const aiContent = responses.choices[0].message.content;
           userMessages.push({ role: "assistant", content: aiContent });
           saveChatHistory(userId, userMessages);
-          const chunks = splitMessage(aiContent, { maxLength: 1900 });
+          const chunks = splitMessage(aiContent, 1900);
           for (const chunk of chunks) {
             message.channel.send(chunk);
           }
