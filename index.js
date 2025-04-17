@@ -1270,10 +1270,17 @@ bot.on("messageCreate", async (message) => {
           const aiContent = responses.choices[0].message.content;
           userMessages.push({ role: "assistant", content: aiContent });
           saveChatHistory(userId, userMessages);
-          const chunks = splitMessage(aiContent, 1900);
-          for (const chunk of chunks) {
-            await message.channel.send(chunk);
+          try {
+            const chunks = splitMessage(aiContent, 1900);
+            console.log(chunks);
+            for (const chunk of chunks) {
+              await message.channel.send(chunk);
+            }
+          } catch (err) {
+            console.error("Failed to send a chunk:", err);
+            message.channel.send("Oops — I hit a send error. Try again in a bit!");
           }
+          
         }
       } catch (error) {
         message.channel.send(`Error: ${error.message}`);
