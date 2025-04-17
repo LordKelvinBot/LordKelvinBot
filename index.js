@@ -1235,6 +1235,9 @@ bot.on("messageCreate", async (message) => {
         }
 
         await thinkingMsg.delete();
+        console.log(responses);
+
+        console.log(responses.choices[0]);
 
         if (responses.choices && responses.choices.length > 0) {
           const aiContent = responses.choices[0].message.content;
