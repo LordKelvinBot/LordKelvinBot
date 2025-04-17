@@ -47,8 +47,7 @@ const {
   ActivityType,
   Collection,
   Events,
-  Partials,
-  splitMessage
+  Partials
 } = require("discord.js");
 const superagent = require("superagent");
 const fetch = require("node-fetch");
@@ -363,15 +362,34 @@ bot.on("messageCreate", async (message) => {
     message.channel.send(text);
   }
 
-  function splitMessage(str, size) {
-    const numChunks = Math.ceil(str.length / size)
-    const chunks = new Array(numChunks)
+  function splitMessage(text, maxLength) {
+    const chunks = [];
+    let remaining = text;
 
-    for (let i = 0, c = 0; i < numChunks; ++i, c += size) {
-      chunks[i] = str.substr(c, size)
+    while (remaining.length > 0) {
+      // If text fits in one chunk
+      if (remaining.length <= maxLength) {
+        chunks.push(remaining);
+        break;
+      }
+
+      // Find a good breaking point
+      let chunkEnd = maxLength;
+      const lastNewline = remaining.substring(0, maxLength).lastIndexOf('\n');
+      const lastSpace = remaining.substring(0, maxLength).lastIndexOf(' ');
+
+      // Prefer breaking at newlines if available
+      if (lastNewline > maxLength * 0.7) {
+        chunkEnd = lastNewline + 1; // Include the newline
+      } else if (lastSpace > maxLength * 0.7) {
+        chunkEnd = lastSpace + 1; // Include the space
+      }
+
+      chunks.push(remaining.substring(0, chunkEnd));
+      remaining = remaining.substring(chunkEnd);
     }
 
-    return chunks
+    return chunks;
   }
 
   function balanceCheck(id) {
@@ -1250,13 +1268,28 @@ bot.on("messageCreate", async (message) => {
 
         if (responses.choices && responses.choices.length > 0) {
           const aiContent = responses.choices[0].message.content;
-          console.log(responses);
           userMessages.push({ role: "assistant", content: aiContent });
           saveChatHistory(userId, userMessages);
-          const messageChunks = splitMessage(aiContent, 2000);
-
-          for (const chunk of messageChunks) {
-            await message.channel.send(chunk);
+          
+          const messageChunks = splitMessage(aiContent, 1900); // Buffer for safety
+          console.log(`Splitting into ${messageChunks.length} chunks`);
+          
+          try {
+            for (let i = 0; i < messageChunks.length; i++) {
+              const chunk = messageChunks[i];
+              console.log(`Sending chunk ${i+1}/${messageChunks.length}, length: ${chunk.length}`);
+              
+              // Send with a 1 second delay between chunks
+              if (i > 0) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+              }
+              
+              await message.channel.send(chunk);
+              console.log(`Successfully sent chunk ${i+1}`);
+            }
+          } catch (err) {
+            console.error("Error sending chunks:", err);
+            await message.channel.send(`Error: ${err.message}`);
           }
         }
       } catch (error) {
