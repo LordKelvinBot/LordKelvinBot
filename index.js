@@ -1229,7 +1229,7 @@ bot.on("messageCreate", async (message) => {
           responses = await openrouter.chat.completions.create({
             model: "google/gemini-2.5-pro-exp-03-25:free",
             models: ["openai/o4-mini-high", "openai/o4-mini"],
-            provider: { order: ["Google", "Google AI Studio"], data_collection: "deny" },
+            provider: { order: ["Google", "Google AI Studio"] },
             messages: userMessages
           });
         }
