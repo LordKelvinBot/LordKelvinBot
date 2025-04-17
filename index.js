@@ -379,31 +379,33 @@ bot.on("messageCreate", async (message) => {
     let remaining = text;
     
     while (remaining.length > 0) {
-      // If text fits in one chunk
+      // If it all fits, push and break
       if (remaining.length <= maxLength) {
         chunks.push(remaining);
         break;
       }
       
-      // Find a good breaking point
+      // otherwise find a good break point
       let chunkEnd = maxLength;
-      const lastNewline = remaining.substring(0, maxLength).lastIndexOf('\n');
-      const lastSpace = remaining.substring(0, maxLength).lastIndexOf(' ');
+      const head = remaining.slice(0, maxLength);
+      const lastNewline = head.lastIndexOf('\n');
+      const lastSpace   = head.lastIndexOf(' ');
       
-      // Prefer breaking at newlines if available
       if (lastNewline > maxLength * 0.7) {
-        chunkEnd = lastNewline + 1; // Include the newline
+        chunkEnd = lastNewline + 1;  // include the newline
       } else if (lastSpace > maxLength * 0.7) {
-        chunkEnd = lastSpace + 1; // Include the space
+        chunkEnd = lastSpace + 1;    // include the space
       }
       
-      chunks.push(remaining.substring(0, chunkEnd));
-      remaining = remaining.substring(chunkEnd);
+      chunks.push(remaining.slice(0, chunkEnd));
+      remaining = remaining.slice(chunkEnd);
     }
     
+    // print out the entire list of chunks in one go
+    console.log(">> split into", chunks.length, "chunks:", chunks);
     return chunks;
   }
-
+  
   function TimeCheck(user) {
     let author = "./playerdata/" + user + ".json";
     let deta = fs.readFileSync(author);
@@ -1271,8 +1273,7 @@ bot.on("messageCreate", async (message) => {
           userMessages.push({ role: "assistant", content: aiContent });
           saveChatHistory(userId, userMessages);
           try {
-            const chunks = splitMessage(aiContent, 1900);
-            console.log(chunks);
+            const chunks = splitMessage(aiContent, 1000);
             for (const chunk of chunks) {
               await message.channel.send(chunk);
             }
@@ -1280,7 +1281,6 @@ bot.on("messageCreate", async (message) => {
             console.error("Failed to send a chunk:", err);
             message.channel.send("Oops — I hit a send error. Try again in a bit!");
           }
-          
         }
       } catch (error) {
         message.channel.send(`Error: ${error.message}`);
