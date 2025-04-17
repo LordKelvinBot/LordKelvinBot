@@ -1315,56 +1315,6 @@ bot.on("messageCreate", async (message) => {
       }
       break;
 
-    case "bchat":
-      args.shift();
-      console.log(args.join(" "));
-      const betterMessageArgs = args.join(" ");
-      const betterUserId = message.author.id.toString();
-
-      if (isChatHistoryTooLong(betterUserId)) {
-        message.channel.send(
-          "Your chat history is too long (over 20,000 characters). Please use 'clearchat' command to reset before continuing."
-        );
-        break;
-      }
-
-      const betterUserMessages = loadChatHistory(betterUserId);
-
-      betterUserMessages.push({
-        role: "user",
-        content: betterMessageArgs,
-      });
-
-      const betterResponses = await openai.chat.completions.create({
-        model: "o3-mini",
-        messages: betterUserMessages,
-      });
-
-      console.log(betterResponses.choices[0].message.content);
-
-      if (betterResponses.choices) {
-        betterUserMessages.push({
-          role: "assistant",
-          content: betterResponses.choices[0].message.content,
-        });
-
-        saveChatHistory(betterUserId, betterUserMessages);
-
-        let betterAiSend = JSON.stringify(
-          betterResponses.choices[0].message.content
-        );
-        betterAiSend = betterAiSend.substring(1, betterAiSend.length - 1);
-        betterAiSend = betterAiSend.replaceAll("\\n", "\n");
-
-        if (betterAiSend.length < 2000) message.channel.send(betterAiSend);
-        else {
-          message.channel.send("Message was over 2000 characters");
-        }
-      } else {
-        message.channel.send("Response was null/empty");
-      }
-      break;
-
     case "clearchat":
       const deleted = deleteChatHistory(message.author.id.toString());
       if (deleted) {
