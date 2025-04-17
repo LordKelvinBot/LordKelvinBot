@@ -1252,7 +1252,7 @@ bot.on("messageCreate", async (message) => {
                 chunk = chunk.slice(0, lastSpace);
               }
             }
-            await message.channel.send({ content: chunk, allowedMentions: { parse: [] } });
+            message.channel.send(chunk);
             remaining = remaining.slice(chunk.length);
             console.log(remaining);
             console.log(responses.choices[0].message.content);
