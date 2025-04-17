@@ -1228,7 +1228,7 @@ bot.on("messageCreate", async (message) => {
         } else {
           responses = await openrouter.chat.completions.create({
             model: "openai/o4-mini-high",
-            models: ["google/gemini-2.5-pro-exp-03-25:free", "openai/o4-mini", ],
+            models: ["openai/o4-mini"],
             provider: { order: ["Google", "Google AI Studio", "OpenAI"] },
             messages: userMessages
           });
@@ -1236,13 +1236,14 @@ bot.on("messageCreate", async (message) => {
 
         await thinkingMsg.delete();
 
-        if (responses.error.code == 429) {
-          console.log("Rate Limited on Gemini 2.5 Pro");
-        }
-
         console.log(responses);
 
         console.log(responses.choices[0]);
+
+        if (responses.error.code == 429 && useGemini) {
+          console.log("Rate Limited on Gemini 2.5 Pro");
+          message.channel.send("Rate Limited. Please try again later.");
+        }
 
         if (responses.choices && responses.choices.length > 0) {
           const aiContent = responses.choices[0].message.content;
