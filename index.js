@@ -1284,24 +1284,24 @@ bot.on("messageCreate", async (message) => {
             await message.channel.send(chunk);
             await new Promise(r => setTimeout(r, 1000));
           } catch (sendErr) {
-            console.error(`❗ chunk #${i + 1} failed:`, sendErr);
+            console.log(`❗ chunk #${i + 1} failed:`, sendErr);
             // _catch_ the error‑reply itself, so it can’t bubble out
             try {
               await message.channel.send(
                 `⚠️ Sorry, I couldn’t send part ${i + 1}/${chunks.length}.`
               );
             } catch (replyErr) {
-              console.error("❗ Failed to notify user of chunk error:", replyErr);
+              console.log("❗ Failed to notify user of chunk error:", replyErr);
             }
             break;
           }
         }
       } catch (err) {
-        console.error("❗ Uncaught in chat handler:", err);
+        console.log("❗ Uncaught in chat handler:", err);
         try {
           await message.channel.send(`Error: ${err.message}`);
         } catch (_) {
-          console.error("❗ Could not send outer error message, giving up.");
+          console.log("❗ Could not send outer error message, giving up.");
         }
       }
       
