@@ -333,22 +333,7 @@ async function translater(message, textinput, lang) {
     });
 }
 
-process
-  .on("unhandledRejection", (reason, p) => {
-    console.error("→ Unhandled Rejection at:", p, "reason:", reason);
-  })
-  .on("uncaughtException", (err) => {
-    console.error("→ Uncaught Exception:", err);
-    // optionally: process.exit(1);
-  });
-process.on("exit", code => console.log("ℹ️ process.exit:", code));
-process.on("SIGTERM", () => console.log("ℹ️ SIGTERM"));
-process.on("SIGINT", () => console.log("ℹ️ SIGINT"));
-
 bot.on("messageCreate", async (message) => {
-  process.on("exit", code => console.log("ℹ️ process.exit:", code));
-  process.on("SIGTERM", () => console.log("ℹ️ SIGTERM"));
-  process.on("SIGINT", () => console.log("ℹ️ SIGINT"));
 
   if (message.author.id === bot.user.id) return;
   if (!message.content.startsWith(PREFIX)) return;
@@ -1255,8 +1240,6 @@ bot.on("messageCreate", async (message) => {
         const userMessages = loadChatHistory(userId);
         userMessages.push({ role: "user", content: messageargs });
         console.log("🟢 CHAT: history length =", userMessages.length);
-
-        console.log("🟢 CHAT: calling OpenAI…");
         // call OpenAI
         let responses;
         if (useWebSearch && message.author.id === "181284528793452545") {
@@ -1281,27 +1264,20 @@ bot.on("messageCreate", async (message) => {
             messages: userMessages
           });
         }
-        console.log("🟢 CHAT: got responses");
-
-        console.log("🟢 CHAT: deleting thinkingMsg");
         await thinkingMsg.delete();
 
         const aiContent = responses.choices[0].message.content;
-        console.log("🟢 CHAT: aiContent.length =", aiContent.length);
 
         userMessages.push({ role: "assistant", content: aiContent });
         saveChatHistory(userId, userMessages);
 
-        console.log("🟢 CHAT: splitting into chunks");
-        const chunks = splitMessage(aiContent, 200);
+        const chunks = splitMessage(aiContent, 2000);
         console.log("🟢 CHAT: chunks =", chunks.length);
 
         for (let i = 0; i < chunks.length; i++) {
-          console.log(`🟢 CHAT: about to send chunk #${i+1}`);
           try {
             await message.channel.send(chunks[i]);
-            console.log(`🟢 CHAT: sent chunk #${i+1}`);
-            await new Promise(r => setTimeout(r, 1000));
+            await new Promise(r => setTimeout(r, 200));
           } catch (sendErr) {
             console.error(`🔴 CHAT: sendErr on chunk #${i+1}`, sendErr);
             break;
