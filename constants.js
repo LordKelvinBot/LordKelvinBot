@@ -186,6 +186,5 @@ var answerlist = [
     slotMachine,
     thing,
     timeChancer,
-    wsettings,
-    featureFlags,
+    wsettings
   };
