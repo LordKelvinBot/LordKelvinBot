@@ -1271,8 +1271,7 @@ bot.on("messageCreate", async (message) => {
         const aiContent = responses.choices[0].message.content;
         userMessages.push({ role: "assistant", content: aiContent });
         saveChatHistory(userId, userMessages);
-        const chunks = splitMessage(aiContent, 1900);
-        console.log("🥁 chunks:", chunks);
+        const chunks = splitMessage(aiContent, 100);
 
         for (let i = 0; i < chunks.length; i++) {
           const chunk = chunks[i];
@@ -1289,7 +1288,7 @@ bot.on("messageCreate", async (message) => {
         }
 
       } catch (error) {
-        message.channel.send(`Error: ${error.message}`);
+        await message.channel.send(`Error: ${error.message}`);
       }
       break;
 
