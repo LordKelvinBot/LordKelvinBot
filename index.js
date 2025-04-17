@@ -2936,46 +2936,19 @@ bot.on("messageCreate", async (message) => {
       message.channel.send("You no longer have access to the console.");
       break;
     case "cleararray":
-      goodArray = [];
-      message.channel.send("List Cleared.");
       break;
     case "shufflearray":
-      var link = goodArray[randomNumber(goodArray.length)];
-      message.channel.send("From the subreddit /r/" + link);
-      randomPuppy(link).then((url) => {
-        message.channel.send(url);
-      });
       break;
     case "sub":
-      var sub = args[1];
-      if (sub == "watchpeopledie")
-        return message.channel.send("You sick fuck.");
-
-      randomPuppy(sub).then((url) => {
-        console.log(url);
-        message.channel.send(url);
-      });
       break;
     case "test2":
-      fetchSubreddit("worldnews").then((urls) =>
-        message.channel.send(pretty(urls)).catch((err) => console.error(err))
-      );
       break;
-
     case "randomdog":
-      randomPuppy().then((url) => {
-        message.channel.send(url);
-      });
       break;
     case "test4":
-      randomPuppy("pics").then((url) => {
-        message.channel.send(url);
-      });
       break;
     case "test5":
-      log("test");
       break;
-
     case "test7":
       if (!args[2]) return message.channel.send("No args[2] present");
       message.channel.send(args[2]);
@@ -2987,10 +2960,6 @@ bot.on("messageCreate", async (message) => {
       plaympeg("Sands.mp3");
       break;
     case "test10":
-      let test10 = new EmbedBuilder()
-        .addField("test one", "test two", true)
-        .addField("test three", "test four", true);
-      message.channel.send(test10);
       break;
     case "test11":
       var images = [
