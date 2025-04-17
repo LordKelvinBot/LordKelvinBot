@@ -1241,11 +1241,9 @@ bot.on("messageCreate", async (message) => {
           userMessages.push({ role: "assistant", content: aiContent });
           saveChatHistory(userId, userMessages);
 
-          // chunk and send in parts
           const maxLen = 2000;
           let remaining = aiContent;
           while (remaining.length > 0) {
-            console.log(chunk.length);
             let chunk = remaining.slice(0, maxLen);
             if (remaining.length > maxLen) {
               const lastSpace = chunk.lastIndexOf(" ");
@@ -1253,12 +1251,13 @@ bot.on("messageCreate", async (message) => {
                 chunk = chunk.slice(0, lastSpace);
               }
             }
-            message.channel.send(chunk);
+            console.log(chunk.length);
+            await message.channel.send(chunk);
             remaining = remaining.slice(chunk.length);
             console.log(remaining.length);
           }
         } else {
-          await message.channel.send("Response was null/empty");
+          message.channel.send("Response was null/empty");
         }
       } catch (error) {
         if (thinkingMsg) {
