@@ -48,7 +48,8 @@ const {
   Collection,
   Events,
   Partials,
-  Util
+  Util,
+  splitMessage
 } = require("discord.js");
 const superagent = require("superagent");
 const fetch = require("node-fetch");
@@ -1239,60 +1240,15 @@ bot.on("messageCreate", async (message) => {
 
         if (responses.choices && responses.choices.length > 0) {
           const aiContent = responses.choices[0].message.content;
+        
           userMessages.push({ role: "assistant", content: aiContent });
           saveChatHistory(userId, userMessages);
-        
-          try {
-            // First try sending a simple test message
-            console.log("Sending test message");
-            await message.channel.send("Testing message sending...");
-            console.log("Test message sent successfully");
-            
-            // Simple chunking - divide into 1500 char chunks
-            const chunks = [];
-            const maxLen = 1500; // Reduced from 2000 to be safe
-            
-            // Divide content into simple chunks
-            for (let i = 0; i < aiContent.length; i += maxLen) {
-              chunks.push(aiContent.substring(i, i + maxLen));
-            }
-            
-            console.log(`Created ${chunks.length} simple chunks`);
-            
-            // Try sending just the first chunk
-            console.log("Attempting to send first chunk only");
-            const firstChunk = chunks[0];
-            console.log(`First chunk length: ${firstChunk.length}`);
-            
-            const sentMessage = await message.channel.send(firstChunk).catch(e => {
-              console.error("Error in .catch():", e);
-              return message.channel.send(`Failed to send chunk: ${e.message}`);
-            });
-            
-            console.log("First chunk sent successfully");
-            
-            // If successful, try the rest one by one
-            if (chunks.length > 1) {
-              console.log("Sending remaining chunks...");
-              for (let i = 1; i < chunks.length; i++) {
-                await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay
-                await message.channel.send(chunks[i]).catch(e => {
-                  console.error(`Error sending chunk ${i+1}:`, e);
-                  return message.channel.send(`Failed to send chunk ${i+1}: ${e.message}`);
-                });
-                console.log(`Sent chunk ${i+1}/${chunks.length}`);
-              }
-            }
-          } catch (err) {
-            console.error("Outer catch block hit:", err);
-            await message.channel.send(`Error in message sending: ${err.message}`).catch(e => {
-              console.error("Failed to send error message:", e);
-            });
+
+          for (const part of splitMessage(aiContent, { maxLength: 1000 })) {
+            await message.channel.send(part);
           }
         } else {
-          await message.channel.send("Response was null/empty").catch(e => {
-            console.error("Failed to send empty response message:", e);
-          });
+          await message.channel.send("Response was null/empty");
         }
       } catch (error) {
         if (thinkingMsg) {
