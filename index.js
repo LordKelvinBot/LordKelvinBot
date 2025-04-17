@@ -97,7 +97,7 @@ const ORConfig = {
   apiKey: OPENROUTER_AITOKEN,
   baseURL: "https://openrouter.ai/api/v1",
   defaultHeaders: {
-    "HTTP-Referer": "https://github.com/OpenRouterTeam/openrouter-examples",
+    "HTTP-Referer": "https://kylechau.com/bot",
   }
 }
 
@@ -1319,7 +1319,8 @@ bot.on("messageCreate", async (message) => {
             model: "google/gemini-2.5-pro-exp-03-25:free",
             models: ["openai/o4-mini-high","openai/o4-mini","openai/gpt-4.1"],
             provider: {
-              order: ["Google", "Google AI Studio"]
+              order: ["Google", "Google AI Studio"],
+              data_collection: "deny"
             },
             messages: userMessages
           });
