@@ -48,6 +48,7 @@ const {
   Collection,
   Events,
   Partials,
+  Util
 } = require("discord.js");
 const superagent = require("superagent");
 const fetch = require("node-fetch");
@@ -1240,52 +1241,8 @@ bot.on("messageCreate", async (message) => {
           const aiContent = responses.choices[0].message.content;
           userMessages.push({ role: "assistant", content: aiContent });
           saveChatHistory(userId, userMessages);
-
-          // Break content into chunks
-          const chunks = [];
-          const maxLen = 2000;
-          let remaining = aiContent;
-
-          // First, create all chunks
-          while (remaining.length > 0) {
-            let chunkSize = Math.min(maxLen, remaining.length);
-
-            if (chunkSize < remaining.length) {
-              const lastSpace = remaining.substring(0, chunkSize).lastIndexOf(" ");
-              if (lastSpace > maxLen / 2) {
-                chunkSize = lastSpace + 1;
-              }
-            }
-
-            chunks.push(remaining.substring(0, chunkSize));
-            remaining = remaining.substring(chunkSize);
-          }
-
-          // Then send them with a delay between each
-          try {
-            console.log(`Prepared ${chunks.length} chunks to send`);
-
-            for (let i = 0; i < chunks.length; i++) {
-              console.log(`Sending chunk ${i + 1}/${chunks.length}: ${chunks[i].length} chars`);
-
-              try {
-                const sentMessage = await message.channel.send(chunks[i]);
-                console.log(`Successfully sent chunk ${i + 1}, message ID: ${sentMessage.id}`);
-
-                // Add a small delay between messages to avoid rate limiting
-                if (i < chunks.length - 1) {
-                  await new Promise(resolve => setTimeout(resolve, 500));
-                }
-              } catch (innerErr) {
-                console.error(`Failed to send chunk ${i + 1}:`, innerErr);
-                await message.channel.send(`Error sending part ${i + 1}: ${innerErr.message}`);
-              }
-            }
-
-            console.log("All chunks sent successfully");
-          } catch (err) {
-            console.error("Error in message chunking process:", err);
-            await message.channel.send(`Error sending response: ${err.message}`);
+          for (const part of Util.splitMessage(aiContent, { maxLength: 1900 })) {
+            await message.channel.send(part);
           }
         } else {
           await message.channel.send("Response was null/empty");
