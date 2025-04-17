@@ -2935,12 +2935,6 @@ bot.on("messageCreate", async (message) => {
       message.member.removeRole(role22).catch(console.error);
       message.channel.send("You no longer have access to the console.");
       break;
-    case "cleararray":
-      break;
-    case "shufflearray":
-      break;
-    case "sub":
-      break;
     case "test2":
       break;
     case "randomdog":
@@ -3006,10 +3000,6 @@ bot.on("messageCreate", async (message) => {
 
       break;
 
-    case "dog":
-      getRandomDogImages();
-
-      break;
     case "botprefixes":
       var embed = new EmbedBuilder()
         .setColor(0x00ffff)
