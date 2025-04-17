@@ -1245,6 +1245,7 @@ bot.on("messageCreate", async (message) => {
           const maxLen = 2000;
           let remaining = aiContent;
           while (remaining.length > 0) {
+            console.log(chunk.length);
             let chunk = remaining.slice(0, maxLen);
             if (remaining.length > maxLen) {
               const lastSpace = chunk.lastIndexOf(" ");
@@ -1254,7 +1255,7 @@ bot.on("messageCreate", async (message) => {
             }
             message.channel.send(chunk);
             remaining = remaining.slice(chunk.length);
-            console.log(remaining);
+            console.log(remaining.length);
           }
         } else {
           await message.channel.send("Response was null/empty");
