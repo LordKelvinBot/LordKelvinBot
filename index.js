@@ -1239,7 +1239,7 @@ bot.on("messageCreate", async (message) => {
 
         if (responses.choices && responses.choices.length > 0) {
           const aiContent = responses.choices[0].message.content;
-        
+          console.log(responses);
           userMessages.push({ role: "assistant", content: aiContent });
           saveChatHistory(userId, userMessages);
           message.channel.send(aiContent, { split: true });
