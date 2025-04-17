@@ -1249,7 +1249,6 @@ bot.on("messageCreate", async (message) => {
           if (aiContent.length < 2000) {
             await message.channel.send(aiContent);
           } else {
-            // chunk and send long responses
             const sendMessageChunks = async (text, maxLength = 2000, maxChunks = 6) => {
               const lines = text.split("\n");
               let chunks = [];
@@ -1301,7 +1300,7 @@ bot.on("messageCreate", async (message) => {
           await message.channel.send("Response was null/empty");
         }
       } catch (error) {
-        if (useGemini && error.response?.status === 429) {
+        if (error.response?.status === 429) {
           if (thinkingMsg) {
             await thinkingMsg.edit("Rate Limited by Gemini 2.5 Pro, please try again later.");
           } else {
