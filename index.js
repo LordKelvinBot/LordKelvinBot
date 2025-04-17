@@ -1236,11 +1236,6 @@ bot.on("messageCreate", async (message) => {
 
         await thinkingMsg.delete();
 
-        if (message.author.id === "181284528793452545") {
-          message.channel.send(responses);
-          message.channel.send(responses.choices[0]);
-        }
-
         if (responses.choices && responses.choices.length > 0) {
           const aiContent = responses.choices[0].message.content;
           userMessages.push({ role: "assistant", content: aiContent });
