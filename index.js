@@ -1,36 +1,36 @@
 /*
 You're gonna have a bad time.
 v2
-  - Added weather & time commands
+- Added weather & time commands
 
 v1.2
-  - fixed issue where the bot would log the messages sent in the admin channel
-  - fixed issue where the bot would not remove mentions in the console log when sending more than one mention
-  - removed the "accesschangelog" and "denychangelog" commands and replaced them with a simple "changelog" command
-  - added a response to whenever someone joins the server
-  Changes to code (aka things that don't really matter)
-  - added live version reading to changelog
-  - got rid of all old commented out lines and gambling commands to a new file named old.js
-  - added a new file named resources.js, meant to be used to redo all gambling commands in a more closed system. Will it work? No.
+- fixed issue where the bot would log the messages sent in the admin channel
+- fixed issue where the bot would not remove mentions in the console log when sending more than one mention
+- removed the "accesschangelog" and "denychangelog" commands and replaced them with a simple "changelog" command
+- added a response to whenever someone joins the server
+Changes to code (aka things that don't really matter)
+- added live version reading to changelog
+- got rid of all old commented out lines and gambling commands to a new file named old.js
+- added a new file named resources.js, meant to be used to redo all gambling commands in a more closed system. Will it work? No.
 
 
 To Do List:
-    json stuff finally works, but convert can take some time to work fully and idk if it really completly works yet
-    finish the gambling Commands
-    handle the case if you bet like a billion copper  but dont have that many
+  json stuff finally works, but convert can take some time to work fully and idk if it really completly works yet
+  finish the gambling Commands
+  handle the case if you bet like a billion copper  but dont have that many
 
 Some links to some stuff
-    https://stackoverflow.com/questions/50667507/how-to-delete-specific-messages/51333614#51333614
-        > How to bulkdelete certain messages
+  https://stackoverflow.com/questions/50667507/how-to-delete-specific-messages/51333614#51333614
+      > How to bulkdelete certain messages
 
 Consts/Libraries Installed:
-    Discord API stuff (js)
-    2 different libraries to fetch subreddit images:
-        superagent
-        fetch
-    urban dictionary (urban)
-    the bot itself (bot)
-    Login token that the bot uses to verify with discord or something (TOKEN)
+  Discord API stuff (js)
+  2 different libraries to fetch subreddit images:
+      superagent
+      fetch
+  urban dictionary (urban)
+  the bot itself (bot)
+  Login token that the bot uses to verify with discord or something (TOKEN)
 */
 
 global.config = require("./config.json");
@@ -1241,32 +1241,28 @@ bot.on("messageCreate", async (message) => {
           userMessages.push({ role: "assistant", content: aiContent });
           saveChatHistory(userId, userMessages);
 
-          if (aiContent.length < 2000) {
-            await message.channel.send(aiContent);
-          } else {
-            const CHUNK_SIZE = 2000;
-            for (let i = 0; i < aiContent.length; i += CHUNK_SIZE) {
-              const chunk = aiContent.substring(i, i + CHUNK_SIZE);
-              await message.channel.send({
-                content: chunk,
-                allowedMentions: { parse: [] }
-              });
+          // chunk and send in parts
+          const maxLen = 2000;
+          let remaining = aiContent;
+          while (remaining.length > 0) {
+            let chunk = remaining.slice(0, maxLen);
+            if (remaining.length > maxLen) {
+              const lastSpace = chunk.lastIndexOf(" ");
+              if (lastSpace > maxLen / 2) {
+                chunk = chunk.slice(0, lastSpace);
+              }
             }
+            await message.channel.send({ content: chunk, allowedMentions: { parse: [] } });
+            remaining = remaining.slice(chunk.length);
           }
         } else {
           await message.channel.send("Response was null/empty");
         }
       } catch (error) {
-        if (error.response?.status === 429) {
-          if (thinkingMsg) {
-            await thinkingMsg.edit("Rate Limited by Gemini 2.5 Pro, please try again later.");
-          } else {
-            message.channel.send("Rate Limited by Gemini 2.5 Pro, please try again later.");
-          }
-        } else if (thinkingMsg) {
+        if (thinkingMsg) {
           await thinkingMsg.edit(`Error: ${error.message}`);
         } else {
-          message.channel.send(`Error: ${error.message}`);
+          await message.channel.send(`Error: ${error.message}`);
         }
       }
       break;
