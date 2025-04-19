@@ -80,6 +80,7 @@ const OPENROUTER_AITOKEN = process.env.OPENROUTER_AITOKEN;
 const configuration = {
   apiKey: AITOKEN,
 };
+
 const ORConfig = {
   apiKey: OPENROUTER_AITOKEN,
   baseURL: "https://openrouter.ai/api/v1",
@@ -1049,6 +1050,7 @@ bot.on("messageCreate", async (message) => {
       break;
 
     case "chat":
+    case "c":
       console.log("🟢 CHAT: entered");
       args.shift();
       console.log("🟢 CHAT: args =", args.join(" "));
