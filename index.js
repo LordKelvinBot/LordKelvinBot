@@ -1064,9 +1064,9 @@ bot.on("messageCreate", async (message) => {
         if (useWebSearch) args.shift();
         const usePreview = args.length > 0 && args[0] === "+pre";
         if (usePreview) args.shift();
-        const useGemini = args.length > 0 && args[0] === "+gem";
+        const useGemini = args.length > 0 && args[0] === "+d";
         if (useGemini) args.shift();
-        const useSeek = args.length > 0 && args[0] === "+deep";
+        const useSeek = args.length > 0 && args[0] === "+r";
         if (useSeek) args.shift();
         const useFast = args.length > 0 && args[0] === "+fast";
         if (useFast) args.shift();
@@ -1092,7 +1092,7 @@ bot.on("messageCreate", async (message) => {
         } else if (usePreview && message.author.id === "181284528793452545") {
           responses = await openai.chat.completions.create({ model: "gpt-4.5-preview", messages: userMessages });
         } else if (useGemini) {
-          responses = await openrouter.chat.completions.create({ model: "google/gemini-2.5-pro-exp-03-25:free", messages: userMessages });
+          responses = await openrouter.chat.completions.create({ model: "deepseek/deepseek-chat-v3-0324:free", messages: userMessages });
         } else if (useSeek) {
           responses = await openrouter.chat.completions.create({ model: "deepseek/deepseek-r1:free", messages: userMessages });
         } else if (useFast) {
