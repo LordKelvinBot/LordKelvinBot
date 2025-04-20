@@ -47,7 +47,7 @@ const {
   ActivityType,
   Collection,
   Events,
-  Partials
+  Partials,
 } = require("discord.js");
 const superagent = require("superagent");
 const fetch = require("node-fetch");
@@ -60,6 +60,7 @@ const bot = new Client({
     GatewayIntentBits.GuildVoiceStates,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.GuildVoiceStates
   ],
   partials: [Partials.Channel, Partials.Message, Partials.User],
 });
@@ -86,14 +87,16 @@ const ORConfig = {
   baseURL: "https://openrouter.ai/api/v1",
   defaultHeaders: {
     "HTTP-Referer": "https://kylechau.com/bot",
-  }
-}
+  },
+};
 
 const openai = new OpenAI(configuration);
 const openrouter = new OpenAI(ORConfig);
 const deeplt = config.deepltoken;
 const TOKEN = config.token;
 const PREFIX = config.prefix;
+const { setupVoiceModule, joinAndListen, leaveVC } = require("./voice");
+
 const {
   answerlist,
   yesnomabyeso,
@@ -106,7 +109,7 @@ const {
   slotMachine,
   thing,
   timeChancer,
-  wsettings
+  wsettings,
 } = require("./constants");
 
 function generateHex() {
@@ -139,10 +142,10 @@ async function deeplusage(message) {
         fulljson = JSON.parse(data);
         message.channel.send(
           "Characters Used: " +
-          fulljson.character_count +
-          "\n" +
-          "Max Characters: " +
-          fulljson.character_limit
+            fulljson.character_count +
+            "\n" +
+            "Max Characters: " +
+            fulljson.character_limit
         );
       });
     })
@@ -173,9 +176,9 @@ async function translater(message, textinput, lang) {
       console.log("Error: " + err.message);
     });
 }
+setupVoiceModule(bot);
 
 bot.on("messageCreate", async (message) => {
-
   if (message.author.id === bot.user.id) return;
   if (!message.content.startsWith(PREFIX)) return;
 
@@ -230,8 +233,8 @@ bot.on("messageCreate", async (message) => {
       // otherwise find a good break point
       let chunkEnd = maxLength;
       const head = remaining.slice(0, maxLength);
-      const lastNewline = head.lastIndexOf('\n');
-      const lastSpace = head.lastIndexOf(' ');
+      const lastNewline = head.lastIndexOf("\n");
+      const lastSpace = head.lastIndexOf(" ");
 
       if (lastNewline > maxLength * 0.7) {
         chunkEnd = lastNewline + 1;
@@ -305,7 +308,9 @@ bot.on("messageCreate", async (message) => {
         const data = fs.readFileSync(filePath, "utf8");
         return JSON.parse(data);
       } else {
-        message.channel.send("All data used in this chat may be used for training purposes by OpenAI. Do not send private or sensitive information.");
+        message.channel.send(
+          "All data used in this chat may be used for training purposes by OpenAI. Do not send private or sensitive information."
+        );
         return [
           {
             role: "system",
@@ -450,10 +455,10 @@ bot.on("messageCreate", async (message) => {
         return message.channel.send("You've already entered.");
       console.log(
         user +
-        ": " +
-        parsedjackpot["entries"][user]["user"] +
-        ": " +
-        parsedjackpot["entries"][user]["amount"]
+          ": " +
+          parsedjackpot["entries"][user]["user"] +
+          ": " +
+          parsedjackpot["entries"][user]["amount"]
       );
     }
     person.money = parseInt(person.money) - parseInt(amount);
@@ -498,10 +503,10 @@ bot.on("messageCreate", async (message) => {
     for (var user in parsedjackpot["entries"]) {
       console.log(
         user +
-        ": " +
-        parsedjackpot["entries"][user]["user"] +
-        ": " +
-        parsedjackpot["entries"][user]["amount"]
+          ": " +
+          parsedjackpot["entries"][user]["user"] +
+          ": " +
+          parsedjackpot["entries"][user]["amount"]
       );
     }
   }
@@ -780,9 +785,9 @@ bot.on("messageCreate", async (message) => {
         log("Inside .stat Data (File exists): " + reputation + copper);
         log(
           "Updating existing player JSON file of " +
-          author +
-          " With the values copper:" +
-          copper
+            author +
+            " With the values copper:" +
+            copper
         );
         if (copper == null) copper = read(author).copper;
         if (reputation == null) reputation = read(author).reputation;
@@ -799,9 +804,9 @@ bot.on("messageCreate", async (message) => {
         log("Inside .stat Data (File does not exist): " + reputation + copper);
         log(
           "Creating new player JSON file of " +
-          author +
-          " With the values copper:" +
-          copper
+            author +
+            " With the values copper:" +
+            copper
         );
         let newdata = {
           reputation: reputation,
@@ -933,20 +938,22 @@ bot.on("messageCreate", async (message) => {
           .addFields(
             {
               name: "Reputation",
-              value: read(author).reputation +
+              value:
+                read(author).reputation +
                 "\nReputation Level: " +
-                repCheck(messageAuthor)
+                repCheck(messageAuthor),
             },
             {
               name: "Money",
-              value: "Copper: " +
+              value:
+                "Copper: " +
                 copper +
                 "\nSilver: " +
                 silver +
                 "\nGold: " +
                 gold +
                 "\nPlatinum: " +
-                platinum
+                platinum,
             }
           );
         message.channel.send(moneyEmbed);
@@ -986,6 +993,7 @@ bot.on("messageCreate", async (message) => {
       for (var k = 0; k < sentenceArray.length; k++) {
         messageToBeSent += sentenceArray[k] + " ";
       }
+      
       message.channel.send(messageToBeSent);
       break;
     case "time":
@@ -1048,6 +1056,17 @@ bot.on("messageCreate", async (message) => {
 
       message.channel.send({ embeds: [timeembed] });
       break;
+    case "joinvoice":
+    case "jv":
+      if (message.member.voice.channel) joinAndListen(message);
+      else message.reply("Join a voice channel first!");
+      break;
+
+    case "leavevoice":
+      leaveVC(message.guild.id)
+        ? message.reply("Disconnected.")
+        : message.reply("I’m not in a voice channel.");
+      break;
 
     case "chat":
     case "c":
@@ -1075,7 +1094,9 @@ bot.on("messageCreate", async (message) => {
         const userId = message.author.id.toString();
 
         if (isChatHistoryTooLong(userId)) {
-          await thinkingMsg.edit("Your chat history is too long (over 50,000 characters). Please use 'clearchat' to reset.");
+          await thinkingMsg.edit(
+            "Your chat history is too long (over 50,000 characters). Please use 'clearchat' to reset."
+          );
           break;
         }
 
@@ -1087,22 +1108,34 @@ bot.on("messageCreate", async (message) => {
           responses = await openai.chat.completions.create({
             model: "gpt-4o-mini-search-preview",
             messages: userMessages,
-            web_search_options: {}
+            web_search_options: {},
           });
         } else if (usePreview && message.author.id === "181284528793452545") {
-          responses = await openai.chat.completions.create({ model: "gpt-4.5-preview", messages: userMessages });
+          responses = await openai.chat.completions.create({
+            model: "gpt-4.5-preview",
+            messages: userMessages,
+          });
         } else if (useGemini) {
-          responses = await openrouter.chat.completions.create({ model: "deepseek/deepseek-chat-v3-0324:free", messages: userMessages });
+          responses = await openrouter.chat.completions.create({
+            model: "deepseek/deepseek-chat-v3-0324:free",
+            messages: userMessages,
+          });
         } else if (useSeek) {
-          responses = await openrouter.chat.completions.create({ model: "deepseek/deepseek-r1:free", messages: userMessages });
+          responses = await openrouter.chat.completions.create({
+            model: "deepseek/deepseek-r1:free",
+            messages: userMessages,
+          });
         } else if (useFast) {
-          responses = await openrouter.chat.completions.create({ model: "google/gemini-2.0-flash-exp:free", messages: userMessages });
+          responses = await openrouter.chat.completions.create({
+            model: "google/gemini-2.0-flash-exp:free",
+            messages: userMessages,
+          });
         } else {
           responses = await openrouter.chat.completions.create({
             model: "google/gemini-2.5-pro-exp-03-25:free",
             models: ["openai/o4-mini-high", "openai/o4-mini"],
             provider: { order: ["Google", "Google AI Studio", "OpenAI"] },
-            messages: userMessages
+            messages: userMessages,
           });
         }
         await thinkingMsg.delete();
@@ -1118,9 +1151,9 @@ bot.on("messageCreate", async (message) => {
         for (let i = 0; i < chunks.length; i++) {
           try {
             await message.channel.send(chunks[i]);
-            await new Promise(r => setTimeout(r, 200));
+            await new Promise((r) => setTimeout(r, 200));
           } catch (sendErr) {
-            console.error(`🔴 CHAT: sendErr on chunk #${i+1}`, sendErr);
+            console.error(`🔴 CHAT: sendErr on chunk #${i + 1}`, sendErr);
             break;
           }
         }
@@ -1141,9 +1174,11 @@ bot.on("messageCreate", async (message) => {
     case "chatinfo":
       const historyInfo = getChatHistoryInfo(message.author.id.toString());
       if (historyInfo.exists) {
-        let infoMsg = `Your conversation has ${historyInfo.messageCount - 1
-          } messages (${historyInfo.userMsgCount} from you, ${historyInfo.assistantMsgCount
-          } from the assistant)`;
+        let infoMsg = `Your conversation has ${
+          historyInfo.messageCount - 1
+        } messages (${historyInfo.userMsgCount} from you, ${
+          historyInfo.assistantMsgCount
+        } from the assistant)`;
 
         infoMsg += `\nTotal character count: ${historyInfo.totalChars}/50000`;
 
@@ -1352,7 +1387,8 @@ bot.on("messageCreate", async (message) => {
     case "ping":
       const m = await message.channel.send("Ping?");
       m.edit(
-        `Pong! Latency is ${m.createdTimestamp - message.createdTimestamp
+        `Pong! Latency is ${
+          m.createdTimestamp - message.createdTimestamp
         }ms. API Latency is ${Math.round(bot.ws.ping)}ms`
       );
       break;
@@ -1401,8 +1437,8 @@ bot.on("messageCreate", async (message) => {
           let resetdata = JSON.parse(rawdata);
           message.channel.send(
             "Cooldown of " +
-            (resetdata.lastreset + 300000 - Date.now()) / 1000 / 60 +
-            " minutes."
+              (resetdata.lastreset + 300000 - Date.now()) / 1000 / 60 +
+              " minutes."
           );
         }
       }
@@ -1916,10 +1952,10 @@ bot.on("messageCreate", async (message) => {
       var rated = args.join(" ");
       message.channel.send(
         "I rate " +
-        rated +
-        " a good " +
-        Math.floor(Math.random() * 101) +
-        "/100"
+          rated +
+          " a good " +
+          Math.floor(Math.random() * 101) +
+          "/100"
       );
       break;
     /*
@@ -2499,7 +2535,7 @@ bot.on("messageCreate", async (message) => {
     case "say":
       var sayMessage = args.join(" ");
       sayMessage = sayMessage.replace("say ", "");
-      message.delete().catch((O_o) => { });
+      message.delete().catch((O_o) => {});
       message.channel.send(sayMessage);
       break;
     case "xkcd":
@@ -2535,7 +2571,7 @@ bot.on("messageCreate", async (message) => {
             message.channel
               .send(
                 "Deletion of messages successful. \n Total messages deleted including command: " +
-                newamount
+                  newamount
               )
               .then((message) => {
                 setTimeout(() => {
@@ -2544,7 +2580,7 @@ bot.on("messageCreate", async (message) => {
               });
             console.log(
               "Deletion of messages successful. \n Total messages deleted including command: " +
-              newamount
+                newamount
             );
           })
           .catch((err) => {
@@ -2655,9 +2691,9 @@ bot.on("messageCreate", async (message) => {
       if (Math.floor(Math.random() * 100) <= 45) {
         return message.channel.send(
           "In " +
-          Math.floor(Math.random() * 100) +
-          " " +
-          timeTypes[Math.floor(Math.random() * timeTypes.length)]
+            Math.floor(Math.random() * 100) +
+            " " +
+            timeTypes[Math.floor(Math.random() * timeTypes.length)]
         );
       } else {
         message.channel.send(
