@@ -79,6 +79,7 @@ async function joinVC(guildId, channelId, adapterCreator, userId) {
     instructions: 'You are a helpful voice assistant.',
     voice: 'alloy',
     turn_detection: { type: 'server_vad' },
+    model: 'gpt-4o-mini-realtime-preview',
     // no input_audio_transcription = pure audio
   });
   rtClient.on('conversation.updated', ({ delta }) => {

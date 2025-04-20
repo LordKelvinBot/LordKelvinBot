@@ -981,6 +981,7 @@ bot.on("messageCreate", async (message) => {
       } else {
         message.channel.send("You don't have perms for that");
       }
+      
       break;
     case "that":
       for (var i = sentenceArray.length - 1; i > 0; i--) {
@@ -993,7 +994,7 @@ bot.on("messageCreate", async (message) => {
       for (var k = 0; k < sentenceArray.length; k++) {
         messageToBeSent += sentenceArray[k] + " ";
       }
-      
+
       message.channel.send(messageToBeSent);
       break;
     case "time":
