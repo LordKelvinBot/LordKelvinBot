@@ -1071,6 +1071,10 @@ bot.on("messageCreate", async (message) => {
 
     case "chat":
     case "c":
+      if (!args[1]) {
+        message.channel.send("Please provide a message to send.");
+        break;
+      }
       console.log("🟢 CHAT: entered");
       args.shift();
       console.log("🟢 CHAT: args =", args.join(" "));
@@ -2193,12 +2197,7 @@ bot.on("messageCreate", async (message) => {
             { name: "translate", value: "Translates text", inline: true },
             {
               name: "chat",
-              value: "Chat with the bot (4o-mini)",
-              inline: true,
-            },
-            {
-              name: "bchat",
-              value: "Chat with the bot (o3-mini)",
+              value: "Chat with the bot",
               inline: true,
             },
             { name: "Subreddit Help", value: "help sub", inline: true },
