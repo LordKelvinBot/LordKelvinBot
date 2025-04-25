@@ -130,9 +130,9 @@ async function joinVC(guildId, channelId, adapterCreator, userId) {
       // Downsample PCM48→PCM16@16 kHz
       const samples48 = new Int16Array(chunk.buffer);
       const floats = Float32Array.from(samples48, s => s / 32768);
-      const mono16 = waveResampler.resample(floats, 48000, 16000);  // resample API :contentReference[oaicite:3]{index=3}
-      const pcm16 = new Int16Array(mono16.map(f => Math.max(-1, Math.min(1, f)) * 0x7fff));
-      rtClient.appendInputAudio(pcm16);
+      const mono24 = waveResampler.resample(floats, 48000, 24000);  // resample audio to 24 kHz
+      const pcm24 = new Int16Array(mono24.map(f => Math.max(-1, Math.min(1, f)) * 0x7fff));
+      rtClient.appendInputAudio(pcm24);
     });
     pcm48Stream.on('end', () =>
       console.log(`[${guildId}] User ${sid} stopped speaking; pipeline closed.`)
@@ -152,7 +152,7 @@ function playAudio(audioDelta, audioPlayer) {
   const floats16 = Float32Array.from(pcm16, s => s / 32768);
 
   // 2) Upsample 16 kHz → 48 kHz mono, then duplicate for stereo
-  const mono48 = waveResampler.resample(floats16, 16000, 48000);
+  const mono48 = waveResampler.resample(floats16, 24000, 48000);  // resample audio from 24 kHz to 48 kHz
   const stereo48 = new Int16Array(mono48.length * 2);
   mono48.forEach((f, i) => {
     const v = Math.max(-1, Math.min(1, f)) * 0x7fff;
