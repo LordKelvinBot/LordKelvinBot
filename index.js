@@ -1070,19 +1070,20 @@ bot.on("messageCreate", async (message) => {
 
     case "chat":
     case "c":
+    case "c+":
       if (!args[1]) {
         message.channel.send("Please provide a message to send.");
         break;
       }
       console.log("🟢 CHAT: entered");
-      args.shift();
-      console.log("🟢 CHAT: args =", args.join(" "));
       let thinkingMsg;
       try {
         console.log("🟢 CHAT: sending ‘Thinking…’");
         thinkingMsg = await message.channel.send("Thinking…");
         console.log("🟢 CHAT: ‘Thinking…’ sent");
-
+        const useO = args.length > 0 && args[0] === "c+";
+        args.shift();
+        console.log("🟢 CHAT: args =", args.join(" "));
         const useWebSearch = args.length > 0 && args[0] === "+web";
         if (useWebSearch) args.shift();
         const usePreview = args.length > 0 && args[0] === "+pre";
@@ -1134,7 +1135,12 @@ bot.on("messageCreate", async (message) => {
             model: "google/gemini-2.0-flash-exp:free",
             messages: userMessages,
           });
-        } else {
+        } else if (useO) {
+          responses = await openai.chat.completions.create({
+            model: "o3",
+            messages: userMessages,
+          });
+        }  else {
           responses = await openrouter.chat.completions.create({
             model: "google/gemini-2.5-pro-exp-03-25:free",
             models: ["openai/o4-mini-high", "openai/o4-mini"],
