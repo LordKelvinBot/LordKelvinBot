@@ -1058,7 +1058,7 @@ bot.on("messageCreate", async (message) => {
       break;
     case "joinvoice":
     case "jv":
-      if (message.member.voice.channel) joinAndListen(message);
+      if (message.member.voice.channel && message.author.id === "181284528793452545") joinAndListen(message);
       else message.reply("Join a voice channel first!");
       break;
 
