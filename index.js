@@ -59,8 +59,7 @@ const bot = new Client({
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildVoiceStates,
     GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.DirectMessages,
-    GatewayIntentBits.GuildVoiceStates
+    GatewayIntentBits.DirectMessages
   ],
   partials: [Partials.Channel, Partials.Message, Partials.User],
 });
