@@ -16,7 +16,7 @@
     "@openai/realtime-api-beta": "github:openai/openai-realtime-api-beta",
     "ansi-regex": "^6.1.0",
     "discord.js": "^14.18.0",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "ffmpeg-binaries": "^3.2.2-3",
     "moment": "^2.30.1",
     "moment-duration-format": "^2.3.2",
