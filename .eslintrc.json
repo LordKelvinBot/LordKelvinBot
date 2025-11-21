@@ -1,0 +1,39 @@
+{
+  "env": {
+    "node": true,
+    "es2022": true,
+    "jest": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "commonjs"
+  },
+  "rules": {
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "no-console": "off",
+    "prefer-const": "error",
+    "no-var": "error",
+    "eqeqeq": ["error", "always"],
+    "curly": ["error", "all"],
+    "semi": ["error", "always"],
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "comma-dangle": ["error", "always-multiline"],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
+    "no-trailing-spaces": "error",
+    "object-curly-spacing": ["error", "always"],
+    "array-bracket-spacing": ["error", "never"],
+    "space-before-blocks": "error",
+    "keyword-spacing": "error",
+    "arrow-spacing": "error",
+    "no-implicit-globals": "error"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "coverage/",
+    "*.min.js",
+    "index.js",
+    "voice.js"
+  ]
+}

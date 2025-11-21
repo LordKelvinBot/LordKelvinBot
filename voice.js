@@ -38,14 +38,14 @@ async function joinAndListen(message) {
     guild.id,
     member.voice.channel.id,
     guild.voiceAdapterCreator,
-    member.id
+    member.id,
   );
 }
 
 /** Leave and clean up */
 function leaveVC(guildId) {
   const data = activeConnections.get(guildId);
-  if (!data) return false;
+  if (!data) {return false;}
   data.rtClient.disconnect();
   data.voiceConnection.destroy();
   activeConnections.delete(guildId);
@@ -65,7 +65,7 @@ async function joinVC(guildId, channelId, adapterCreator, userId) {
   await entersState(
     voiceConnection,
     VoiceConnectionStatus.Ready,
-    30_000
+    30_000,
   );
   console.log(`[${guildId}] Discord voice ready.`);
 
@@ -83,7 +83,7 @@ async function joinVC(guildId, channelId, adapterCreator, userId) {
     // no input_audio_transcription = pure audio
   });
   rtClient.on('conversation.updated', ({ delta }) => {
-    if (delta?.audio) playAudio(delta.audio, audioPlayer);
+    if (delta?.audio) {playAudio(delta.audio, audioPlayer);}
   });
   await rtClient.connect();
   console.log(`[${guildId}] OpenAI realtime ready.`);
@@ -91,7 +91,7 @@ async function joinVC(guildId, channelId, adapterCreator, userId) {
   // 4) When user starts speaking, subscribe to their Opus stream
   const receiver = voiceConnection.receiver;
   receiver.speaking.on('start', async (sid) => {
-    if (sid !== userId) return;
+    if (sid !== userId) {return;}
     console.log(`[${guildId}] User ${sid} started speaking; pipeline open.`);
 
     // 4.1) Prepare Opus decoder and wait for WASM compilation
@@ -123,7 +123,7 @@ async function joinVC(guildId, channelId, adapterCreator, userId) {
           console.error(`[${guildId}] Opus decode error:`, err);
           cb(); // drop bad packet
         }
-      }
+      },
     }));
 
     pcm48Stream.on('data', (chunk) => {
@@ -135,10 +135,10 @@ async function joinVC(guildId, channelId, adapterCreator, userId) {
       rtClient.appendInputAudio(pcm24);
     });
     pcm48Stream.on('end', () =>
-      console.log(`[${guildId}] User ${sid} stopped speaking; pipeline closed.`)
+      console.log(`[${guildId}] User ${sid} stopped speaking; pipeline closed.`),
     );
     pcm48Stream.on('error', (err) =>
-      console.error(`[${guildId}] PCM stream error:`, err)
+      console.error(`[${guildId}] PCM stream error:`, err),
     );
   });
 

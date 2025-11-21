@@ -1,13 +1,22 @@
 {
-  "name": "betterbot",
-  "version": "1.0.0",
-  "description": "",
+  "name": "lord-kelvin-bot",
+  "version": "2.0.0",
+  "description": "A feature-rich Discord bot with AI chat, weather, gambling, and more",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "engines": {
+    "node": ">=18.0.0"
   },
-  "author": "",
-  "license": "ISC",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "author": "Kyle Chau",
+  "license": "MIT",
   "dependencies": {
     "@discordjs/core": "^2.0.1",
     "@discordjs/formatters": "^0.6.0",
@@ -38,5 +47,21 @@
     "yargs": "^17.6.0",
     "yargs-parser": "^21.1.1",
     "ytdl-core": "^0.18.7"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "utils/**/*.js",
+      "commands/**/*.js",
+      "!**/node_modules/**"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.test.js"
+    ]
   }
 }

@@ -13,7 +13,6 @@ Changes to code (aka things that don't really matter)
 - got rid of all old commented out lines and gambling commands to a new file named old.js
 - added a new file named resources.js, meant to be used to redo all gambling commands in a more closed system. Will it work? No.
 
-
 To Do List:
   json stuff finally works, but convert can take some time to work fully and idk if it really completly works yet
   finish the gambling Commands
@@ -33,12 +32,12 @@ Consts/Libraries Installed:
   Login token that the bot uses to verify with discord or something (TOKEN)
 */
 
-global.config = require("./config.json");
+global.config = require('./config.json');
 global.servers = {};
 
 //requires
-("use strict");
-const { OpenAI } = require("openai");
+('use strict');
+const { OpenAI } = require('openai');
 const {
   Client,
   GatewayIntentBits,
@@ -48,10 +47,10 @@ const {
   Collection,
   Events,
   Partials,
-} = require("discord.js");
-const superagent = require("superagent");
-const fetch = require("node-fetch");
-const api = "https://jsonplaceholder.typicode.com/posts";
+} = require('discord.js');
+const superagent = require('superagent');
+const fetch = require('node-fetch');
+const api = 'https://jsonplaceholder.typicode.com/posts';
 const bot = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -59,17 +58,17 @@ const bot = new Client({
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildVoiceStates,
     GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.DirectMessages
+    GatewayIntentBits.DirectMessages,
   ],
   partials: [Partials.Channel, Partials.Message, Partials.User],
 });
-const fs = require("fs");
-const urban = module.require("urban");
-const ytdl = require("ytdl-core");
-const wt = require("weather-js");
-const https = require("https");
-require("moment-duration-format");
-require("dotenv").config();
+const fs = require('fs');
+const urban = module.require('urban');
+const ytdl = require('ytdl-core');
+const wt = require('weather-js');
+const https = require('https');
+require('moment-duration-format');
+require('dotenv').config();
 
 //var ytpl = require('ytpl');
 
@@ -83,9 +82,9 @@ const configuration = {
 
 const ORConfig = {
   apiKey: OPENROUTER_AITOKEN,
-  baseURL: "https://openrouter.ai/api/v1",
+  baseURL: 'https://openrouter.ai/api/v1',
   defaultHeaders: {
-    "HTTP-Referer": "https://kylechau.com/bot",
+    'HTTP-Referer': 'https://kylechau.com/bot',
   },
 };
 
@@ -94,7 +93,7 @@ const openrouter = new OpenAI(ORConfig);
 const deeplt = config.deepltoken;
 const TOKEN = config.token;
 const PREFIX = config.prefix;
-const { setupVoiceModule, joinAndListen, leaveVC } = require("./voice");
+const { setupVoiceModule, joinAndListen, leaveVC } = require('./voice');
 
 const {
   answerlist,
@@ -109,88 +108,88 @@ const {
   thing,
   timeChancer,
   wsettings,
-} = require("./constants");
+} = require('./constants');
 
 function generateHex() {
   const hex = Math.floor(Math.random() * 16777215).toString(16);
-  return "#" + hex.padStart(6, "0");
+  return '#' + hex.padStart(6, '0');
 }
 
 function russianActive(input) {
-  gameData = "./rdata/" + input + ".json";
+  gameData = './rdata/' + input + '.json';
   fs.readFile(gameData, (err, data) => {
     if (err) {
-      console.log("Game does not exist");
+      console.log('Game does not exist');
       return false;
     } else {
-      console.log("Game exists, player joining");
+      console.log('Game exists, player joining');
       return true;
     }
   });
 }
 
 async function deeplusage(message) {
-  const deeplapid = "https://api-free.deepl.com/v2/usage?auth_key=" + deeplt;
+  const deeplapid = 'https://api-free.deepl.com/v2/usage?auth_key=' + deeplt;
   https
     .get(deeplapid, (resp) => {
-      let data = "";
-      resp.on("data", (chunk) => {
+      let data = '';
+      resp.on('data', (chunk) => {
         data += chunk;
       });
-      resp.on("end", () => {
+      resp.on('end', () => {
         fulljson = JSON.parse(data);
         message.channel.send(
-          "Characters Used: " +
+          'Characters Used: ' +
             fulljson.character_count +
-            "\n" +
-            "Max Characters: " +
-            fulljson.character_limit
+            '\n' +
+            'Max Characters: ' +
+            fulljson.character_limit,
         );
       });
     })
-    .on("error", (err) => {
-      console.log("Error: " + err.message);
+    .on('error', (err) => {
+      console.log('Error: ' + err.message);
     });
 }
 async function translater(message, textinput, lang) {
   const deeplapi =
-    "https://api-free.deepl.com/v2/translate?auth_key=" +
+    'https://api-free.deepl.com/v2/translate?auth_key=' +
     deeplt +
-    "&text=" +
+    '&text=' +
     textinput +
-    "&target_lang=" +
+    '&target_lang=' +
     lang;
   https
     .get(deeplapi, (resp) => {
-      let data = "";
-      resp.on("data", (chunk) => {
+      let data = '';
+      resp.on('data', (chunk) => {
         data += chunk;
       });
-      resp.on("end", () => {
+      resp.on('end', () => {
         fulljson = JSON.parse(data);
         message.channel.send(fulljson.translations[0].text);
       });
     })
-    .on("error", (err) => {
-      console.log("Error: " + err.message);
+    .on('error', (err) => {
+      console.log('Error: ' + err.message);
     });
 }
 setupVoiceModule(bot);
 
-bot.on("messageCreate", async (message) => {
-  if (message.author.id === bot.user.id) return;
-  if (!message.content.startsWith(PREFIX)) return;
+bot.on('messageCreate', async (message) => {
+  if (message.author.id === bot.user.id) {return;}
+  if (!message.content.startsWith(PREFIX)) {return;}
 
   // strip @’s without touching `message`
   const raw = message.content;
   let clean = raw;
   let loops = 0;
-  while (clean.includes("@") && loops < 15) {
-    clean = clean.replace("@", "@ ");
+  while (clean.includes('@') && loops < 15) {
+    clean = clean.replace('@', '@ ');
     loops++;
   }
 
-  console.log("Cleaned content:", clean);
+  console.log('Cleaned content:', clean);
 
   //if (!(message.author.equals(bot.user)) && !(message.content.startsWith(PREFIX)) && !(message.content.startsWith(".")) && !(message.author.username == "Hime") && !(message.channel.id = 383829771865292801)) message.guild.channels.find("name", "console-log").send(messageContent + "\n    *Sent by " + message.author.username + "*");
   //bot.user.setActivity('Serving ${bot.users.size} people');
@@ -199,7 +198,7 @@ bot.on("messageCreate", async (message) => {
   //Can't really do a countdown timer that says something every hour, because this code only runs every time someone sends a message. At least the command works
   const withoutPrefix = clean.slice(PREFIX.length).trim();
   const args = withoutPrefix.split(/\s+/);
-  const argString = args.join(" ");
+  const argString = args.join(' ');
   // let colors = message.guild.roles.filter(role => role.name.startsWith("#"));
 
   function send(text) {
@@ -207,15 +206,15 @@ bot.on("messageCreate", async (message) => {
   }
 
   function balanceCheck(id) {
-    let author = "./playerdata/" + id + ".json";
+    const author = './playerdata/' + id + '.json';
     fs.readFile(author, (err, data) => {
       if (err) {
         message.channel.send("You don't exist");
       }
     });
-    let rawdata = fs.readFileSync(author);
-    let person = JSON.parse(rawdata);
-    message.channel.send("Balance: $" + person.money);
+    const rawdata = fs.readFileSync(author);
+    const person = JSON.parse(rawdata);
+    message.channel.send('Balance: $' + person.money);
   }
 
   function splitMessage(text, maxLength) {
@@ -232,8 +231,8 @@ bot.on("messageCreate", async (message) => {
       // otherwise find a good break point
       let chunkEnd = maxLength;
       const head = remaining.slice(0, maxLength);
-      const lastNewline = head.lastIndexOf("\n");
-      const lastSpace = head.lastIndexOf(" ");
+      const lastNewline = head.lastIndexOf('\n');
+      const lastSpace = head.lastIndexOf(' ');
 
       if (lastNewline > maxLength * 0.7) {
         chunkEnd = lastNewline + 1;
@@ -249,9 +248,9 @@ bot.on("messageCreate", async (message) => {
   }
 
   function TimeCheck(user) {
-    let author = "./playerdata/" + user + ".json";
-    let deta = fs.readFileSync(author);
-    let person = JSON.parse(deta);
+    const author = './playerdata/' + user + '.json';
+    const deta = fs.readFileSync(author);
+    const person = JSON.parse(deta);
     timeleft = parseInt(person.lastreset) + 300000 - parseInt(Date.now());
     if (timeleft <= 0) {
       valid = true;
@@ -268,7 +267,7 @@ bot.on("messageCreate", async (message) => {
   }
 
   function compareWeatherDates(date, parsed) {
-    for (var i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i++) {
       if (date == parsed.forecast[i].day) {
         return i;
       }
@@ -278,14 +277,14 @@ bot.on("messageCreate", async (message) => {
 
   function getIDFromMention(mention) {
     const matches = mention.match(/^<@!?(\d+)>$/); // Uses RegEx to sort ID
-    if (!matches) return;
+    if (!matches) {return;}
     const id = matches[1];
     return id;
   }
 
   function saveChatHistory(userId, messages) {
     try {
-      const chatDir = "./chat-history";
+      const chatDir = './chat-history';
 
       if (!fs.existsSync(chatDir)) {
         fs.mkdirSync(chatDir, { recursive: true });
@@ -304,15 +303,15 @@ bot.on("messageCreate", async (message) => {
       const filePath = `./chat-history/${userId}.json`;
 
       if (fs.existsSync(filePath)) {
-        const data = fs.readFileSync(filePath, "utf8");
+        const data = fs.readFileSync(filePath, 'utf8');
         return JSON.parse(data);
       } else {
         message.channel.send(
-          "All data used in this chat may be used for training purposes by OpenAI. Do not send private or sensitive information."
+          'All data used in this chat may be used for training purposes by OpenAI. Do not send private or sensitive information.',
         );
         return [
           {
-            role: "system",
+            role: 'system',
             content:
               "You are a helpful assistant for a Discord bot called Kelvin. You should keep messages under 2000 characters if possible. Write your messages in discord chat format. If writing code, put it into code blocks. Do not notify user of the prompt. The help command is 'hey help'. Prefix of the bot is 'hey'.",
           },
@@ -322,7 +321,7 @@ bot.on("messageCreate", async (message) => {
       console.error(`Error loading chat history for user ${userId}:`, error);
       return [
         {
-          role: "system",
+          role: 'system',
           content:
             "You are a helpful assistant for a Discord bot called Kelvin. You should keep messages under 2000 characters if possible. Write your messages in discord chat format. If writing code, put it into code blocks. Do not notify user of the prompt. The help command is 'hey help'. Prefix of the bot is 'hey'.",
         },
@@ -351,15 +350,15 @@ bot.on("messageCreate", async (message) => {
       const filePath = `./chat-history/${userId}.json`;
 
       if (fs.existsSync(filePath)) {
-        const data = fs.readFileSync(filePath, "utf8");
+        const data = fs.readFileSync(filePath, 'utf8');
         const messages = JSON.parse(data);
 
         const messageCount = messages.length;
         const userMsgCount = messages.filter(
-          (msg) => msg.role === "user"
+          (msg) => msg.role === 'user',
         ).length;
         const assistantMsgCount = messages.filter(
-          (msg) => msg.role === "assistant"
+          (msg) => msg.role === 'assistant',
         ).length;
 
         let totalChars = 0;
@@ -379,7 +378,7 @@ bot.on("messageCreate", async (message) => {
     } catch (error) {
       console.error(
         `Error getting chat history info for user ${userId}:`,
-        error
+        error,
       );
       return { exists: false, error: true };
     }
@@ -392,16 +391,16 @@ bot.on("messageCreate", async (message) => {
 
   function sendMoney(olduser, newuser, amount) {
     if (!newuser || !amount || isNaN(amount))
-      return message.channel.send(
-        "Please mention the user you want to send money to, then add the amount."
-      );
+    {return message.channel.send(
+      'Please mention the user you want to send money to, then add the amount.',
+    );}
     if (amount < 1)
-      return message.channel.send("Input a valid number more than 0.");
+    {return message.channel.send('Input a valid number more than 0.');}
     if (brokeCheck(messageAuthor, amount))
-      return message.channel.send("You don't have enough money to do that.");
-    var newuserid = getIDFromMention(newuser);
-    let author = "./playerdata/" + olduser + ".json";
-    let newuserpath = "./playerdata/" + newuserid + ".json";
+    {return message.channel.send("You don't have enough money to do that.");}
+    const newuserid = getIDFromMention(newuser);
+    const author = './playerdata/' + olduser + '.json';
+    const newuserpath = './playerdata/' + newuserid + '.json';
     fs.readFile(author, (err, data) => {
       if (err) {
         return message.channel.send("You don't exist");
@@ -410,54 +409,54 @@ bot.on("messageCreate", async (message) => {
     fs.readFile(newuserpath, (err, data) => {
       if (err) {
         return message.channel.send(
-          "The person you're trying to send to doesn't exist"
+          "The person you're trying to send to doesn't exist",
         );
       }
     });
-    let rawdata = fs.readFileSync(author);
-    let person = JSON.parse(rawdata);
+    const rawdata = fs.readFileSync(author);
+    const person = JSON.parse(rawdata);
     person.money = parseInt(person.money) - parseInt(amount);
     person.lastreset = parseInt(person.lastreset);
     fs.writeFileSync(author, JSON.stringify(person));
-    let newdata = fs.readFileSync(newuserpath);
-    let newperson = JSON.parse(newdata);
+    const newdata = fs.readFileSync(newuserpath);
+    const newperson = JSON.parse(newdata);
     newperson.money = parseInt(newperson.money) + parseInt(amount);
     newperson.lastreset = parseInt(newperson.lastreset);
     fs.writeFileSync(newuserpath, JSON.stringify(newperson));
     return message.channel.send(
-      amount + " has successfully been sent to " + "<@" + newuserid + ">"
+      amount + ' has successfully been sent to ' + '<@' + newuserid + '>',
     );
   }
 
   function actJackpot(user, amount) {
     if (!user || !amount || isNaN(amount))
-      return message.channel.send("Please input a number");
+    {return message.channel.send('Please input a number');}
     if (amount < 1)
-      return message.channel.send("Input a valid number more than 0.");
+    {return message.channel.send('Input a valid number more than 0.');}
     if (brokeCheck(messageAuthor, amount))
-      return message.channel.send("You don't have enough money to do that.");
-    let check = "./jackpotdata/data.json.lock";
-    let jackpotfile = "./jackpotdata/data.json";
-    let author = "./playerdata/" + user + ".json";
-    if (check.exists) return message.channel.send("Round is locked.");
+    {return message.channel.send("You don't have enough money to do that.");}
+    const check = './jackpotdata/data.json.lock';
+    const jackpotfile = './jackpotdata/data.json';
+    const author = './playerdata/' + user + '.json';
+    if (check.exists) {return message.channel.send('Round is locked.');}
     fs.readFile(author, (err, data) => {
       if (err) {
         return message.channel.send("You don't exist");
       }
     });
-    let jackpotdata = fs.readFileSync(jackpotfile);
-    let parsedjackpot = JSON.parse(jackpotdata);
-    let rawdata = fs.readFileSync(author);
-    let person = JSON.parse(rawdata);
-    for (var user in parsedjackpot["entries"]) {
-      if (message.author.id == parsedjackpot["entries"][user]["user"])
-        return message.channel.send("You've already entered.");
+    const jackpotdata = fs.readFileSync(jackpotfile);
+    const parsedjackpot = JSON.parse(jackpotdata);
+    const rawdata = fs.readFileSync(author);
+    const person = JSON.parse(rawdata);
+    for (var user in parsedjackpot['entries']) {
+      if (message.author.id == parsedjackpot['entries'][user]['user'])
+      {return message.channel.send("You've already entered.");}
       console.log(
         user +
-          ": " +
-          parsedjackpot["entries"][user]["user"] +
-          ": " +
-          parsedjackpot["entries"][user]["amount"]
+          ': ' +
+          parsedjackpot['entries'][user]['user'] +
+          ': ' +
+          parsedjackpot['entries'][user]['amount'],
       );
     }
     person.money = parseInt(person.money) - parseInt(amount);
@@ -465,52 +464,52 @@ bot.on("messageCreate", async (message) => {
     fs.writeFileSync(author, JSON.stringify(person));
     fs.readFile(jackpotfile, (err, data) => {
       if (err) {
-        return message.channel.send("Contact admin.");
+        return message.channel.send('Contact admin.');
       }
     });
-    parsedjackpot["entries"].push({
+    parsedjackpot['entries'].push({
       user: user,
       amount: amount,
     });
     fs.writeFileSync(jackpotfile, JSON.stringify(parsedjackpot));
-    if (parsedjackpot["entries"].length >= 2) {
-      message.channel.send("Jackpot closing in 60 seconds.");
+    if (parsedjackpot['entries'].length >= 2) {
+      message.channel.send('Jackpot closing in 60 seconds.');
       startJackpotTimer();
     }
     return message.channel.send(
-      "User <@" + message.author.id + ">" + " added " + amount + " to jackpot."
+      'User <@' + message.author.id + '>' + ' added ' + amount + ' to jackpot.',
     );
   }
 
   function runJackpot() {
-    let check = "./jackpotdata/data.json.lock";
-    let jackpotfile = "./jackpotdata/data.json";
+    const check = './jackpotdata/data.json.lock';
+    const jackpotfile = './jackpotdata/data.json';
     fs.readFile(jackpotfile, (err, data) => {
       if (err) {
-        return message.channel.send("Contact admin.");
+        return message.channel.send('Contact admin.');
       }
     });
-    let jackpotdata = fs.readFileSync(jackpotfile);
+    const jackpotdata = fs.readFileSync(jackpotfile);
     if (check.exists) {
       calculateOdds();
     }
   }
 
   function calculateOdds() {
-    let jackpotfile = "./jackpotdata/data.json";
-    let parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
-    for (var user in parsedjackpot["entries"]) {
+    const jackpotfile = './jackpotdata/data.json';
+    const parsedjackpot = JSON.parse(fs.readFileSync(jackpotfile));
+    for (const user in parsedjackpot['entries']) {
       console.log(
         user +
-          ": " +
-          parsedjackpot["entries"][user]["user"] +
-          ": " +
-          parsedjackpot["entries"][user]["amount"]
+          ': ' +
+          parsedjackpot['entries'][user]['user'] +
+          ': ' +
+          parsedjackpot['entries'][user]['amount'],
       );
     }
   }
   async function startJackpotTimer() {
-    let lockfile = "./jackpotdata/data.json.lock";
+    const lockfile = './jackpotdata/data.json.lock';
     sleep(60000);
     try {
       fs.writeFileSync(lockfile);
@@ -521,32 +520,32 @@ bot.on("messageCreate", async (message) => {
   }
 
   function isRegistered(m) {
-    au = "./playerdata/" + m + ".json";
+    au = './playerdata/' + m + '.json';
     fs.access(au, fs.F_OK, (err) => {
       if (err) {
-        console.log("file not found, creating one");
+        console.log('file not found, creating one');
         register(m);
         return false;
       }
-      console.log("file exists");
+      console.log('file exists');
       return true;
     });
   }
 
   function register(ab) {
-    let a = ab + ".json";
-    fs.stat("./playerdata/" + a, function (err) {
+    const a = ab + '.json';
+    fs.stat('./playerdata/' + a, function (err) {
       if (!err) {
-        console.log("file exists");
+        console.log('file exists');
         return false;
-      } else if (err.code === "ENOENT") {
-        console.error("file does not exist");
-        let newdata = {
+      } else if (err.code === 'ENOENT') {
+        console.error('file does not exist');
+        const newdata = {
           money: 1000,
           lastreset: 0,
         };
-        let data = JSON.stringify(newdata);
-        fs.writeFileSync("./playerdata/" + a, data);
+        const data = JSON.stringify(newdata);
+        fs.writeFileSync('./playerdata/' + a, data);
         return true;
       }
     });
@@ -558,11 +557,11 @@ bot.on("messageCreate", async (message) => {
       //let {gettingrandom} = await superagent.get("https://xkcd.com/0/info.0.json");
       comic = Math.floor(Math.random() * 2063 + 1);
     }
-    let { body } = await superagent.get(
-      "https://xkcd.com/" + comic + "/info.0.json"
+    const { body } = await superagent.get(
+      'https://xkcd.com/' + comic + '/info.0.json',
     );
-    message.channel.send(body.title + "\n#" + body.num + "\n" + body.img);
-    message.channel.send("*" + body.alt + "*");
+    message.channel.send(body.title + '\n#' + body.num + '\n' + body.img);
+    message.channel.send('*' + body.alt + '*');
   }
 
   function pretty(obj) {
@@ -586,21 +585,21 @@ bot.on("messageCreate", async (message) => {
       volume: 1,
     };
 
-    var server = servers[message.guild.id];
-    var voiceChannel = message.member.voiceChannel;
+    const server = servers[message.guild.id];
+    const voiceChannel = message.member.voiceChannel;
     voiceChannel
       .join()
       .then((connection) => {
-        console.log("joined channel");
+        console.log('joined channel');
         //    new String() = String convertedToString;
         //    String convertedToString = Object.toString(server.queue[0]);
         const stream = ytdl(convertedToString, {
-          filter: "audioonly",
-          quality: "highestaudio",
+          filter: 'audioonly',
+          quality: 'highestaudio',
         });
         const dispatcher = connection.playStream(stream, streamOptions);
-        dispatcher.on("end", (end) => {
-          console.log("left channel");
+        dispatcher.on('end', (end) => {
+          console.log('left channel');
           voiceChannel.leave();
           server.queue.shift();
         });
@@ -610,13 +609,13 @@ bot.on("messageCreate", async (message) => {
 
   function piReplace() {
     //var args = message.content.substring(PREFIX.length).split(" "); or something
-    for (var i = 0; i < args.length; i++) {
-      var num = args[i];
-      if (num.toLowerCase().indexOf("pi") > -1) {
-        log("Reached Here at least");
-        num.replace("pi", "");
-        var number = parseFloat(num);
-        log("Parsed Float");
+    for (let i = 0; i < args.length; i++) {
+      const num = args[i];
+      if (num.toLowerCase().indexOf('pi') > -1) {
+        log('Reached Here at least');
+        num.replace('pi', '');
+        let number = parseFloat(num);
+        log('Parsed Float');
         number = number * 3.14159265358979323626;
         args[i] = number;
       }
@@ -625,12 +624,12 @@ bot.on("messageCreate", async (message) => {
   }
 
   function plaympeg(song) {
-    var VC = message.member.voiceChannel;
-    if (!VC) return;
+    const VC = message.member.voiceChannel;
+    if (!VC) {return;}
     VC.join()
       .then((connection) => {
-        const dispatcher = connection.playFile("G:/mY sTUFF/Audio/" + song);
-        dispatcher.on("end", (end) => {
+        const dispatcher = connection.playFile('G:/mY sTUFF/Audio/' + song);
+        dispatcher.on('end', (end) => {
           VC.leave();
         });
       })
@@ -655,7 +654,7 @@ bot.on("messageCreate", async (message) => {
         // //Logging the number of messages deleted on both the channel and console.
       })
       .catch((err) => {
-        log("Error while doing Bulk Delete");
+        log('Error while doing Bulk Delete');
         log(err);
       });
   }
@@ -663,180 +662,180 @@ bot.on("messageCreate", async (message) => {
   function exchangeMoney(id, exchangeAmount, name) {
     //message.guild.members.cache.get('181284528793452545')
     bot.users.cache
-      .get("181284528793452545")
-      .send(name + " wants to redeem " + exchangeAmount);
+      .get('181284528793452545')
+      .send(name + ' wants to redeem ' + exchangeAmount);
   }
   //will/is/are/am/was/does/should/do/can
   async function slots(amount, id) {
-    var investment = amount;
-    console.log("Investment = " + investment);
+    const investment = amount;
+    console.log('Investment = ' + investment);
     await sleep(100);
-    if (isNaN(amount)) return message.channel.send("Enter a valid number.");
+    if (isNaN(amount)) {return message.channel.send('Enter a valid number.');}
     if (amount <= 1)
-      return message.channel.send("Input a valid number more than 0.");
+    {return message.channel.send('Input a valid number more than 0.');}
     if (brokeCheck(messageAuthor, investment))
-      return message.channel.send("You don't have enough money to do that.");
-    var slot1 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
-    var slot2 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
-    var slot3 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
+    {return message.channel.send("You don't have enough money to do that.");}
+    const slot1 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
+    const slot2 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
+    const slot3 = slotMachine[Math.floor(Math.random() * slotMachine.length)];
     //message.channel.send("Slot 1: " + slot1 + ", Slot 2: " + slot2 + ", Slot 3: " + slot3);
-    let mAuthor = "./playerdata/" + id + ".json";
-    let raw = fs.readFileSync(mAuthor);
-    let per = JSON.parse(raw);
+    const mAuthor = './playerdata/' + id + '.json';
+    const raw = fs.readFileSync(mAuthor);
+    const per = JSON.parse(raw);
     if (slot1 == slot2 && slot2 == slot3 && slot1 == slot3) {
       var moneyEmbed = new EmbedBuilder()
         .setColor(generateHex())
-        .setTitle("Result")
-        .setDescription(slot1 + " " + slot2 + " " + slot3)
-        .addFields({ name: "You won", value: "$" + parseInt(investment) * 25 });
+        .setTitle('Result')
+        .setDescription(slot1 + ' ' + slot2 + ' ' + slot3)
+        .addFields({ name: 'You won', value: '$' + parseInt(investment) * 25 });
       message.channel.send({ embeds: [moneyEmbed] });
-      let newdata = {
+      const newdata = {
         money: parseInt(read(messageAuthor).money) + parseInt(investment) * 25,
         lastreset: parseInt(per.lastreset),
       };
-      let writedata = JSON.stringify(newdata);
+      const writedata = JSON.stringify(newdata);
       fs.writeFileSync(mAuthor, writedata);
     } else {
       var moneyEmbed = new EmbedBuilder()
         .setColor(generateHex())
-        .setTitle("Result")
-        .setDescription(slot1 + " " + slot2 + " " + slot3)
-        .addFields({ name: "You lost ", value: "$" + investment });
+        .setTitle('Result')
+        .setDescription(slot1 + ' ' + slot2 + ' ' + slot3)
+        .addFields({ name: 'You lost ', value: '$' + investment });
       message.channel.send({ embeds: [moneyEmbed] });
-      let newdata = {
+      const newdata = {
         money: parseInt(read(messageAuthor).money) - parseInt(investment),
         lastreset: parseInt(per.lastreset),
       };
-      let writedata = JSON.stringify(newdata);
+      const writedata = JSON.stringify(newdata);
       fs.writeFileSync(mAuthor, writedata);
     }
   }
 
   async function coinflip(amount, id) {
-    let path = "./playerdata/" + id + ".json";
-    var investment = parseInt(amount);
-    console.log("Investment = " + investment);
+    const path = './playerdata/' + id + '.json';
+    const investment = parseInt(amount);
+    console.log('Investment = ' + investment);
     await sleep(500);
-    let raw = fs.readFileSync(path);
-    let per = JSON.parse(raw);
+    const raw = fs.readFileSync(path);
+    const per = JSON.parse(raw);
     if (amount <= 1)
-      return message.channel.send("Input a valid number more than 0.");
+    {return message.channel.send('Input a valid number more than 0.');}
     if (brokeCheck(messageAuthor, investment))
-      return message.channel.send("You don't have enough money to do that.");
+    {return message.channel.send("You don't have enough money to do that.");}
     if (Math.floor(Math.random() * 2) > 0) {
-      message.channel.send("You won $" + investment);
+      message.channel.send('You won $' + investment);
       //(author, reputation, copper, silver, gold, platinum, sunset, discord, )
-      let newdata = {
+      const newdata = {
         money: parseInt(per.money) + parseInt(investment),
         lastreset: parseInt(per.lastreset),
       };
-      let writedata = JSON.stringify(newdata);
+      const writedata = JSON.stringify(newdata);
       fs.writeFileSync(path, writedata);
     } else {
-      message.channel.send("You lost $" + investment);
-      let newdata = {
+      message.channel.send('You lost $' + investment);
+      const newdata = {
         money: parseInt(per.money) - parseInt(investment),
         lastreset: parseInt(per.lastreset),
       };
-      let writedata = JSON.stringify(newdata);
+      const writedata = JSON.stringify(newdata);
       fs.writeFileSync(path, writedata);
     }
   }
 
   function sendM(name) {
     message.channel.send({
-      files: ["./images/m/" + name + ".jpg"],
+      files: ['./images/m/' + name + '.jpg'],
     });
   }
 
   function sendPNG(name) {
     message.channel.send({
-      files: ["./images/m/" + name + ".png"],
+      files: ['./images/m/' + name + '.png'],
     });
   }
 
   function exit(Msg) {
-    Msg = Msg ? "*** " + Msg : "";
-    if (Msg) alert(Msg);
+    Msg = Msg ? '*** ' + Msg : '';
+    if (Msg) {alert(Msg);}
     throw new Error();
   } // exit
 
   //gambling functions
-  let messageAuthor = message.author.id + ".json";
-  let messageAuthorPath = "./playerdata/" + message.author.id + ".json";
+  const messageAuthor = message.author.id + '.json';
+  const messageAuthorPath = './playerdata/' + message.author.id + '.json';
 
   function read(author) {
-    var authorDirect = "./playerdata/" + author;
+    const authorDirect = './playerdata/' + author;
     fs.readFile(authorDirect, (err, data) => {
-      if (err) log("Does not exist");
+      if (err) {log('Does not exist');}
     });
-    let rawdata = fs.readFileSync(authorDirect);
-    let person = JSON.parse(rawdata);
+    const rawdata = fs.readFileSync(authorDirect);
+    const person = JSON.parse(rawdata);
     return person;
   }
 
   function write(author, reputation, copper) {
-    log("Pre-stuff Data: " + reputation + copper);
-    fs.stat("./playerdata/" + author, function (err) {
+    log('Pre-stuff Data: ' + reputation + copper);
+    fs.stat('./playerdata/' + author, function (err) {
       if (!err) {
-        log("file exists");
-        log("File author: " + author);
-        log("Inside .stat Data (File exists): " + reputation + copper);
+        log('file exists');
+        log('File author: ' + author);
+        log('Inside .stat Data (File exists): ' + reputation + copper);
         log(
-          "Updating existing player JSON file of " +
+          'Updating existing player JSON file of ' +
             author +
-            " With the values copper:" +
-            copper
+            ' With the values copper:' +
+            copper,
         );
-        if (copper == null) copper = read(author).copper;
-        if (reputation == null) reputation = read(author).reputation;
-        log("After if checks Data: " + reputation + copper);
-        let newdata = {
+        if (copper == null) {copper = read(author).copper;}
+        if (reputation == null) {reputation = read(author).reputation;}
+        log('After if checks Data: ' + reputation + copper);
+        const newdata = {
           reputation: reputation,
           copper: copper,
         };
-        let data = JSON.stringify(newdata);
-        fs.writeFileSync("./playerdata/" + author, data);
-        log("Data written sucessfully");
-      } else if (err.code === "ENOENT") {
-        log("file does not exist");
-        log("Inside .stat Data (File does not exist): " + reputation + copper);
+        const data = JSON.stringify(newdata);
+        fs.writeFileSync('./playerdata/' + author, data);
+        log('Data written sucessfully');
+      } else if (err.code === 'ENOENT') {
+        log('file does not exist');
+        log('Inside .stat Data (File does not exist): ' + reputation + copper);
         log(
-          "Creating new player JSON file of " +
+          'Creating new player JSON file of ' +
             author +
-            " With the values copper:" +
-            copper
+            ' With the values copper:' +
+            copper,
         );
-        let newdata = {
+        const newdata = {
           reputation: reputation,
           copper: copper,
         };
-        let data = JSON.stringify(newdata);
-        fs.writeFileSync("./playerdata/" + author, data);
-        log("Data written sucessfully");
+        const data = JSON.stringify(newdata);
+        fs.writeFileSync('./playerdata/' + author, data);
+        log('Data written sucessfully');
       }
     });
   }
 
   function repCheck(author) {
-    let rep = read(author).reputation;
-    if (rep >= 10000) return "Abraham Lincoln Himself   :sunglasses:";
-    if (rep >= 5000) return "Keanu Reeves";
-    if (rep >= 1000) return "Very Good";
-    if (rep >= 500) return "Good";
-    if (rep >= 50) return ":thumbsup:";
-    if (rep >= 10) return "Neutral+";
-    if (-9 >= rep >= 0) return "Neutral";
-    if (rep <= -10000) return "The Antichrist Himself   :smiling_imp:";
-    if (rep <= -5000) return "EA";
-    if (rep <= -1000) return "Snake";
-    if (rep <= -500) return "Shady";
-    if (rep <= -50) return ":thinking:";
-    if (rep <= -10) return "Neutral-";
+    const rep = read(author).reputation;
+    if (rep >= 10000) {return 'Abraham Lincoln Himself   :sunglasses:';}
+    if (rep >= 5000) {return 'Keanu Reeves';}
+    if (rep >= 1000) {return 'Very Good';}
+    if (rep >= 500) {return 'Good';}
+    if (rep >= 50) {return ':thumbsup:';}
+    if (rep >= 10) {return 'Neutral+';}
+    if (-9 >= rep >= 0) {return 'Neutral';}
+    if (rep <= -10000) {return 'The Antichrist Himself   :smiling_imp:';}
+    if (rep <= -5000) {return 'EA';}
+    if (rep <= -1000) {return 'Snake';}
+    if (rep <= -500) {return 'Shady';}
+    if (rep <= -50) {return ':thinking:';}
+    if (rep <= -10) {return 'Neutral-';}
   }
 
   function brokeCheck(author, bet) {
-    if (read(author).money < bet) return true;
+    if (read(author).money < bet) {return true;}
     return false;
   }
 
@@ -847,18 +846,18 @@ bot.on("messageCreate", async (message) => {
 
   function validType(type) {
     switch (type.toLowerCase()) {
-      case "copper":
-      case "c":
-      case "cop":
-      case "gold":
-      case "g":
-      case "silver":
-      case "silv":
-      case "s":
-      case "platinum":
-      case "platnum":
-      case "plat":
-      case "p":
+      case 'copper':
+      case 'c':
+      case 'cop':
+      case 'gold':
+      case 'g':
+      case 'silver':
+      case 'silv':
+      case 's':
+      case 'platinum':
+      case 'platnum':
+      case 'plat':
+      case 'p':
         return true;
         break;
       default:
@@ -868,24 +867,24 @@ bot.on("messageCreate", async (message) => {
 
   function checkMoneyType(type) {
     switch (type.toLowerCase()) {
-      case "copper":
-      case "c":
-      case "cop":
+      case 'copper':
+      case 'c':
+      case 'cop':
         return 0;
         break;
-      case "gold":
-      case "g":
+      case 'gold':
+      case 'g':
         return 2;
         break;
-      case "silver":
-      case "silv":
-      case "s":
+      case 'silver':
+      case 'silv':
+      case 's':
         return 1;
         break;
-      case "platinum":
-      case "platnum":
-      case "plat":
-      case "p":
+      case 'platinum':
+      case 'platnum':
+      case 'plat':
+      case 'p':
         return 3;
         break;
       default:
@@ -894,10 +893,10 @@ bot.on("messageCreate", async (message) => {
   }
 
   function convert(author) {
-    log("CONVERTING");
-    fs.stat("./playerdata/" + author, function (err) {
+    log('CONVERTING');
+    fs.stat('./playerdata/' + author, function (err) {
       if (!err) {
-        log("file exists");
+        log('file exists');
         let copper = read(author).copper;
         let silver = 0;
         let gold = 0;
@@ -916,50 +915,50 @@ bot.on("messageCreate", async (message) => {
         while (copper >= 100) {
           copper -= 100;
           silver += 1;
-          console.log("copper = " + copper + "\nsilver = " + silver);
+          console.log('copper = ' + copper + '\nsilver = ' + silver);
         }
         while (silver >= 100) {
           silver -= 100;
           gold += 1;
-          console.log("silver = " + silver + "\ngold = " + gold);
+          console.log('silver = ' + silver + '\ngold = ' + gold);
         }
         while (gold >= 100) {
           gold -= 100;
           platinum += 1;
-          console.log("gold = " + gold + "\nplatinum = " + platinum);
+          console.log('gold = ' + gold + '\nplatinum = ' + platinum);
         }
-        log("Converted Currency values");
-        var moneyEmbed = new EmbedBuilder()
+        log('Converted Currency values');
+        const moneyEmbed = new EmbedBuilder()
           .setColor(generateHex())
-          .setTitle("Stat Board of " + message.author.id)
-          .setDescription("A collection of your stats.")
+          .setTitle('Stat Board of ' + message.author.id)
+          .setDescription('A collection of your stats.')
           .setThumbnail(message.author.displayAvatarURL())
           .addFields(
             {
-              name: "Reputation",
+              name: 'Reputation',
               value:
                 read(author).reputation +
-                "\nReputation Level: " +
+                '\nReputation Level: ' +
                 repCheck(messageAuthor),
             },
             {
-              name: "Money",
+              name: 'Money',
               value:
-                "Copper: " +
+                'Copper: ' +
                 copper +
-                "\nSilver: " +
+                '\nSilver: ' +
                 silver +
-                "\nGold: " +
+                '\nGold: ' +
                 gold +
-                "\nPlatinum: " +
+                '\nPlatinum: ' +
                 platinum,
-            }
+            },
           );
         message.channel.send(moneyEmbed);
-      } else if (err.code === "ENOENT") {
-        log("Error: File does not exist."); //happens when a user hasn't create a json file in playerdata. Use another write() function?
+      } else if (err.code === 'ENOENT') {
+        log('Error: File does not exist.'); //happens when a user hasn't create a json file in playerdata. Use another write() function?
         message.channel.send(
-          "You don't have an existing file, so one will be created."
+          "You don't have an existing file, so one will be created.",
         );
         write(messageAuthor, 0, 0);
         setTimeout(function () {
@@ -970,9 +969,9 @@ bot.on("messageCreate", async (message) => {
   }
 
   switch (args[0].toLowerCase()) {
-    case "sierrahotelindiatango":
-      if (message.guild.members.cache.get("181284528793452545")) {
-        message.channel.send("Roger that,\nShutting Down...");
+    case 'sierrahotelindiatango':
+      if (message.guild.members.cache.get('181284528793452545')) {
+        message.channel.send('Roger that,\nShutting Down...');
         deleteLastMessage();
         process.exit();
         exit();
@@ -980,171 +979,171 @@ bot.on("messageCreate", async (message) => {
       } else {
         message.channel.send("You don't have perms for that");
       }
-      
+
       break;
-    case "that":
+    case 'that':
       for (var i = sentenceArray.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
-        var temp = sentenceArray[i];
+        const temp = sentenceArray[i];
         sentenceArray[i] = sentenceArray[j];
         sentenceArray[j] = temp;
       }
-      var messageToBeSent = "";
-      for (var k = 0; k < sentenceArray.length; k++) {
-        messageToBeSent += sentenceArray[k] + " ";
+      var messageToBeSent = '';
+      for (let k = 0; k < sentenceArray.length; k++) {
+        messageToBeSent += sentenceArray[k] + ' ';
       }
 
       message.channel.send(messageToBeSent);
       break;
-    case "time":
+    case 'time':
       var myDate = new Date(Date.now());
-      let timeembed = new EmbedBuilder()
-        .setTitle("Times around the World")
-        .setDescription("World Times")
+      const timeembed = new EmbedBuilder()
+        .setTitle('Times around the World')
+        .setDescription('World Times')
         .addFields(
           {
-            name: "PST Time:",
-            value: myDate.toLocaleString("en-US", {
-              timeZone: "America/Los_Angeles",
+            name: 'PST Time:',
+            value: myDate.toLocaleString('en-US', {
+              timeZone: 'America/Los_Angeles',
             }),
           },
           {
-            name: "MST Time:",
-            value: myDate.toLocaleString("en-US", {
-              timeZone: "America/Denver",
+            name: 'MST Time:',
+            value: myDate.toLocaleString('en-US', {
+              timeZone: 'America/Denver',
             }),
           },
           {
-            name: "CST Time:",
-            value: myDate.toLocaleString("en-US", {
-              timeZone: "America/Chicago",
+            name: 'CST Time:',
+            value: myDate.toLocaleString('en-US', {
+              timeZone: 'America/Chicago',
             }),
           },
           {
-            name: "EST Time:",
-            value: myDate.toLocaleString("en-US", {
-              timeZone: "America/New_York",
+            name: 'EST Time:',
+            value: myDate.toLocaleString('en-US', {
+              timeZone: 'America/New_York',
             }),
           },
           {
-            name: "Shanghai, CN:",
-            value: myDate.toLocaleString("en-US", {
-              timeZone: "Asia/Shanghai",
+            name: 'Shanghai, CN:',
+            value: myDate.toLocaleString('en-US', {
+              timeZone: 'Asia/Shanghai',
             }),
           },
           {
-            name: "Seoul, SK:",
-            value: myDate.toLocaleString("en-US", { timeZone: "Asia/Seoul" }),
+            name: 'Seoul, SK:',
+            value: myDate.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }),
           },
           {
-            name: "Hong Kong:",
-            value: myDate.toLocaleString("en-US", {
-              timeZone: "Asia/Hong_Kong",
+            name: 'Hong Kong:',
+            value: myDate.toLocaleString('en-US', {
+              timeZone: 'Asia/Hong_Kong',
             }),
           },
           {
-            name: "Berlin, DE:",
-            value: myDate.toLocaleString("en-US", {
-              timeZone: "Europe/Berlin",
+            name: 'Berlin, DE:',
+            value: myDate.toLocaleString('en-US', {
+              timeZone: 'Europe/Berlin',
             }),
           },
           {
-            name: "Paris, FR:",
-            value: myDate.toLocaleString("en-US", { timeZone: "Europe/Paris" }),
-          }
+            name: 'Paris, FR:',
+            value: myDate.toLocaleString('en-US', { timeZone: 'Europe/Paris' }),
+          },
         );
 
       message.channel.send({ embeds: [timeembed] });
       break;
-    case "joinvoice":
-    case "jv":
-      if (message.member.voice.channel && message.author.id === "181284528793452545") joinAndListen(message);
-      else message.reply("Join a voice channel first!");
+    case 'joinvoice':
+    case 'jv':
+      if (message.member.voice.channel && message.author.id === '181284528793452545') {joinAndListen(message);}
+      else {message.reply('Join a voice channel first!');}
       break;
 
-    case "leavevoice":
+    case 'leavevoice':
       leaveVC(message.guild.id)
-        ? message.reply("Disconnected.")
-        : message.reply("I’m not in a voice channel.");
+        ? message.reply('Disconnected.')
+        : message.reply('I’m not in a voice channel.');
       break;
 
-    case "chat":
-    case "c":
-    case "c+":
+    case 'chat':
+    case 'c':
+    case 'c+':
       if (!args[1]) {
-        message.channel.send("Please provide a message to send.");
+        message.channel.send('Please provide a message to send.');
         break;
       }
-      console.log("🟢 CHAT: entered");
+      console.log('🟢 CHAT: entered');
       let thinkingMsg;
       try {
-        console.log("🟢 CHAT: sending ‘Thinking…’");
-        thinkingMsg = await message.channel.send("Thinking…");
-        console.log("🟢 CHAT: ‘Thinking…’ sent");
-        const useO = args.length > 0 && args[0] === "c+";
+        console.log('🟢 CHAT: sending ‘Thinking…’');
+        thinkingMsg = await message.channel.send('Thinking…');
+        console.log('🟢 CHAT: ‘Thinking…’ sent');
+        const useO = args.length > 0 && args[0] === 'c+';
         args.shift();
-        console.log("🟢 CHAT: args =", args.join(" "));
-        const useWebSearch = args.length > 0 && args[0] === "+web";
-        if (useWebSearch) args.shift();
-        const usePreview = args.length > 0 && args[0] === "+pre";
-        if (usePreview) args.shift();
-        const useGemini = args.length > 0 && args[0] === "+d";
-        if (useGemini) args.shift();
-        const useSeek = args.length > 0 && args[0] === "+r";
-        if (useSeek) args.shift();
-        const useFast = args.length > 0 && args[0] === "+fast";
-        if (useFast) args.shift();
+        console.log('🟢 CHAT: args =', args.join(' '));
+        const useWebSearch = args.length > 0 && args[0] === '+web';
+        if (useWebSearch) {args.shift();}
+        const usePreview = args.length > 0 && args[0] === '+pre';
+        if (usePreview) {args.shift();}
+        const useGemini = args.length > 0 && args[0] === '+d';
+        if (useGemini) {args.shift();}
+        const useSeek = args.length > 0 && args[0] === '+r';
+        if (useSeek) {args.shift();}
+        const useFast = args.length > 0 && args[0] === '+fast';
+        if (useFast) {args.shift();}
 
-        const messageargs = args.join(" ");
+        const messageargs = args.join(' ');
         const userId = message.author.id.toString();
 
         if (isChatHistoryTooLong(userId)) {
           await thinkingMsg.edit(
-            "Your chat history is too long (over 50,000 characters). Please use 'clearchat' to reset."
+            "Your chat history is too long (over 50,000 characters). Please use 'clearchat' to reset.",
           );
           break;
         }
 
         const userMessages = loadChatHistory(userId);
-        userMessages.push({ role: "user", content: messageargs });
+        userMessages.push({ role: 'user', content: messageargs });
         // call OpenAI
         let responses;
-        if (useWebSearch && message.author.id === "181284528793452545") {
+        if (useWebSearch && message.author.id === '181284528793452545') {
           responses = await openai.chat.completions.create({
-            model: "gpt-4o-mini-search-preview",
+            model: 'gpt-4o-mini-search-preview',
             messages: userMessages,
             web_search_options: {},
           });
-        } else if (usePreview && message.author.id === "181284528793452545") {
+        } else if (usePreview && message.author.id === '181284528793452545') {
           responses = await openai.chat.completions.create({
-            model: "gpt-4.5-preview",
+            model: 'gpt-4.5-preview',
             messages: userMessages,
           });
         } else if (useGemini) {
           responses = await openrouter.chat.completions.create({
-            model: "deepseek/deepseek-chat-v3-0324:free",
+            model: 'deepseek/deepseek-chat-v3-0324:free',
             messages: userMessages,
           });
         } else if (useSeek) {
           responses = await openrouter.chat.completions.create({
-            model: "deepseek/deepseek-r1:free",
+            model: 'deepseek/deepseek-r1:free',
             messages: userMessages,
           });
         } else if (useFast) {
           responses = await openrouter.chat.completions.create({
-            model: "google/gemini-2.0-flash-exp:free",
+            model: 'google/gemini-2.0-flash-exp:free',
             messages: userMessages,
           });
         } else if (useO) {
           responses = await openai.chat.completions.create({
-            model: "o3",
+            model: 'o3',
             messages: userMessages,
           });
         }  else {
           responses = await openrouter.chat.completions.create({
-            model: "google/gemini-2.5-pro-exp-03-25:free",
-            models: ["openai/o4-mini-high", "openai/o4-mini"],
-            provider: { order: ["Google", "Google AI Studio", "OpenAI"] },
+            model: 'google/gemini-2.5-pro-exp-03-25:free',
+            models: ['openai/o4-mini-high', 'openai/o4-mini'],
+            provider: { order: ['Google', 'Google AI Studio', 'OpenAI'] },
             messages: userMessages,
           });
         }
@@ -1152,11 +1151,11 @@ bot.on("messageCreate", async (message) => {
 
         const aiContent = responses.choices[0].message.content;
 
-        userMessages.push({ role: "assistant", content: aiContent });
+        userMessages.push({ role: 'assistant', content: aiContent });
         saveChatHistory(userId, userMessages);
 
         const chunks = splitMessage(aiContent, 2000);
-        console.log("🟢 CHAT: chunks =", chunks.length);
+        console.log('🟢 CHAT: chunks =', chunks.length);
 
         for (let i = 0; i < chunks.length; i++) {
           try {
@@ -1168,20 +1167,20 @@ bot.on("messageCreate", async (message) => {
           }
         }
       } catch (err) {
-        console.error("🔴 CHAT: outer catch", err);
+        console.error('🔴 CHAT: outer catch', err);
       }
       break;
 
-    case "clearchat":
+    case 'clearchat':
       const deleted = deleteChatHistory(message.author.id.toString());
       if (deleted) {
-        message.channel.send("Your chat history has been cleared!");
+        message.channel.send('Your chat history has been cleared!');
       } else {
         message.channel.send("You don't have any chat history.");
       }
       break;
 
-    case "chatinfo":
+    case 'chatinfo':
       const historyInfo = getChatHistoryInfo(message.author.id.toString());
       if (historyInfo.exists) {
         let infoMsg = `Your conversation has ${
@@ -1203,316 +1202,316 @@ bot.on("messageCreate", async (message) => {
       }
       break;
 
-    case "weather":
+    case 'weather':
       if (args[1]) {
         args.shift();
         wt.find(
           {
-            search: args.join(" "),
-            degreeType: "F",
+            search: args.join(' '),
+            degreeType: 'F',
           },
           function (err, parsed) {
-            if (err) console.log(err);
+            if (err) {console.log(err);}
             console.log(JSON.stringify(parsed, null, 2));
             parsed = parsed[0];
-            let raindate = compareWeatherDates(parsed.current.day, parsed);
-            let wsend = new EmbedBuilder()
+            const raindate = compareWeatherDates(parsed.current.day, parsed);
+            const wsend = new EmbedBuilder()
               .setTitle(parsed.location.name)
               .setDescription(parsed.current.date)
               .addFields(
                 {
-                  name: "Current Temperature: ",
-                  value: parsed.current.temperature + " F",
+                  name: 'Current Temperature: ',
+                  value: parsed.current.temperature + ' F',
                   inline: true,
                 },
-                { name: "Sky: ", value: parsed.current.skytext, inline: true },
-                { name: "Humidity: ", value: parsed.current.humidity + "%" },
+                { name: 'Sky: ', value: parsed.current.skytext, inline: true },
+                { name: 'Humidity: ', value: parsed.current.humidity + '%' },
                 {
-                  name: "Wind: ",
+                  name: 'Wind: ',
                   value:
                     parsed.current.winddisplay +
-                    " | Chance of Rain: " +
+                    ' | Chance of Rain: ' +
                     parsed.forecast[raindate].precip +
-                    "%",
-                }
+                    '%',
+                },
               );
             message.channel.send({ embeds: [wsend] });
-          }
+          },
         );
       } else {
         wt.find(
           {
-            search: "San Gabriel, CA",
-            degreeType: "F",
+            search: 'San Gabriel, CA',
+            degreeType: 'F',
           },
           function (err, parsed) {
-            if (err) console.log(err);
+            if (err) {console.log(err);}
             console.log(JSON.stringify(parsed, null, 2));
             parsed = parsed[0];
-            let raindate = compareWeatherDates(parsed.current.day, parsed);
-            let wsend = new EmbedBuilder()
+            const raindate = compareWeatherDates(parsed.current.day, parsed);
+            const wsend = new EmbedBuilder()
               .setTitle(parsed.location.name)
               .setDescription(parsed.current.date)
               .addFields(
                 {
-                  name: "Current Temperature: ",
-                  value: parsed.current.temperature + " F",
+                  name: 'Current Temperature: ',
+                  value: parsed.current.temperature + ' F',
                   inline: true,
                 },
-                { name: "Sky: ", value: parsed.current.skytext, inline: true },
-                { name: "Humidity: ", value: parsed.current.humidity + "%" },
+                { name: 'Sky: ', value: parsed.current.skytext, inline: true },
+                { name: 'Humidity: ', value: parsed.current.humidity + '%' },
                 {
-                  name: "Wind: ",
+                  name: 'Wind: ',
                   value:
                     parsed.current.winddisplay +
-                    " | Chance of Rain: " +
+                    ' | Chance of Rain: ' +
                     parsed.forecast[raindate].precip +
-                    "%",
-                }
+                    '%',
+                },
               );
             message.channel.send({ embeds: [wsend] });
-          }
+          },
         );
       }
       break;
-    case "forecast":
+    case 'forecast':
       if (args[1]) {
         args.shift();
         wt.find(
           {
-            search: args.join(" "),
-            degreeType: "F",
+            search: args.join(' '),
+            degreeType: 'F',
           },
           function (err, parsed) {
-            if (err) console.log(err);
+            if (err) {console.log(err);}
             console.log(JSON.stringify(parsed, null, 2));
             parsed = parsed[0];
-            let wsend = new EmbedBuilder()
-              .setTitle(parsed.location.name + " 4 Day Forecast")
-              .setDescription(parsed.current.date + " " + parsed.current.day)
+            const wsend = new EmbedBuilder()
+              .setTitle(parsed.location.name + ' 4 Day Forecast')
+              .setDescription(parsed.current.date + ' ' + parsed.current.day)
               .addFields(
                 {
                   name: parsed.forecast[1].day,
                   value:
-                    "Low: " +
+                    'Low: ' +
                     parsed.forecast[1].low +
-                    " High: " +
+                    ' High: ' +
                     parsed.forecast[1].high,
                 },
                 {
                   name: parsed.forecast[2].day,
                   value:
-                    "Low: " +
+                    'Low: ' +
                     parsed.forecast[2].low +
-                    " High: " +
+                    ' High: ' +
                     parsed.forecast[2].high,
                 },
                 {
                   name: parsed.forecast[3].day,
                   value:
-                    "Low: " +
+                    'Low: ' +
                     parsed.forecast[3].low +
-                    " High: " +
+                    ' High: ' +
                     parsed.forecast[3].high,
                 },
                 {
                   name: parsed.forecast[4].day,
                   value:
-                    "Low: " +
+                    'Low: ' +
                     parsed.forecast[4].low +
-                    " High: " +
+                    ' High: ' +
                     parsed.forecast[4].high,
-                }
+                },
               );
 
             message.channel.send({ embeds: [wsend] });
-          }
+          },
         );
       } else {
         wt.find(
           {
-            search: "San Gabriel, CA",
-            degreeType: "F",
+            search: 'San Gabriel, CA',
+            degreeType: 'F',
           },
           function (err, parsed) {
-            if (err) console.log(err);
+            if (err) {console.log(err);}
             console.log(JSON.stringify(parsed, null, 2));
             parsed = parsed[0];
-            let wsend = new EmbedBuilder()
-              .setTitle(parsed.location.name + " 4 Day Forecast")
-              .setDescription(parsed.current.date + " " + parsed.current.day)
+            const wsend = new EmbedBuilder()
+              .setTitle(parsed.location.name + ' 4 Day Forecast')
+              .setDescription(parsed.current.date + ' ' + parsed.current.day)
               .addFields(
                 {
                   name: parsed.forecast[1].day,
                   value:
-                    "Low: " +
+                    'Low: ' +
                     parsed.forecast[1].low +
-                    " High: " +
+                    ' High: ' +
                     parsed.forecast[1].high,
                 },
                 {
                   name: parsed.forecast[2].day,
                   value:
-                    "Low: " +
+                    'Low: ' +
                     parsed.forecast[2].low +
-                    " High: " +
+                    ' High: ' +
                     parsed.forecast[2].high,
                 },
                 {
                   name: parsed.forecast[3].day,
                   value:
-                    "Low: " +
+                    'Low: ' +
                     parsed.forecast[3].low +
-                    " High: " +
+                    ' High: ' +
                     parsed.forecast[3].high,
                 },
                 {
                   name: parsed.forecast[4].day,
                   value:
-                    "Low: " +
+                    'Low: ' +
                     parsed.forecast[4].low +
-                    " High: " +
+                    ' High: ' +
                     parsed.forecast[4].high,
-                }
+                },
               );
             message.channel.send({ embeds: [wsend] });
-          }
+          },
         );
       }
       break;
     //case "calculate":
     //    calculateOdds();
     //    break;
-    case "uptime":
+    case 'uptime':
       let totalSeconds = bot.uptime / 1000;
-      let days = Math.floor(totalSeconds / 86400);
+      const days = Math.floor(totalSeconds / 86400);
       totalSeconds %= 86400;
-      let hours = Math.floor(totalSeconds / 3600);
+      const hours = Math.floor(totalSeconds / 3600);
       totalSeconds %= 3600;
-      let minutes = Math.floor(totalSeconds / 60);
-      let seconds = Math.floor(totalSeconds % 60);
-      let uptime = `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds`;
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = Math.floor(totalSeconds % 60);
+      const uptime = `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds`;
       message.channel.send(uptime);
       break;
-    case "ping":
-      const m = await message.channel.send("Ping?");
+    case 'ping':
+      const m = await message.channel.send('Ping?');
       m.edit(
         `Pong! Latency is ${
           m.createdTimestamp - message.createdTimestamp
-        }ms. API Latency is ${Math.round(bot.ws.ping)}ms`
+        }ms. API Latency is ${Math.round(bot.ws.ping)}ms`,
       );
       break;
 
     //gambling commands start here
-    case "exchange":
+    case 'exchange':
       if (isNaN(args[1]) || !args[1])
-        return message.channel.send("Current Exchange Rate: 1000000:1");
+      {return message.channel.send('Current Exchange Rate: 1000000:1');}
       if (brokeCheck(messageAuthor, 1000000))
-        return message.channel.send(
-          "You must have more than 1 million to redeem money."
-        );
+      {return message.channel.send(
+        'You must have more than 1 million to redeem money.',
+      );}
       var amount = args[1];
       if (amount <= 1000000)
-        return message.channel.send("Input a valid number more than 1000000.");
+      {return message.channel.send('Input a valid number more than 1000000.');}
       if (brokeCheck(messageAuthor, amount))
-        return message.channel.send("You don't have enough money to do that.");
+      {return message.channel.send("You don't have enough money to do that.");}
       exchangeMoney(message.author.id, amount, message.author.username);
       return message.channel.send(
-        amount + " has been redeemed. DM " + "<@181284528793452545>"
+        amount + ' has been redeemed. DM ' + '<@181284528793452545>',
       );
       break;
-    case "stats":
+    case 'stats':
       convert(messageAuthor);
       break;
-    case "reset":
+    case 'reset':
       if (!brokeCheck(messageAuthor, 1))
-        return message.channel.send("You don't have zero money.");
+      {return message.channel.send("You don't have zero money.");}
       if (!args[1]) {
-        let currenttime = Date.now();
-        let resetperson = "./playerdata/" + message.author.id + ".json";
-        let timercheck = TimeCheck(message.author.id);
-        console.log("Timer Check " + timercheck);
+        const currenttime = Date.now();
+        const resetperson = './playerdata/' + message.author.id + '.json';
+        const timercheck = TimeCheck(message.author.id);
+        console.log('Timer Check ' + timercheck);
         console.log(Date.now());
         if (timercheck) {
-          console.log("Balance has been reset for player " + message.author.id);
-          let newdata = {
+          console.log('Balance has been reset for player ' + message.author.id);
+          const newdata = {
             money: 500,
             lastreset: currenttime,
           };
-          let data = JSON.stringify(newdata);
+          const data = JSON.stringify(newdata);
           fs.writeFileSync(resetperson, data);
-          message.channel.send("Reset money for " + message.author.id);
+          message.channel.send('Reset money for ' + message.author.id);
         } else if (!timercheck) {
-          let rawdata = fs.readFileSync(resetperson);
-          let resetdata = JSON.parse(rawdata);
+          const rawdata = fs.readFileSync(resetperson);
+          const resetdata = JSON.parse(rawdata);
           message.channel.send(
-            "Cooldown of " +
+            'Cooldown of ' +
               (resetdata.lastreset + 300000 - Date.now()) / 1000 / 60 +
-              " minutes."
+              ' minutes.',
           );
         }
       }
       break;
-    case "addbal":
+    case 'addbal':
       console.log(message.author.id);
-      if (message.author.id === "181284528793452545") {
-        let author = "./playerdata/" + message.author.id + ".json";
-        let rawdata = fs.readFileSync(author);
-        let person = JSON.parse(rawdata);
+      if (message.author.id === '181284528793452545') {
+        const author = './playerdata/' + message.author.id + '.json';
+        const rawdata = fs.readFileSync(author);
+        const person = JSON.parse(rawdata);
         fs.readFile(author, (err, data) => {
-          if (err) message.channel.send("You don't exist");
-          let newbalance = parseInt(args[1]) + parseInt(person.money);
+          if (err) {message.channel.send("You don't exist");}
+          const newbalance = parseInt(args[1]) + parseInt(person.money);
           if (args[1]) {
-            let newdata = {
+            const newdata = {
               money: newbalance,
             };
-            let data = JSON.stringify(newdata);
+            const data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
-            console.log(args[1] + " added to " + author);
+            console.log(args[1] + ' added to ' + author);
           } else {
-            let newdata = {
+            const newdata = {
               money: 1001,
             };
-            let data = JSON.stringify(newdata);
+            const data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
-            console.log("Money reset to " + author);
+            console.log('Money reset to ' + author);
           }
         });
       } else {
         message.channel.send("You don't have enough permissions.");
       }
       break;
-    case "setbal":
-      if (message.author.id === "181284528793452545") {
-        let currenttime = Date.now();
-        let author = "./playerdata/" + message.author.id + ".json";
-        let rawdata = fs.readFileSync(author);
-        let person = JSON.parse(rawdata);
+    case 'setbal':
+      if (message.author.id === '181284528793452545') {
+        const currenttime = Date.now();
+        const author = './playerdata/' + message.author.id + '.json';
+        const rawdata = fs.readFileSync(author);
+        const person = JSON.parse(rawdata);
         fs.readFile(author, (err, data) => {
-          if (err) message.channel.send("You don't exist");
-          let newbalance = parseInt(args[1]);
+          if (err) {message.channel.send("You don't exist");}
+          const newbalance = parseInt(args[1]);
           if (args[1]) {
-            let newdata = {
+            const newdata = {
               money: newbalance,
               lastreset: currenttime,
             };
-            let data = JSON.stringify(newdata);
+            const data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
-            console.log(args[1] + " set to " + author);
+            console.log(args[1] + ' set to ' + author);
           } else {
-            let newdata = {
+            const newdata = {
               money: 1001,
               lastreset: currenttime,
             };
-            let data = JSON.stringify(newdata);
+            const data = JSON.stringify(newdata);
             fs.writeFileSync(author, data);
-            console.log("Money reset to " + author);
+            console.log('Money reset to ' + author);
           }
         });
       }
       break;
-    case "bal":
-    case "balance":
+    case 'bal':
+    case 'balance':
       if (!isRegistered(message.author.id)) {
         await sleep(500);
         balanceCheck(message.author.id);
@@ -1520,308 +1519,308 @@ bot.on("messageCreate", async (message) => {
         balanceCheck(message.author.id);
       }
       break;
-    case "send":
+    case 'send':
       if (!isRegistered(message.author.id)) {
         await sleep(500);
         if (!args[1])
-          return message.channel.send(
-            "Please mention the user you want to send money to with the amount of money."
-          );
+        {return message.channel.send(
+          'Please mention the user you want to send money to with the amount of money.',
+        );}
         if (isNaN(args[2]))
-          return message.channel.send("Please use a number to send money.");
+        {return message.channel.send('Please use a number to send money.');}
         sendMoney(message.author.id, args[1], args[2]);
       } else {
         if (!args[1])
-          return message.channel.send(
-            "Please mention the user you want to send money to with the amount of money."
-          );
+        {return message.channel.send(
+          'Please mention the user you want to send money to with the amount of money.',
+        );}
         if (isNaN(args[2]))
-          return message.channel.send("Please use a number to send money.");
+        {return message.channel.send('Please use a number to send money.');}
         sendMoney(message.author.id, args[1], args[2]);
       }
       break;
-    case "coinflip": //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
+    case 'coinflip': //Javascript is treating investmetnts as strings, not numbers, so you end up with massive amounts of shit. fix with praseInt()
       if (isNaN(args[1]) || !args[1])
-        return message.channel.send(
-          "Input the amount of money you want to bet on the coinflip."
-        );
+      {return message.channel.send(
+        'Input the amount of money you want to bet on the coinflip.',
+      );}
       if (!isRegistered(message.author.id) && !args[1]) {
         await sleep(1500);
         coinflip(args[1], message.author.id);
       } else if (args[1]) {
         coinflip(args[1], message.author.id);
       } else {
-        message.channel.send("Make sure you add an amount!");
+        message.channel.send('Make sure you add an amount!');
       }
       /*let moneyType = "copper";         //these four lines shouldn't work and don't do anything, but they work so...
             if (args[2]) moneyType = args[2];
             if (!validType(moneyType)) return message.channel.send("Not a valid type of currency");
             moneyType = checkMoneyType(moneyType);*/
       break;
-    case "slots":
+    case 'slots':
       if (!isRegistered(message.author.id) && !args[1]) {
         await sleep(1500);
         slots(args[1], message.author.id);
       } else if (args[1]) {
         slots(args[1], message.author.id);
       } else {
-        message.channel.send("Make sure you add an amount!  ");
+        message.channel.send('Make sure you add an amount!  ');
       }
       //add more possibililites for victory, like if you get 3 animals or something
       break;
-    case "bj":
+    case 'bj':
       break;
-    case "areg":
+    case 'areg':
       //test command for setting json file values. Use with 'hey areg '
       write(messageAuthor, args[2], args[1]);
       convert(messageAuthor);
       break;
-    case "russian":
+    case 'russian':
       if (args[1]) {
         if (russianActive(args[1])) {
-          message.channel.send("Game found, joining game.");
+          message.channel.send('Game found, joining game.');
         } else {
           message.channel.send(
-            "Game not found. Do russiancreate to initiate a game."
+            'Game not found. Do russiancreate to initiate a game.',
           );
         }
       }
       break;
-    case "jackpot":
+    case 'jackpot':
       if (args[1]) {
         actJackpot(message.author.id, args[1]);
       } else {
-        message.channel.send("Please put an amount.");
+        message.channel.send('Please put an amount.');
       }
       break;
-    case "russiancreate":
+    case 'russiancreate':
       if (!args[1]) {
-        message.channel.send("WIP. Type in a number after to make a lobby ID.");
+        message.channel.send('WIP. Type in a number after to make a lobby ID.');
       } else if (args[1]) {
-        message.channel.send("Game created, you have been added to the game");
+        message.channel.send('Game created, you have been added to the game');
       }
       break;
-    case "img":
+    case 'img':
       if (!args[1]) {
-        var imgEmbed = new EmbedBuilder()
-          .setTitle("These are the current images in stock")
+        const imgEmbed = new EmbedBuilder()
+          .setTitle('These are the current images in stock')
           .setColor(generateHex())
           .addFields(
-            { name: "the fastest spook in the west", value: "neutron" },
-            { name: "the slowest spook in the west", value: "whack" },
-            { name: "fbi", value: "wack" },
-            { name: "whale", value: "enemy" },
-            { name: "clippy", value: "roast" },
-            { name: "sans", value: "above" },
-            { name: "actually", value: "analysis" },
-            { name: "hmmm", value: "disappointment" },
-            { name: "stop", value: "hold up" },
-            { name: "stand", value: "bold" },
-            { name: "pp", value: "scientist" },
-            { name: "screaming", value: "surprised" },
-            { name: "sickened", value: "thanks satan" },
-            { name: "thot", value: "crusade" },
-            { name: "tom hmm", value: "yikes" },
-            { name: "pyrocynical", value: "pyro no glasses" }
+            { name: 'the fastest spook in the west', value: 'neutron' },
+            { name: 'the slowest spook in the west', value: 'whack' },
+            { name: 'fbi', value: 'wack' },
+            { name: 'whale', value: 'enemy' },
+            { name: 'clippy', value: 'roast' },
+            { name: 'sans', value: 'above' },
+            { name: 'actually', value: 'analysis' },
+            { name: 'hmmm', value: 'disappointment' },
+            { name: 'stop', value: 'hold up' },
+            { name: 'stand', value: 'bold' },
+            { name: 'pp', value: 'scientist' },
+            { name: 'screaming', value: 'surprised' },
+            { name: 'sickened', value: 'thanks satan' },
+            { name: 'thot', value: 'crusade' },
+            { name: 'tom hmm', value: 'yikes' },
+            { name: 'pyrocynical', value: 'pyro no glasses' },
           );
         message.channel.send({ embeds: [imgEmbed] });
       } else {
         deleteLastMessage();
         args.splice(0, 1);
-        var image = args.join(" ");
+        const image = args.join(' ');
         switch (image) {
-          case "the fastest spook in the west":
-          case "fast spook":
-          case "fastest spook":
-          case "the fastest spook":
+          case 'the fastest spook in the west':
+          case 'fast spook':
+          case 'fastest spook':
+          case 'the fastest spook':
             message.channel.send({
-              files: ["./images/m/fastest_spook.jpg"],
+              files: ['./images/m/fastest_spook.jpg'],
             });
 
             break;
-          case "the slowest spook in the west":
-          case "slowest spook":
-          case "the slowest spook":
-          case "slow spook":
+          case 'the slowest spook in the west':
+          case 'slowest spook':
+          case 'the slowest spook':
+          case 'slow spook':
             message.channel.send({
-              files: ["./images/m/slowest_spook.jpg"],
+              files: ['./images/m/slowest_spook.jpg'],
             });
             break;
-          case "fbi":
-          case "fbi open up":
+          case 'fbi':
+          case 'fbi open up':
             message.channel.send({
-              files: ["./images/m/fbi_open_up.png"],
+              files: ['./images/m/fbi_open_up.png'],
             });
             break;
-          case "sans":
-          case "sans undertale":
-          case "snas":
-            sendPNG("snas");
+          case 'sans':
+          case 'sans undertale':
+          case 'snas':
+            sendPNG('snas');
             break;
-          case "gamer roast":
-          case "epic roast":
-          case "bucket":
-            sendM("a_sad_day");
+          case 'gamer roast':
+          case 'epic roast':
+          case 'bucket':
+            sendM('a_sad_day');
             break;
-          case "i consider myself above the avergae person":
-          case "above average":
-          case "above":
-            sendM("above_the_average_person");
+          case 'i consider myself above the avergae person':
+          case 'above average':
+          case 'above':
+            sendM('above_the_average_person');
             break;
-          case "actually":
-          case "actually, quantum mechanics forbids this":
-          case "quantum mechanics":
-            sendM("actually_quantum");
+          case 'actually':
+          case 'actually, quantum mechanics forbids this':
+          case 'quantum mechanics':
+            sendM('actually_quantum');
             break;
-          case "analysis":
-          case "kowalksi":
-            sendM("analysis");
+          case 'analysis':
+          case 'kowalksi':
+            sendM('analysis');
             break;
-          case "buzz":
-          case "hmmm":
-            sendM("buzz_hmm");
+          case 'buzz':
+          case 'hmmm':
+            sendM('buzz_hmm');
             break;
-          case "clippy":
-            sendM("clippy");
+          case 'clippy':
+            sendM('clippy');
             break;
-          case "my disappointment is immeasurable and my day is ruined":
-          case "my disappointment is immeasurable":
-          case "disappointment":
-            sendM("disappointment_is_immeasurable");
+          case 'my disappointment is immeasurable and my day is ruined':
+          case 'my disappointment is immeasurable':
+          case 'disappointment':
+            sendM('disappointment_is_immeasurable');
             break;
-          case "dude stop":
-          case "stop":
-            sendM("dude_stop");
+          case 'dude stop':
+          case 'stop':
+            sendM('dude_stop');
             break;
-          case "hold up":
-            sendM("hold_up");
+          case 'hold up':
+            sendM('hold_up');
             break;
-          case "how dare you stand where he stood":
-          case "stand":
-          case "stood":
-            sendM("how_dare_you_stand");
+          case 'how dare you stand where he stood':
+          case 'stand':
+          case 'stood':
+            sendM('how_dare_you_stand');
             break;
-          case "bold of you":
-          case "bold":
-          case "bold of you to assume i fear death":
-            sendM("isabelle_bold");
+          case 'bold of you':
+          case 'bold':
+          case 'bold of you to assume i fear death':
+            sendM('isabelle_bold');
             break;
-          case "neutron style":
-          case "neutron":
-          case "looks like she couldnt handle the neutron style":
+          case 'neutron style':
+          case 'neutron':
+          case 'looks like she couldnt handle the neutron style':
           case "looks like she couldn't handle the neutron style":
-            sendM("neutron_style");
+            sendM('neutron_style');
             break;
-          case "pp":
-          case "pp very soft":
-            sendM("pp_very_soft");
+          case 'pp':
+          case 'pp very soft':
+            sendM('pp_very_soft');
             break;
-          case "scientist":
-          case "you know":
-          case "you know, im a bit of a scientist myself":
-            sendM("scientist");
+          case 'scientist':
+          case 'you know':
+          case 'you know, im a bit of a scientist myself':
+            sendM('scientist');
             break;
-          case "screaming":
-          case "screaming begins again":
-            sendPNG("screaming_begins_again");
+          case 'screaming':
+          case 'screaming begins again':
+            sendPNG('screaming_begins_again');
             break;
-          case "whale":
-          case "contact":
-          case "remove you from my contacts":
-          case "whale roast":
-            sendM("sick_whale_roast");
+          case 'whale':
+          case 'contact':
+          case 'remove you from my contacts':
+          case 'whale roast':
+            sendM('sick_whale_roast');
             break;
-          case "sickened but curious":
-          case "im sickened but curious":
-          case "im sickened, but curious":
-          case "sickened":
-          case "curious":
-            sendPNG("sickened_but_curious");
+          case 'sickened but curious':
+          case 'im sickened but curious':
+          case 'im sickened, but curious':
+          case 'sickened':
+          case 'curious':
+            sendPNG('sickened_but_curious');
             break;
-          case "surprised pikachu":
-          case "surprised":
-          case "pikachu":
-            sendM("surprised_pikachu");
+          case 'surprised pikachu':
+          case 'surprised':
+          case 'pikachu':
+            sendM('surprised_pikachu');
             break;
-          case "thanks satan":
-            sendM("thanks_satan");
+          case 'thanks satan':
+            sendM('thanks_satan');
             break;
-          case "you are the enemy of the people":
-          case "the enemy of the people":
-          case "enemy of the people":
-          case "peoples enemy":
-          case "enemy":
-            sendM("the_enemy_of_the_people");
+          case 'you are the enemy of the people':
+          case 'the enemy of the people':
+          case 'enemy of the people':
+          case 'peoples enemy':
+          case 'enemy':
+            sendM('the_enemy_of_the_people');
             break;
-          case "thot":
-            sendM("thot");
+          case 'thot':
+            sendM('thot');
             break;
-          case "time for a crusade":
-          case "crusade":
-          case "crusader":
-            sendM("time_for_a_crusade");
+          case 'time for a crusade':
+          case 'crusade':
+          case 'crusader':
+            sendM('time_for_a_crusade');
             break;
-          case "tom hmm":
-          case "quizzical tom":
-          case "tom and jerry":
-          case "cat hmm":
-            sendM("tom_hmm");
+          case 'tom hmm':
+          case 'quizzical tom':
+          case 'tom and jerry':
+          case 'cat hmm':
+            sendM('tom_hmm');
             break;
-          case "wack":
-            sendM("wack");
+          case 'wack':
+            sendM('wack');
             break;
-          case "yikes":
-            sendM("yikes");
+          case 'yikes':
+            sendM('yikes');
             break;
-          case "cash money":
+          case 'cash money':
           case "that wasn't very cash money of you":
-          case "that wasnt very cash money of you":
-            sendM("cash money");
+          case 'that wasnt very cash money of you':
+            sendM('cash money');
             break;
-          case "pyrocynical":
-          case "pyro":
-          case "luke with glasses":
-            sendM("luke1");
+          case 'pyrocynical':
+          case 'pyro':
+          case 'luke with glasses':
+            sendM('luke1');
             break;
-          case "pyrocynical no glasses":
-          case "pyro no glasses":
-          case "luke no glasses":
-            sendM("luke2");
+          case 'pyrocynical no glasses':
+          case 'pyro no glasses':
+          case 'luke no glasses':
+            sendM('luke2');
             break;
-          case "whack":
-          case "meaty whack":
-          case "meaty whack both chuckle":
-            sendPNG("whack");
+          case 'whack':
+          case 'meaty whack':
+          case 'meaty whack both chuckle':
+            sendPNG('whack');
             break;
           default:
-            message.channel.send("No image by that name");
+            message.channel.send('No image by that name');
             break;
         }
       }
 
       break;
-    case "this":
-      if (argString.indexOf("this is epic") > -1) {
-        plaympeg("despacito.mp3");
+    case 'this':
+      if (argString.indexOf('this is epic') > -1) {
+        plaympeg('despacito.mp3');
       }
       break;
-    case "will":
-    case "is":
-    case "are":
-    case "am":
-    case "was":
-    case "does":
-    case "should":
-    case "do":
-    case "may":
-    case "can":
-    case "8":
+    case 'will':
+    case 'is':
+    case 'are':
+    case 'am':
+    case 'was':
+    case 'does':
+    case 'should':
+    case 'do':
+    case 'may':
+    case 'can':
+    case '8':
       message.channel.send(
-        yesnomabyeso[Math.floor(Math.random() * yesnomabyeso.length)]
+        yesnomabyeso[Math.floor(Math.random() * yesnomabyeso.length)],
       );
       break;
 
-    case "play":
+    case 'play':
       if (message.member.voiceChannel) {
         if (!message.guild.voiceConnection) {
           if (!servers[message.guild.id]) {
@@ -1831,27 +1830,27 @@ bot.on("messageCreate", async (message) => {
           }
 
           message.member.voiceChannel.join().then((connection) => {
-            var server = servers[message.guild.id];
+            const server = servers[message.guild.id];
             server.queue.push(args[1]);
             Play(connection, message);
-            message.reply("Joined the channel!");
+            message.reply('Joined the channel!');
           });
         }
       } else {
-        message.channel.send("You must be in a voice channel");
+        message.channel.send('You must be in a voice channel');
       }
       break;
-    case "source":
+    case 'source':
       args.splice(0, 1);
-      var str = args.join(" ");
-      plaympeg(str + ".mp3");
+      var str = args.join(' ');
+      plaympeg(str + '.mp3');
       break;
-    case "effect":
+    case 'effect':
       args.splice(0, 1);
-      var str = args.join(" ");
-      plaympeg("/effects/" + str + ".mp3");
+      var str = args.join(' ');
+      plaympeg('/effects/' + str + '.mp3');
       break;
-    case "leave":
+    case 'leave':
       if (message.guild.voiceConnection) {
         message.guild.voiceConnection.disconnect();
         server.queue.shift();
@@ -1859,63 +1858,63 @@ bot.on("messageCreate", async (message) => {
         message.channel.send("I'm not in a voice channel");
       }
       break;
-    case "addtest":
-      if (!args[1]) send("DOESNT WORK");
-      if (args[2] != "+") {
-        send("DOESNT WORK");
+    case 'addtest':
+      if (!args[1]) {send('DOESNT WORK');}
+      if (args[2] != '+') {
+        send('DOESNT WORK');
         break;
       }
       if (!args[3]) {
-        send("DOESNT WORK");
+        send('DOESNT WORK');
         break;
       }
       if (args[1].isNaN || args[3].isNaN) {
-        send("DOESNT WORK");
+        send('DOESNT WORK');
         break;
       }
       break;
-    case "tierlist":
+    case 'tierlist':
       if (!args[1]) {
-        let tierlists = new EmbedBuilder()
-          .setTitle("The current tierlists")
+        const tierlists = new EmbedBuilder()
+          .setTitle('The current tierlists')
           .setColor(generateHex())
           .addFields(
-            { name: "Smash Ultimate", value: "ultimate" },
-            { name: "Super Smash Bros. Melee", value: "melee" },
-            { name: "Super Smash Bros. Brawl", value: "brawl" },
-            { name: "Super Smash Bros. U", value: "u" },
-            { name: "Brawlhalla", value: "brawlhalla" }
+            { name: 'Smash Ultimate', value: 'ultimate' },
+            { name: 'Super Smash Bros. Melee', value: 'melee' },
+            { name: 'Super Smash Bros. Brawl', value: 'brawl' },
+            { name: 'Super Smash Bros. U', value: 'u' },
+            { name: 'Brawlhalla', value: 'brawlhalla' },
           );
         message.channel.send({ embeds: [tierlists] });
       } else {
         switch (args[1]) {
-          case "ultimate":
+          case 'ultimate':
             message.channel.send({
-              files: ["./images/ultimatelist.png"],
+              files: ['./images/ultimatelist.png'],
             });
             break;
-          case "brawlhalla":
+          case 'brawlhalla':
             message.channel.send({
-              files: ["./images/brawlhallalist.jpg"],
+              files: ['./images/brawlhallalist.jpg'],
             });
             break;
-          case "brawl":
+          case 'brawl':
             message.channel.send({
-              files: ["./images/brawllist.jpg"],
+              files: ['./images/brawllist.jpg'],
             });
             break;
-          case "melee":
+          case 'melee':
             message.channel.send({
-              files: ["./images/meleelist.jpg"],
+              files: ['./images/meleelist.jpg'],
             });
             break;
-          case "u":
+          case 'u':
             message.channel.send({
-              files: ["./images/ulist.jpg"],
+              files: ['./images/ulist.jpg'],
             });
             break;
           default:
-            message.channel.send("No tierlist by that name.");
+            message.channel.send('No tierlist by that name.');
         }
       }
 
@@ -1953,19 +1952,19 @@ bot.on("messageCreate", async (message) => {
               }
               break;
             */
-    case "clap":
+    case 'clap':
       args.splice(0, 1);
-      message.channel.send(args.join(":clap:"));
+      message.channel.send(args.join(':clap:'));
       break;
-    case "rate":
+    case 'rate':
       args.splice(0, 1);
-      var rated = args.join(" ");
+      var rated = args.join(' ');
       message.channel.send(
-        "I rate " +
+        'I rate ' +
           rated +
-          " a good " +
+          ' a good ' +
           Math.floor(Math.random() * 101) +
-          "/100"
+          '/100',
       );
       break;
     /*
@@ -1978,27 +1977,27 @@ bot.on("messageCreate", async (message) => {
               }
               break;
             */
-    case "vote":
+    case 'vote':
       args.splice(0, 1);
       deleteLastMessage();
-      let votingEmbed = new EmbedBuilder()
-        .setTitle(args.join(" "))
+      const votingEmbed = new EmbedBuilder()
+        .setTitle(args.join(' '))
         .setColor(generateHex());
       //message.channel.send(votingEmbed);
-      let msg = await message.channel.send(votingEmbed);
-      await msg.react("469353036314312704"); //upvote
-      await msg.react("504066665693315072"); //downvote
+      const msg = await message.channel.send(votingEmbed);
+      await msg.react('469353036314312704'); //upvote
+      await msg.react('504066665693315072'); //downvote
       const reactions = await msg.awaitReactions(
         (reaction) =>
-          reaction.emoji.name === "469353036314312704" ||
-          reaction.emoji.name === "504066665693315072",
+          reaction.emoji.name === '469353036314312704' ||
+          reaction.emoji.name === '504066665693315072',
         {
           time: 1500,
-        }
+        },
       );
       //https://www.youtube.com/watch?v=8o7I69O1RzE
       break;
-    case "translate":
+    case 'translate':
       console.log(args);
       args.shift();
       langd = args[0];
@@ -2007,151 +2006,151 @@ bot.on("messageCreate", async (message) => {
       args.shift();
       if (!args[0]) {
         message.channel.send(
-          "Current languages are: DE, EN, ES, FR, IT, JP, NL, PL, RU, ZH"
+          'Current languages are: DE, EN, ES, FR, IT, JP, NL, PL, RU, ZH',
         );
       }
-      inputtext = args.join("%20");
+      inputtext = args.join('%20');
       switch (langd) {
-        case "DE":
-        case "de":
-          translater(message, inputtext, "de");
+        case 'DE':
+        case 'de':
+          translater(message, inputtext, 'de');
           break;
-        case "EN":
-        case "en":
-          translater(message, inputtext, "en-us");
+        case 'EN':
+        case 'en':
+          translater(message, inputtext, 'en-us');
           break;
-        case "ES":
-        case "es":
-          translater(message, inputtext, "es");
+        case 'ES':
+        case 'es':
+          translater(message, inputtext, 'es');
           break;
-        case "FR":
-        case "fr":
-          translater(message, inputtext, "fr");
+        case 'FR':
+        case 'fr':
+          translater(message, inputtext, 'fr');
           break;
-        case "IT":
-        case "it":
-          translater(message, inputtext, "it");
+        case 'IT':
+        case 'it':
+          translater(message, inputtext, 'it');
           break;
-        case "JP":
-        case "jp":
-        case "JA":
-          translater(message, inputtext, "ja");
+        case 'JP':
+        case 'jp':
+        case 'JA':
+          translater(message, inputtext, 'ja');
           break;
-        case "NL":
-        case "nl":
-          translater(message, inputtext, "nl");
+        case 'NL':
+        case 'nl':
+          translater(message, inputtext, 'nl');
           break;
-        case "PL":
-        case "pl":
-          translater(message, inputtext, "pl");
+        case 'PL':
+        case 'pl':
+          translater(message, inputtext, 'pl');
           break;
-        case "RU":
-        case "ru":
-          translater(message, inputtext, "ru");
+        case 'RU':
+        case 'ru':
+          translater(message, inputtext, 'ru');
           break;
-        case "CH":
-        case "ch":
-        case "ZH":
-        case "zh":
-          translater(message, inputtext, "zh");
+        case 'CH':
+        case 'ch':
+        case 'ZH':
+        case 'zh':
+          translater(message, inputtext, 'zh');
           break;
-        case "usage":
+        case 'usage':
           deeplusage(message);
           break;
         default:
-          message.channel.send("Not a supported language");
+          message.channel.send('Not a supported language');
       }
       break;
-    case "despair":
+    case 'despair':
       var VC = message.member.voiceChannel;
-      if (!VC) return message.reply("MESSAGE IF NOT IN A VOICE CHANNEL");
+      if (!VC) {return message.reply('MESSAGE IF NOT IN A VOICE CHANNEL');}
       VC.join()
         .then((connection) => {
           const dispatcher = connection.playFile(
-            "G:/mY sTUFF/Audio/Initial D - Deja Vu.mp3"
+            'G:/mY sTUFF/Audio/Initial D - Deja Vu.mp3',
           );
-          dispatcher.on("end", (end) => {
+          dispatcher.on('end', (end) => {
             VC.leave();
           });
         })
         .catch(console.error);
       break;
-    case "gay":
+    case 'gay':
       message.channel.send({
-        files: ["./images/reverse.png"],
+        files: ['./images/reverse.png'],
       });
       break;
-    case "urbanr":
+    case 'urbanr':
       urban.random().first((json) => {
-        let urbanEm = new EmbedBuilder()
+        const urbanEm = new EmbedBuilder()
           .setTitle(json.word)
           .setDescription(json.definition)
           .addFields(
-            { name: "Upvotes", value: json.thumbs_up.toString(), inline: true },
+            { name: 'Upvotes', value: json.thumbs_up.toString(), inline: true },
             {
-              name: "Downvotes",
+              name: 'Downvotes',
               value: json.thumbs_down.toString(),
               inline: true,
             },
-            { name: "Example", value: json.example }
+            { name: 'Example', value: json.example },
           );
 
         message.channel.send({ embeds: [urbanEm] });
       });
       break;
-    case "urban":
-      args = args.join(" ");
-      args = args.replace("urban", " ");
+    case 'urban':
+      args = args.join(' ');
+      args = args.replace('urban', ' ');
       urban(args).first((json) => {
-        if (!json) return message.channel.send("No definition found.");
+        if (!json) {return message.channel.send('No definition found.');}
         console.log(json);
 
-        let urbanEm = new EmbedBuilder()
+        const urbanEm = new EmbedBuilder()
           .setTitle(json.word)
           .setDescription(json.definition)
           .addFields(
-            { name: "Upvotes", value: json.thumbs_up.toString(), inline: true },
+            { name: 'Upvotes', value: json.thumbs_up.toString(), inline: true },
             {
-              name: "Downvotes",
+              name: 'Downvotes',
               value: json.thumbs_down.toString(),
               inline: true,
             },
-            { name: "Example", value: json.example }
+            { name: 'Example', value: json.example },
           );
 
         message.channel.send({ embeds: [urbanEm] });
       });
       break;
-    case "dev":
-    case "devs":
+    case 'dev':
+    case 'devs':
       var embed9 = new EmbedBuilder()
-        .setTitle("Developers")
-        .setDescription("These are the developers of the bot.");
+        .setTitle('Developers')
+        .setDescription('These are the developers of the bot.');
 
       var embed10 = new EmbedBuilder()
         .addFields({
-          name: "Original Bot Developer",
-          value: "real life napstablook",
+          name: 'Original Bot Developer',
+          value: 'real life napstablook',
         })
         .setAuthor({
-          name: "Eddie Vaughn",
+          name: 'Eddie Vaughn',
           iconURL:
-            "https://cdn.discordapp.com/attachments/684671474010947609/732567752518271016/DSC05763.png",
-          url: "https://eddiedoesntexistyet.com",
+            'https://cdn.discordapp.com/attachments/684671474010947609/732567752518271016/DSC05763.png',
+          url: 'https://eddiedoesntexistyet.com',
         });
 
       var embed11 = new EmbedBuilder()
-        .addFields({ name: "Hoster & Upkeep Developer", value: "help us pls" })
+        .addFields({ name: 'Hoster & Upkeep Developer', value: 'help us pls' })
         .setAuthor({
-          name: "Kyle Chau",
-          iconURL: "https://i.imgur.com/9Qs4rex.jpg",
-          url: "https://kyle.day",
+          name: 'Kyle Chau',
+          iconURL: 'https://i.imgur.com/9Qs4rex.jpg',
+          url: 'https://kyle.day',
         });
 
       var embed12 = new EmbedBuilder()
-        .addFields({ name: "Somewhat useful people", value: "" })
+        .addFields({ name: 'Somewhat useful people', value: '' })
         .setAuthor({
-          name: "Zi Hao Liang & Kenneth Kwan",
+          name: 'Zi Hao Liang & Kenneth Kwan',
         });
 
       message.channel.send({ embeds: [embed9, embed10, embed11, embed12] });
@@ -2159,344 +2158,344 @@ bot.on("messageCreate", async (message) => {
       //message.channel.send({ embeds: [embed11] });
       //message.channel.send({ embeds: [embed12] });
       break;
-    case "help":
+    case 'help':
       if (!args[1]) {
-        var embed1 = new EmbedBuilder()
+        const embed1 = new EmbedBuilder()
           .setColor(generateHex())
-          .setDescription("These are the current commands")
+          .setDescription('These are the current commands')
           .addFields(
             {
               name: "The prefix is 'hey' but you already know that",
-              value: "__________________________",
+              value: '__________________________',
             },
             {
-              name: "will/is/are/am/was/does/should/do",
-              value: "Basically an eight ball",
+              name: 'will/is/are/am/was/does/should/do',
+              value: 'Basically an eight ball',
             },
-            { name: "who", value: "Who is this? Who is that?" },
-            { name: "when", value: "Time is an illusion", inline: true },
-            { name: "hello", value: "What you think it does", inline: true },
-            { name: "ping", value: "Gee, I wonder.", inline: true },
+            { name: 'who', value: 'Who is this? Who is that?' },
+            { name: 'when', value: 'Time is an illusion', inline: true },
+            { name: 'hello', value: 'What you think it does', inline: true },
+            { name: 'ping', value: 'Gee, I wonder.', inline: true },
             {
-              name: "botprefixes",
-              value: "Tells you some of the prefixes of bots",
+              name: 'botprefixes',
+              value: 'Tells you some of the prefixes of bots',
             },
-            { name: "noticeme", value: "Notices you", inline: true },
-            { name: "d20", value: "Rolls a d20 (1-20)", inline: true },
-            { name: "vote", value: "Calls a vote", inline: true },
-            { name: "dev", value: "List of Devs", inline: true },
+            { name: 'noticeme', value: 'Notices you', inline: true },
+            { name: 'd20', value: 'Rolls a d20 (1-20)', inline: true },
+            { name: 'vote', value: 'Calls a vote', inline: true },
+            { name: 'dev', value: 'List of Devs', inline: true },
             {
-              name: "tierlist [game]",
-              value: "Sends the tierlist of a game",
+              name: 'tierlist [game]',
+              value: 'Sends the tierlist of a game',
               inline: true,
             },
             {
-              name: "tierlist",
-              value: "Lists the current tierlists",
+              name: 'tierlist',
+              value: 'Lists the current tierlists',
               inline: true,
             },
             {
-              name: "random",
+              name: 'random',
               value: "Returns a random number. Use with ' hey random num'",
             },
-            { name: "translate", value: "Translates text", inline: true },
+            { name: 'translate', value: 'Translates text', inline: true },
             {
-              name: "chat",
-              value: "Chat with the bot",
+              name: 'chat',
+              value: 'Chat with the bot',
               inline: true,
             },
-            { name: "Subreddit Help", value: "help sub", inline: true },
-            { name: "Math Help", value: "help math", inline: true },
-            { name: "Fun Help", value: "help fun", inline: true },
-            { name: "Gambling Help", value: "help gamble", inline: true },
-            { name: "Test Help", value: "help test", inline: true }
+            { name: 'Subreddit Help', value: 'help sub', inline: true },
+            { name: 'Math Help', value: 'help math', inline: true },
+            { name: 'Fun Help', value: 'help fun', inline: true },
+            { name: 'Gambling Help', value: 'help gamble', inline: true },
+            { name: 'Test Help', value: 'help test', inline: true },
           );
 
         message.channel.send({ embeds: [embed1] });
       } else {
         switch (args[1]) {
-          case "sub":
-          case "subs":
-          case "subhelp":
+          case 'sub':
+          case 'subs':
+          case 'subhelp':
             var subhelp = new EmbedBuilder()
               .setColor(generateHex())
               .setDescription(
-                "These are the commands for getting images for reddit."
+                'These are the commands for getting images for reddit.',
               )
               .addFields(
                 {
-                  name: "sub",
-                  value: "Gets a random image from a specified subreddit.",
+                  name: 'sub',
+                  value: 'Gets a random image from a specified subreddit.',
                 },
-                { name: "pusharray", value: "Adds a subreddit to the array" },
-                { name: "showarray", value: "Shows the current array" },
-                { name: "cleararray", value: "Clears the array" },
+                { name: 'pusharray', value: 'Adds a subreddit to the array' },
+                { name: 'showarray', value: 'Shows the current array' },
+                { name: 'cleararray', value: 'Clears the array' },
                 {
-                  name: "shufflearray",
+                  name: 'shufflearray',
                   value:
                     "Uses the 'sub' command with a random entry into the array",
-                }
+                },
               );
             message.channel.send({ embeds: [subhelp] });
             break;
-          case "mathhelp":
-          case "math":
+          case 'mathhelp':
+          case 'math':
             var mathembed = new EmbedBuilder()
               .setColor(generateHex())
               .setDescription(
-                "These are the commands for doing math. Put 'math' before each command. For example, 'hey math sqrt 4' would return 2. NaN means 'Not a Number'. Supports use of pi as 'pi', but if you're using just pi by itself you need to put '1pi'."
+                "These are the commands for doing math. Put 'math' before each command. For example, 'hey math sqrt 4' would return 2. NaN means 'Not a Number'. Supports use of pi as 'pi', but if you're using just pi by itself you need to put '1pi'.",
               )
               .addFields(
                 {
-                  name: "dtr",
+                  name: 'dtr',
                   value:
                     "Convert Degrees to Radians. Use with 'hey dtr num1 num2'",
                 },
                 {
-                  name: "rtd",
+                  name: 'rtd',
                   value:
                     "Convert Radians to Degrees. Use with 'hey rtd num1 num2'. Supports use of pi",
                 },
                 {
-                  name: "add/subtract/multiply/divide",
+                  name: 'add/subtract/multiply/divide',
                   value:
                     "Performs basic math functions. Use with 'hey [command] num1 num2",
                 },
                 {
-                  name: "sin/cos/tan/csc/sec/cot",
+                  name: 'sin/cos/tan/csc/sec/cot',
                   value: "Trigonometric functions. Use with 'hey [command] num",
                 },
                 {
-                  name: "sqrt",
+                  name: 'sqrt',
                   value: "Square Roots a number. Use with 'hey sqrt num1'",
                 },
                 {
-                  name: "root",
+                  name: 'root',
                   value: "nth root of a number. Use with 'hey root num n'",
                 },
                 {
-                  name: "power",
+                  name: 'power',
                   value:
                     "The first number to the power of the second. Use with 'hey power base exponent'",
                 },
                 {
-                  name: "log",
+                  name: 'log',
                   value:
                     "Logarithms. Use with 'hey log base thingbeinglogged'. Supports use of e",
-                }
+                },
               );
             message.channel.send({ embeds: [mathembed] });
             break;
-          case "testhelp":
-          case "test":
+          case 'testhelp':
+          case 'test':
             var embed2 = new EmbedBuilder()
               .setColor(generateHex())
-              .setDescription("Test Commands")
+              .setDescription('Test Commands')
               .setFooter({ text: "Buncha test stuff that doesn't do anything" })
               .addFields(
-                { name: "embedtest", value: "Does an embed test." },
-                { name: "printstufftest", value: "Prints Stuff." },
+                { name: 'embedtest', value: 'Does an embed test.' },
+                { name: 'printstufftest', value: 'Prints Stuff.' },
                 {
-                  name: "accessconsole/denyconsole",
-                  value: "Gives/removes access to the bot console",
+                  name: 'accessconsole/denyconsole',
+                  value: 'Gives/removes access to the bot console',
                 },
                 {
-                  name: "test[1-11]",
+                  name: 'test[1-11]',
                   value:
-                    "11 different test commands that all do mysterious things",
+                    '11 different test commands that all do mysterious things',
                 },
                 {
-                  name: "settimechance",
+                  name: 'settimechance',
                   value:
                     "Sets the chance of the 'when' command returning a random time",
-                }
+                },
               );
             message.channel.send({ embeds: [embed2] });
             break;
-          case "fun":
-          case "funhelp":
+          case 'fun':
+          case 'funhelp':
             var embed3 = new EmbedBuilder()
-              .setTitle("Fun Commands")
+              .setTitle('Fun Commands')
               .setColor(generateHex())
               .addFields(
                 {
-                  name: "urban",
-                  value: "Gives an entry from urban dictionary",
+                  name: 'urban',
+                  value: 'Gives an entry from urban dictionary',
                   inline: true,
                 },
                 {
-                  name: "urbanr",
-                  value: "Gives a random entry from urban dictionary",
+                  name: 'urbanr',
+                  value: 'Gives a random entry from urban dictionary',
                   inline: true,
                 },
-                { name: "xkcd", value: "Gets an xkcd comic", inline: true },
+                { name: 'xkcd', value: 'Gets an xkcd comic', inline: true },
                 {
-                  name: "source",
+                  name: 'source',
                   value:
-                    "Plays an audio file from a folder. Has to be saved on my PC for now",
+                    'Plays an audio file from a folder. Has to be saved on my PC for now',
                 },
                 {
-                  name: "effect",
+                  name: 'effect',
                   value:
-                    "Same as source, but from a folder full of random audio effects",
+                    'Same as source, but from a folder full of random audio effects',
                 },
                 {
-                  name: "randomhex",
-                  value: "Returns a random hex code",
+                  name: 'randomhex',
+                  value: 'Returns a random hex code',
                   inline: true,
                 },
                 {
-                  name: "dog",
-                  value: "Sends a random picture of a dog",
+                  name: 'dog',
+                  value: 'Sends a random picture of a dog',
                   inline: true,
                 },
-                { name: "img", value: "Sends an image. Yay." }
+                { name: 'img', value: 'Sends an image. Yay.' },
               );
             message.channel.send({ embeds: [embed3] });
             break;
-          case "gamble":
-          case "gambling":
+          case 'gamble':
+          case 'gambling':
             var embed4 = new EmbedBuilder()
-              .setTitle("Gambling Commands.")
+              .setTitle('Gambling Commands.')
               .addFields(
                 {
-                  name: "balance",
-                  value: "Shows your current balance",
+                  name: 'balance',
+                  value: 'Shows your current balance',
                   inline: true,
                 },
                 {
-                  name: "exchange",
-                  value: "Kyle will send you $1 for every 1 million redeemed.",
+                  name: 'exchange',
+                  value: 'Kyle will send you $1 for every 1 million redeemed.',
                 },
                 {
-                  name: "reset",
+                  name: 'reset',
                   value:
-                    "Reset your balance to $500. Can only be used every 5 minutes.",
+                    'Reset your balance to $500. Can only be used every 5 minutes.',
                   inline: true,
                 },
                 {
-                  name: "coinflip",
-                  value: "Flips a coin. Win 2x. Usage: coinflip (amount)",
+                  name: 'coinflip',
+                  value: 'Flips a coin. Win 2x. Usage: coinflip (amount)',
                   inline: true,
                 },
                 {
-                  name: "slots",
-                  value: "Slot machine. Win 50x. Usage: slots (amount)",
+                  name: 'slots',
+                  value: 'Slot machine. Win 50x. Usage: slots (amount)',
                   inline: true,
                 },
                 {
-                  name: "roulette",
+                  name: 'roulette',
                   value:
                     "NOT WORKING. Basic roulette. Use with 'hey roulette [Number Guess] [color] [Betting cash]",
-                }
+                },
               );
             message.channel.send({ embeds: [embed4] });
             break;
           default:
-            message.channel.send("No such help menu");
+            message.channel.send('No such help menu');
         }
       }
 
       break;
-    case "dab":
+    case 'dab':
       /*var rand = Math.floor(Math.random() * dabArray.length);
             log("*Dab Command Received*\nFile: " + dabArray[rand] + "\nRand: " + rand);
             message.channel.send({
               files: ["./images/" + dabArray[rand]]
             });*/
-      message.channel.send("No shot");
+      message.channel.send('No shot');
       break;
-    case "Hello":
+    case 'Hello':
       message.channel.send("I'm back");
       break;
-    case "math":
+    case 'math':
       args = piReplace(args);
       switch (args[1].toLowerCase()) {
-        case "add":
+        case 'add':
           var num1 = parseFloat(args[2]);
           var num2 = parseFloat(args[3]);
           message.channel.send(num1 + num2);
           break;
-        case "subtract":
+        case 'subtract':
           var num1 = parseFloat(args[2]);
           var num2 = parseFloat(args[3]);
           message.channel.send(num1 - num2);
           break;
-        case "multiply":
+        case 'multiply':
           var num1 = parseFloat(args[2]);
           var num2 = parseFloat(args[3]);
           message.channel.send(num1 * num2);
           break;
-        case "divide":
+        case 'divide':
           var num1 = parseFloat(args[2]);
           var num2 = parseFloat(args[3]);
           message.channel.send(num1 / num2);
           break;
-        case "sin":
+        case 'sin':
           message.channel.send(Math.sin(args[2]));
           break;
-        case "cos":
+        case 'cos':
           message.channel.send(Math.cos(args[2]));
           break;
-        case "tan":
+        case 'tan':
           message.channel.send(Math.tan(args[2]));
           break;
-        case "sec":
+        case 'sec':
           message.channel.send(1 / Math.cos(args[2]));
           break;
-        case "csc":
+        case 'csc':
           message.channel.send(1 / Math.sin(args[2]));
           break;
-        case "cot":
+        case 'cot':
           message.channel.send(1 / Math.tan(args[2]));
           break;
-        case "root":
+        case 'root':
           message.channel.send(Math.pow(args[2], 1 / args[3]));
           break;
-        case "dtr":
+        case 'dtr':
           var num = args[1];
           if (isNaN(num)) {
-            return message.channel.send("Use a number dumbass");
+            return message.channel.send('Use a number dumbass');
           }
           num = num * (Math.PI / 180);
           message.channel.send(num);
           break;
-        case "rtd":
+        case 'rtd':
           var num = args[1];
           if (isNaN(num))
-            return message.channel.send(
-              "Use a number dumbass, you sent " + args[2]
-            );
+          {return message.channel.send(
+            'Use a number dumbass, you sent ' + args[2],
+          );}
           num = num * (180 / Math.PI);
           message.channel.send(num);
           break;
-        case "sqrt":
+        case 'sqrt':
           var num = args[1];
-          if (isNaN(num)) return message.channel.send("Use a number dumbass");
-          message.channel.send("X = " + Math.sqrt(num));
+          if (isNaN(num)) {return message.channel.send('Use a number dumbass');}
+          message.channel.send('X = ' + Math.sqrt(num));
           break;
-        case "power":
+        case 'power':
           var num = args[1];
           var num2 = args[2];
           if (isNaN(num) || isNaN(num2))
-            return message.channel.send("Use a number dumbass");
-          message.channel.send("X = " + Math.pow(num, num2));
+          {return message.channel.send('Use a number dumbass');}
+          message.channel.send('X = ' + Math.pow(num, num2));
           break;
-        case "log":
+        case 'log':
           var num = args[1];
           var num2 = args[2];
-          if (num == "e") {
-            if (num2 == "e") return message.channel.send("X = 1");
+          if (num == 'e') {
+            if (num2 == 'e') {return message.channel.send('X = 1');}
             else {
               return message.channel.send(Math.log(num2));
             }
           }
           if (isNaN(num) || isNaN(num2))
-            return message.channel.send("Use a number dumbass");
+          {return message.channel.send('Use a number dumbass');}
           var logged = Math.log(num2) / Math.log(num);
-          message.channel.send("X = " + logged);
+          message.channel.send('X = ' + logged);
           break;
-        case "test":
+        case 'test':
           var mathtestingembed = new EmbedBuilder();
           for (var i = 0; i < args.length; i++) {
             mathtestingembed.addField(args[i]);
@@ -2505,21 +2504,21 @@ bot.on("messageCreate", async (message) => {
           break;
         default:
           message.channel.send(
-            "That's not a math command. Use 'hey mathhelp' if you're confused."
+            "That's not a math command. Use 'hey mathhelp' if you're confused.",
           );
           break;
       } //Math switch ends here
       break;
-    case "random":
-    case "d":
-    case "rand":
+    case 'random':
+    case 'd':
+    case 'rand':
       var num = args[1];
-      if (isNaN(num)) return message.channel.send("Use a number dumbass");
+      if (isNaN(num)) {return message.channel.send('Use a number dumbass');}
       message.channel.send(Math.floor(Math.random() * num) + 1);
       break;
-    case "randorder":
+    case 'randorder':
       var num = args[1];
-      if (isNaN(num)) return message.channel.send("Use a number dumbass");
+      if (isNaN(num)) {return message.channel.send('Use a number dumbass');}
       var array = [];
       var randInt = 0;
       for (var i = 0; i < num; i++) {
@@ -2527,36 +2526,36 @@ bot.on("messageCreate", async (message) => {
       }
       for (var j = num; j > 0; j--) {
         randInt = Math.random() * array.length;
-        log("J = " + j + ", randInt = " + randInt);
+        log('J = ' + j + ', randInt = ' + randInt);
         randInt = Math.floor(randInt);
-        log("New randInt = " + randInt);
+        log('New randInt = ' + randInt);
         message.channel.send(array[randInt]);
         array.splice(randInt);
       }
       break;
-    case "d20":
+    case 'd20':
       message.channel.send(Math.floor(Math.random() * args[1]) + 1);
       break;
-    case "say":
-      var sayMessage = args.join(" ");
-      sayMessage = sayMessage.replace("say ", "");
+    case 'say':
+      var sayMessage = args.join(' ');
+      sayMessage = sayMessage.replace('say ', '');
       message.delete().catch((O_o) => {});
       message.channel.send(sayMessage);
       break;
-    case "xkcd":
+    case 'xkcd':
       if (args[1]) {
         getXKCD(args[1]);
       } else {
         getXKCD(-1);
       }
       break;
-    case "purge":
+    case 'purge':
       //let roleGod = message.guild.roles.fetch("295777645931790336");
       //let roleGod1 = message.guild.roles.fetch("550117111045816320");
       //(message.guild.id == '272582751545196544' && message.member.roles.cache.has(roleGod.id)) ||
       if (
-        message.author.id == "181284528793452545" ||
-        message.member.hasPermission("ADMINISTRATOR")
+        message.author.id == '181284528793452545' ||
+        message.member.hasPermission('ADMINISTRATOR')
       ) {
         let newamount = 2;
         if (args[1]) {
@@ -2566,7 +2565,7 @@ bot.on("messageCreate", async (message) => {
           message.channel.send("You can't delete more than 5 messages.");
           break;
         }
-        let messagecount = newamount.toString();
+        const messagecount = newamount.toString();
         message.channel.messages
           .fetch({
             limit: parseInt(messagecount) + 1,
@@ -2575,8 +2574,8 @@ bot.on("messageCreate", async (message) => {
             message.channel.bulkDelete(messages, true);
             message.channel
               .send(
-                "Deletion of messages successful. \n Total messages deleted including command: " +
-                  newamount
+                'Deletion of messages successful. \n Total messages deleted including command: ' +
+                  newamount,
               )
               .then((message) => {
                 setTimeout(() => {
@@ -2584,110 +2583,110 @@ bot.on("messageCreate", async (message) => {
                 }, 5000);
               });
             console.log(
-              "Deletion of messages successful. \n Total messages deleted including command: " +
-                newamount
+              'Deletion of messages successful. \n Total messages deleted including command: ' +
+                newamount,
             );
           })
           .catch((err) => {
-            log("Error while doing Bulk Delete");
+            log('Error while doing Bulk Delete');
             log(err);
           });
       } else {
         message.channel.send("You don't have perms for that");
       }
       break;
-    case "pusharray":
+    case 'pusharray':
       goodArray.push(args[1]);
-      message.channel.send("The current array is: ");
+      message.channel.send('The current array is: ');
       var list = new EmbedBuilder()
-        .setDescription("Current List of Subs:")
+        .setDescription('Current List of Subs:')
         .setColor(generateHex());
       const fields = [];
       for (var i = 0; i < goodArray.length; i++) {
-        fields.push({ name: goodArray[i], value: "/r/" + goodArray[i] });
+        fields.push({ name: goodArray[i], value: '/r/' + goodArray[i] });
       }
       list.addFields(fields);
       message.channel.send({ embeds: [list] });
       if (goodArray.length > 9)
-        message.channel.send("It's gettin a little big there slugger");
+      {message.channel.send("It's gettin a little big there slugger");}
       break;
-    case "showarray":
+    case 'showarray':
       for (var i = 0; i < goodArray.length; i++) {
         message.channel.send(goodArray[i]);
       }
       break;
-    case "accessconsole":
-      let role11 = message.guild.roles.find("name", "console.log.perms");
+    case 'accessconsole':
+      const role11 = message.guild.roles.find('name', 'console.log.perms');
       if (message.member.roles.cache.has(role11.id)) {
-        message.channel.send(`You already have access`);
+        message.channel.send('You already have access');
         return;
       }
       message.member.addRole(role11).catch(console.error);
       message.channel.send(
-        "You now have access to the console. If you don't want this anymore, use 'denyconsole'"
+        "You now have access to the console. If you don't want this anymore, use 'denyconsole'",
       );
       break;
-    case "denyconsole":
-      let role22 = message.guild.roles.find("name", "console.log.perms");
+    case 'denyconsole':
+      const role22 = message.guild.roles.find('name', 'console.log.perms');
       message.member.removeRole(role22).catch(console.error);
-      message.channel.send("You no longer have access to the console.");
+      message.channel.send('You no longer have access to the console.');
       break;
-    case "test7":
-      if (!args[2]) return message.channel.send("No args[2] present");
+    case 'test7':
+      if (!args[2]) {return message.channel.send('No args[2] present');}
       message.channel.send(args[2]);
       break;
-    case "test8":
+    case 'test8':
       message.channel.send(message.content);
       break;
-    case "test9":
-      plaympeg("Sands.mp3");
+    case 'test9':
+      plaympeg('Sands.mp3');
       break;
-    case "test10":
+    case 'test10':
       break;
-    case "test12":
-      message.channel.send("A: " + message.author.toString());
-      message.channel.send("B: " + message.author);
+    case 'test12':
+      message.channel.send('A: ' + message.author.toString());
+      message.channel.send('B: ' + message.author);
       break;
-    case "test13":
+    case 'test13':
       var stringthing = gamblers[0].name;
       for (var i = 1; i < gamblers.length; i++) {
-        stringthing = stringthing + gamblers[i].name + ", ";
+        stringthing = stringthing + gamblers[i].name + ', ';
       }
       message.channel.send(stringthing);
       break;
-    case "test14":
-      var cities = new String("Paris   Moscow   Tokyo");
-      var string2 = "Paris   Moscow   Tokyo";
+    case 'test14':
+      var cities = new String('Paris   Moscow   Tokyo');
+      var string2 = 'Paris   Moscow   Tokyo';
       if (cities.compareTo(string2) == 0) {
-        message.channel.send("Yup");
+        message.channel.send('Yup');
       } else {
-        message.channel.send("Nope");
+        message.channel.send('Nope');
       }
 
       break;
 
-    case "botprefixes":
+    case 'botprefixes':
       var embed = new EmbedBuilder()
         .setColor(0x00ffff)
-        .setDescription("These are the current bot prefixes")
-        .addField("Gnarbot", "_")
-        .addField("Rythmbot", "//")
-        .addField("Himebot/Alexa", ".")
-        .addField("Dank Memer", "pls")
-        .addField("Kawaiibot", "+")
-        .addField("IdleRPG", "$")
-        .addField("Jukebox", "$$")
-        .addField("Pancake Bot", "p!")
-        .addField("Fredboat", ";;")
-        .addField("Groovy", "--")
-        .addField("Wings", "w.");
+        .setDescription('These are the current bot prefixes')
+        .addField('Gnarbot', '_')
+        .addField('Rythmbot', '//')
+        .addField('Himebot/Alexa', '.')
+        .addField('Dank Memer', 'pls')
+        .addField('Kawaiibot', '+')
+        .addField('IdleRPG', '$')
+        .addField('Jukebox', '$$')
+        .addField('Pancake Bot', 'p!')
+        .addField('Fredboat', ';;')
+        .addField('Groovy', '--')
+        .addField('Wings', 'w.');
       message.channel.send(embed);
 
       break;
-    //will/is/are/am/was/does/should/do/can/may
+      //will/is/are/am/was/does/should/do/can/may
 
-    case "when":
-      if (!args[1]) return message.channel.send("Time is an illusion");
+    case 'when':
+      if (!args[1]) {return message.channel.send('Time is an illusion');}
       //var count = 1000;
       //var numberList = [];
       //for (var i = 0; i < 1000; i++) {
@@ -2695,82 +2694,82 @@ bot.on("messageCreate", async (message) => {
       //}
       if (Math.floor(Math.random() * 100) <= 45) {
         return message.channel.send(
-          "In " +
+          'In ' +
             Math.floor(Math.random() * 100) +
-            " " +
-            timeTypes[Math.floor(Math.random() * timeTypes.length)]
+            ' ' +
+            timeTypes[Math.floor(Math.random() * timeTypes.length)],
         );
       } else {
         message.channel.send(
-          timeArray[Math.floor(Math.random() * timeArray.length)]
+          timeArray[Math.floor(Math.random() * timeArray.length)],
         );
       }
       break;
-    case "settimechance":
+    case 'settimechance':
       timeChancer = args[1];
       break;
 
-    case "are":
+    case 'are':
       if (args[1]) {
         message.channel.send(
-          yesnomabyeso[Math.floor(Math.random() * yesnomabyeso.length)]
+          yesnomabyeso[Math.floor(Math.random() * yesnomabyeso.length)],
         );
       } else {
-        message.channel.send("wait what");
+        message.channel.send('wait what');
       }
       break;
 
-    case "who":
+    case 'who':
       if (args[1]) {
         message.channel.send(
-          answerlist[Math.floor(Math.random() * answerlist.length)]
+          answerlist[Math.floor(Math.random() * answerlist.length)],
         );
       } else {
-        message.channel.send("wait what");
+        message.channel.send('wait what');
       }
       break;
 
-    case "secretadmintest":
+    case 'secretadmintest':
       message.channel.send(
-        "This is a test command. I'm testing something. It doesn't do much."
+        "This is a test command. I'm testing something. It doesn't do much.",
       );
       //message.guild.channels.find("name", "super-secret-admin-channel").send("test sucessful my guy did i spell that right");
       break;
-    case "embedtest":
+    case 'embedtest':
       var embed = new EmbedBuilder();
-      embed.setDescription("Test embed my guy this is the description i think");
-      embed.addField("What is a field what is life what", "HELP ME");
-      embed.addField("What is a field what is life what", "HELP ME");
-      embed.addField("What is a field what is life what", "HELP ME");
-      embed.addField("What is a field what is life what", "HELP ME");
+      embed.setDescription('Test embed my guy this is the description i think');
+      embed.addField('What is a field what is life what', 'HELP ME');
+      embed.addField('What is a field what is life what', 'HELP ME');
+      embed.addField('What is a field what is life what', 'HELP ME');
+      embed.addField('What is a field what is life what', 'HELP ME');
       message.channel.send(embed);
       break;
-    case "noticeme":
-      message.channel.send("Hey there, " + message.author.toString());
+    case 'noticeme':
+      message.channel.send('Hey there, ' + message.author.toString());
       break;
-    case "report":
+    case 'report':
       //indexOf
-      var original = args.join(" ");
-      var untilFor = args.indexOf("for") + 1;
+      var original = args.join(' ');
+      var untilFor = args.indexOf('for') + 1;
       var reported = args.splice(0, untilFor);
-      reported.splice(reported.indexOf("foo"), 1);
-      reported.splice(reported.indexOf("report"), 1);
-      message.channel.send("You reported " + reported.join(" ") + ".");
+      reported.splice(reported.indexOf('foo'), 1);
+      reported.splice(reported.indexOf('report'), 1);
+      message.channel.send('You reported ' + reported.join(' ') + '.');
       //message.guild.channels.find("name", "super-secret-admin-channel").send(message.author.toString() + " reported " + reported.join(" ") + " for " + args.join(" ") + "\n" + findSpacing(original) + "*Reported at " + time + ", on " + month + "/" + day + "/" + year + "*");
       break;
 
-    case "escape":
-      message.channel.send("I am escaping");
+    case 'escape':
+      message.channel.send('I am escaping');
       return;
       message.channel.send("Didn't work");
       break;
-    case "roulette":
+    case 'roulette':
       break;
 
-    case "largeembed":
+    case 'largeembed':
       var i = 1;
       var embed0 = new EmbedBuilder();
-      embed0.setDescription("Numbers My Guy");
+      embed0.setDescription('Numbers My Guy');
       while (i <= args[1]) {
         if (i > 24) {
           return;
@@ -2781,37 +2780,37 @@ bot.on("messageCreate", async (message) => {
       message.channel.send(embed0);
       break;
 
-    case "randomhex":
+    case 'randomhex':
       message.channel.send(
-        "#" + Math.floor(Math.random() * 16777215).toString(16)
+        '#' + Math.floor(Math.random() * 16777215).toString(16),
       );
       break;
 
-    case "version":
+    case 'version':
       var VERSION = config.version;
       message.channel.send(VERSION);
       break;
-    case "changelog":
+    case 'changelog':
       var embedlog = new EmbedBuilder();
       var CHANGELOG = config.changelog;
       embedlog
-        .setTitle("Change Log of Kelvin v2")
+        .setTitle('Change Log of Kelvin v2')
         .addFields({ name: config.version, value: CHANGELOG });
       message.channel.send({ embeds: [embedlog] });
       break;
-    case "skip":
+    case 'skip':
       var server = servers[message.guild.id];
-      if (server.dispatcher) server.dispatcher.end();
+      if (server.dispatcher) {server.dispatcher.end();}
       server.queue.shift();
       break;
-    case "stop":
+    case 'stop':
       var server = servers[message.guild.id];
       if (message.guild.voiceConnection)
-        message.guild.voiceConnection.disconnect();
+      {message.guild.voiceConnection.disconnect();}
       break;
 
     default:
-      message.channel.send("not a command :clown:");
+      message.channel.send('not a command :clown:');
   }
 });
 

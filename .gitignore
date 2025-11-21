@@ -8,3 +8,6 @@ config.json
 /chat-history/
 git-auto-pull.js
 ecosystem.config.js
+
+# Test coverage
+/coverage/
