@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/core": "^2.0.1",
+    "@discordjs/core": "^2.1.0",
     "@discordjs/formatters": "^0.6.0",
     "@discordjs/opus": "^0.10.0",
     "@discordjs/voice": "^0.18.0",
